@@ -1,0 +1,159 @@
+<link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl(); ?>/public/css/faq.css" />
+<?php
+$thumb = $this->baseUrl() . "/public/thumbs/thumb.php";
+$userInfo = array('userName' => $this->user_fname . ' ' . $this->user_lname, 'phone' => '7062232497', 'profileImage' => $this->user_img);
+echo $this->partial('index/headerstrip.phtml', array('headlineText' => $this->headlineText, 'userInfo' => $userInfo))
+?>
+
+<div class="container" style="margin-top: 60px;">
+    <div class="container">
+        <div class="panel-group" id="accordion">
+            <div class="panel panel-default content-pane">
+                <div class="panel-heading head">
+                    <h4 class="panel-title">
+                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">What are your store hours?</a>
+                    </h4>
+                </div>
+                <div id="collapseOne" class="panel-collapse collapse in">
+                    <div class="panel-body">
+                        We really don’t operate as a store yet. However if need arises we will have one. Till then you can avail our online booking with the free pickup and drop services.
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default content-pane">
+                <div class="panel-heading head">
+                    <h4 class="panel-title">
+                        <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Do you have large machines?</a>
+                    </h4>
+                </div>
+                <div id="collapseTwo" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        Yes, the largest machines in the area. We have super large top of the line machines that can handle all your large items, comforters, blankets etc....
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default content-pane">
+                <div class="panel-heading head">
+                    <h4 class="panel-title">
+                        <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Who is LaundryWala?</a>
+                    </h4>
+                </div>
+                <div id="collapseThree" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        LaundryWala is the premiere laundry service in your area, where we reach people through door to door service.LaundryWala aims at providing high quality laundry services coupled with customized experience and express delivery. “We use Latest technology machines and internationally standardized chemicals for quality cleaning. With an added feature of online ordering and free pick-up and delivery within 24 hours, we expect to reach every household in our vicinity”.
+                        <br>We provide washing, dry cleaning, steam ironing and other value added services in Noida to make your life free of laundry hassles.
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default content-pane">
+                <div class="panel-heading head">
+                    <h4 class="panel-title">
+                        <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFour">Who uses your pickup and delivery services?</a>
+                    </h4>
+                </div>
+                <div id="collapseFour" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        Really everyone. Our customers range from college students to busy professionals to seniors! Our service is for people who want to free-up time from a tedious and labour intensive task.
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default content-pane">
+                <div class="panel-heading head">
+                    <h4 class="panel-title">
+                        <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFive">What about Dry Cleaning?</a>
+                    </h4>
+                </div>
+                <div id="collapseFive" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        Yes, we do offer these services as a convenience and for one-stop-shopping for our customers at very competitive prices. Please identify and place those items in a separate bag.
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default content-pane">
+                <div class="panel-heading head">
+                    <h4 class="panel-title">
+                        <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseSix">Can I pay per wash?</a>
+                    </h4>
+                </div>
+                <div id="collapseSix" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        Yes, the cost as per the garment/cloth. Please check our price listing page.
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default content-pane">
+                <div class="panel-heading head">
+                    <h4 class="panel-title">
+                        <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven">Are my clothes mixed with other orders?</a>
+                    </h4>
+                </div>
+                <div id="collapseSeven" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        No, each customers clothing is done separately.
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default content-pane">
+                <div class="panel-heading head">
+                    <h4 class="panel-title">
+                        <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseEight">How do I signup?</a>
+                    </h4>
+                </div>
+                <div id="collapseEight" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        You can signup via our web portal.
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default content-pane">
+                <div class="panel-heading head">
+                    <h4 class="panel-title">
+                        <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseNine">Do I need to separate my clothes before pickup?</a>
+                    </h4>
+                </div>
+                <div id="collapseNine" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        No, our experienced professionals will take care of this for you. If you have any delicates or special needs, just place them in a small plastic bag with a note.
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default content-pane">
+                <div class="panel-heading head">
+                    <h4 class="panel-title">
+                        <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTen">How much laundry can I have picked up each week?</a>
+                    </h4>
+                </div>
+                <div id="collapseTen" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        There is no maximum. We are made for this.
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default content-pane">
+                <div class="panel-heading head">
+                    <h4 class="panel-title">
+                        <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseEleven">How do I get my LandryWala bag?</a>
+                    </h4>
+                </div>
+                <div id="collapseEleven" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        Your first order will be delivered in your new bag, it is yours for keeps.
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default content-pane">
+                <div class="panel-heading head">
+                    <h4 class="panel-title">
+                        <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwelve">How do I let you know about my preferences?</a>
+                    </h4>
+                </div>
+                <div id="collapseTwelve" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        You can easily specify your personal preferences by including a note in with your bag of items or by typing your request in the Special Instructions field of the order screen when you place your order online.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Bootstrap FAQ - END -->
+</div>

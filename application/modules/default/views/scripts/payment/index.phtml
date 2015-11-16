@@ -1,0 +1,42 @@
+<div id="slider_wrapper2" style="margin-top:100px;">
+    <div class="wrap">
+
+        <h1>Payment</h1>
+
+    </div>
+</div>
+
+<div class="clear"></div>
+<?php if ($this->authorized == TRUE): ?>
+    <div class="content" style="background: transparent">
+
+        <div class="wrap" style="padding: 50px; min-height:600px;">
+
+            <p style="font-size: 25px;"><strong>Redirecting you to payment gateway.Please do not refresh the page...</strong></p>
+
+        </div>
+    </div>
+    <form action="<?php echo $this->action; ?>" method="post" name="payment_form" id="payment-form">
+        <input type="hidden" name="hash" value="<?php echo $this->hash; ?>"/>
+        <?php foreach ($this->posted as $key => $value): ?>
+            <input type="hidden" name="<?php echo $key; ?>" value="<?php echo $value; ?>"/>
+        <?php endforeach; ?>
+        <!--<button type="submit" value="Submit">Submit</button>-->
+    </form>
+<?php else: ?>
+    <div class="content" style="background: transparent">
+        <p style="font-size: 25px;"><strong><?php echo $this->message; ?></strong></p>
+
+    </div>
+<?php endif; ?>
+
+<div class="blue-bar">
+
+</div>
+<?php if ($this->authorized == TRUE): ?>
+    <script>
+        $(document).ready(function() {
+            $("#payment-form").submit();
+        });
+    </script>
+<?php endif; ?>

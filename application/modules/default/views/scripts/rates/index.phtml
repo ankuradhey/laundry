@@ -1,0 +1,138 @@
+<div id="slider_wrapper2">
+    <div class="wrap">
+
+        <h1>About Us</h1>
+
+    </div>
+</div>
+
+<div class="clear"></div>
+
+<div class="content" style="background: transparent">
+    <div class="wrap" style="background: transparent; padding: 10px;">
+
+        <div class="row">
+            <?php
+            $servicesMapper = new Application_Model_ServiceMasterMapper();
+            $service = $servicesMapper->getServiceMasterById($this->service_id);
+            if ($service):
+                ?>
+                <h3><?php echo $service->__get("service_name");
+                ?> Rates</h3>
+                <?php
+            endif;
+            ?>
+
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+                <?php
+                if ($this->categories):
+                    $f1 = false;
+                    foreach ($this->categories as $category):
+                        ?>
+                        <li role="presentation" class="<?php if (!$f1): ?>active<?php
+                            $f1 = true;
+                        endif;
+                        ?>">
+                            <a href="#<?php echo $category->__get("category_id"); ?>" role="tab" data-toggle="tab"><?php echo $category->__get("category_name"); ?></a></li>
+                        <?php
+                    endforeach;
+                endif;
+                ?>
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="col-sm-2">
+            </div>
+            <div class="col-sm-8">
+                <div class="tab-content" style="margin-top: 30px; text-align:center;">
+                    <?php
+                    if ($this->categories):
+                        $f = false;
+                        foreach ($this->categories as $category):
+                            ?>
+                            <div role="tabpanel" class="tab-pane <?php if (!$f): ?>active<?php
+                                $f = true;
+                            endif;
+                            ?>" id="<?php echo $category->__get("category_id"); ?>">
+                                <div class="row">
+                                    <?php
+                                    $itemsMapper = new Application_Model_ItemsMapper();
+                                    $items = $itemsMapper->getItemsByCategoryIdServiceId($category->__get("category_id"), $this->service_id);
+                                    if ($items):
+                                        $item_count = count($items);
+                                        $var = $item_count / 2;
+                                        $mid = ceil($var);
+                                        ?>
+                                        <div class="col-sm-6 brright">
+                                            <?php
+                                            for ($i = 0; $i < $mid; $i++):
+                                                ?>
+                                                <div class="form-group">
+                                                    <label for="inputEmail3" class="col-sm-6 control-label col-xs-8"><?php echo $items[$i]->__get("item_name"); ?></label>
+                                                    <div class="col-sm-6 col-xs-4">
+                                                        <p><?php
+                                                            $itemsPriceMapper = new Application_Model_ItemPriceMapper();
+                                                            $price = $itemsPriceMapper->getItemPriceByItemId($items[$i]->__get("item_id"));
+                                                            if ($price) {
+                                                                echo $price->__get("price");
+                                                            } else {
+                                                                echo "XXX";
+                                                            }
+                                                            ?></p>
+                                                    </div>
+                                                </div>
+                                                <?php
+                                            endfor;
+                                            ?>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <?php
+                                            for ($j = $mid; $j < count($items); $j++):
+                                                ?>
+                                                <div class="form-group">
+                                                    <label for="inputEmail3" class="col-sm-6 control-label col-xs-8"><?php echo $items[$j]->__get("item_name"); ?></label>
+                                                    <div class="col-sm-6 col-xs-4">
+                                                        <p><?php
+                                                            $itemsPriceMapper = new Application_Model_ItemPriceMapper();
+                                                            $price = $itemsPriceMapper->getItemPriceByItemId($items[$j]->__get("item_id"));
+                                                            if ($price) {
+                                                                echo $price->__get("price");
+                                                            } else {
+                                                                echo "XXX";
+                                                            }
+                                                            ?></p>
+                                                    </div>
+                                                </div>
+                                            
+                                        <?php endfor; ?>
+                                            </div>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                            <?php
+                        endforeach;
+                    endif;
+                    ?>
+
+                </div>
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+        <div class="clear"></div>
+
+    </div>
+</div>
+
+<div class="blue-bar">
+
+</div>

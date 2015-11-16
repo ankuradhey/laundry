@@ -1,0 +1,112 @@
+
+<div id="slider_wrapper2">
+    <div class="wrap">
+
+        <h1>Order Details</h1>
+
+    </div>
+</div>
+
+<div class="clear"></div>
+
+<div class="content">
+    <div class="wrap">
+
+        <div class="content_404">
+            <h3>Order Detail </h3>
+            <table class="table tablenew_1">
+                <?php
+                if ($this->order):
+                    ?>
+                    <tr>
+                        <td class="tablenew_2"><strong>Order Id</strong></td>
+                        <td class="tablenew_2"><?php echo $this->order->__get("order_id"); ?></td>
+                    </tr>
+                    <tr>
+                        <td class="tablenew_2"><strong>Order Total</strong></td>
+                        <td class="tablenew_2"><?php echo $this->order->__get("order_total"); ?></td>
+                    </tr>
+                    <tr>
+                        <td class="tablenew_2"><strong>Payment Method</strong></td>
+                        <td class="tablenew_2"><?php echo $this->order->__get("payment_method"); ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tablenew_2"><strong>Payment Status</strong></td>
+                        <td class="tablenew_2"><?php echo $this->order->__get("payment_status"); ?> 
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tablenew_2"><strong>Delivery Type</strong></td>
+                        <td class="tablenew_2"><?php echo $this->order->__get("delivery_type"); ?></td>
+                    </tr>
+                    <tr>
+                        <td class="tablenew_2"><strong>Service Name</strong></td>
+                        <td class="tablenew_2"><?php
+                            $serviceMasterMapper = new Application_Model_ServiceMasterMapper();
+                            $service = $serviceMasterMapper->getServiceMasterById($this->order->__get("service"));
+                            if ($service) {
+                                echo $service->__get("service_name");
+                            } else {
+                                echo "None";
+                            }
+                            ?> 
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tablenew_2"><strong>Delivery Date</strong></td>
+                        <td class="tablenew_2"><?php
+                            $date = $this->order->__get("delivery_date");
+                            $zendDate = new Zend_Date($date);
+                            echo $zendDate->toString("dd-MM-yyyy");
+                            ?> 
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tablenew_2"><strong>Delivery Time</strong></td>
+                        <td class="tablenew_2"><?php echo $this->order->__get("delivery_time"); ?> 
+                        </td>
+                    </tr>
+
+                <?php endif; ?>
+
+            </table>
+
+            <h3>Order Items</h3>
+            <table class="table tablenew_1" style="margin-bottom: 50px;">
+
+                <tr >
+                    <th class="tablenew_2">Item</th>
+                    <th class="tablenew_2">Quantity</th>
+                    <th class="tablenew_2">Unit Price</th>
+                    <th class="tablenew_2">Total</th>
+                </tr>
+
+                <?php if ($this->items): ?>
+                    <?php foreach ($this->items as $item): ?>
+
+                        <tr>
+                            <td class="tablenew_2"> <?php
+                                $itemsMapper = new Application_Model_ItemsMapper();
+                                $item_name = $itemsMapper->getItemById($item->__get("item_id"));
+                                if ($item_name) {
+                                    echo $item_name->__get("item_name");
+                                } else {
+                                    echo "None";
+                                }
+                                ?> </td>
+                            <td class="tablenew_2"> <?php echo $item->__get("quantity"); ?></td>
+                            <td class="tablenew_2"> <?php echo $item->__get("unit_price"); ?> </td>
+                            <td class="tablenew_2"> <?php echo $item->__get("total_price"); ?> </td>
+                        </tr>
+                        <?php
+                    endforeach;
+                endif;
+                ?>
+            </table>
+        </div>
+
+        <div class="clear"></div>
+
+    </div>
+</div>

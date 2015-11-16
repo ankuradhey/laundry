@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Laundry Wala</title>
+        <!-- Apple iOS and Android stuff (do not remove) -->
+        <meta name="apple-mobile-web-app-capable" content="no" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,maximum-scale=1" />
+        <meta name="description" content="overview &amp; stats" />
+
+        <!-- Required Stylesheets -->
+        <link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/css_new/reset.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/css_new/text.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/css_new/fonts/ptsans/stylesheet.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/css_new/fluid.css" media="screen" />
+
+        <link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/css_new/mws.style.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/css_new/icons/16x16.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/css_new/icons/24x24.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/css_new/icons/32x32.css" media="screen" />
+
+        <!-- Demo and Plugin Stylesheets -->
+        <link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/css_new/demo.css" media="screen" />
+
+        <link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/plugins/colorpicker/colorpicker.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/plugins/imgareaselect/css/imgareaselect-default.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/plugins/fullcalendar/fullcalendar.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/plugins/fullcalendar/fullcalendar.print.css" media="print" />
+        <link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/plugins/chosen/chosen.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/plugins/prettyphoto/css/prettyPhoto.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/plugins/tipsy/tipsy.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/plugins/sourcerer/Sourcerer-1.2.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/plugins/jgrowl/jquery.jgrowl.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/plugins/spinner/ui.spinner.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/js/css/jquery.ui.all.css" media="screen" />
+
+        <!-- Theme Stylesheet -->
+        <link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/css_new/mws.theme.css" media="screen" />
+
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css"/>
+        
+        <!-- JavaScript Plugins -->
+        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/js_new/jquery-1.7.2.min.js"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/js_new/jquery.mousewheel.min.js"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/js_new/jquery.placeholder.js"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/js_new/jquery.fileinput.js"></script>
+
+        <!-- jQuery-UI Dependent Scripts -->
+        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/js/js/jquery-ui-1.8.20.min.js"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/js/js/jquery.ui.timepicker.min.js"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/js/js/jquery.ui.touch-punch.js"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/spinner/ui.spinner.min.js"></script>
+
+        <!-- Plugin Scripts -->
+        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/plugins/imgareaselect/jquery.imgareaselect.min.js"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/plugins/duallistbox/jquery.dualListBox-1.3.min.js"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/plugins/jgrowl/jquery.jgrowl-min.js"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/plugins/fullcalendar/fullcalendar.min.js"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/plugins/datatables/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/plugins/chosen/chosen.jquery.min.js"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/plugins/prettyphoto/js/jquery.prettyPhoto.min.js"></script>
+        <!--[if lt IE 9]>
+        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/plugins/flot/excanvas.min.js"></script>
+        <![endif]-->
+        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/plugins/flot/jquery.flot.min.js"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/plugins/flot/jquery.flot.pie.min.js"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/plugins/flot/jquery.flot.stack.min.js"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/plugins/flot/jquery.flot.resize.min.js"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/plugins/colorpicker/colorpicker-min.js"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/plugins/tipsy/jquery.tipsy-min.js"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/plugins/sourcerer/Sourcerer-1.2-min.js"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/plugins/validate/jquery.validate-min.js"></script>
+
+        <!-- Core Script -->
+        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/js/core/mws.js"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/js/core/mws.wizard.js"></script>
+
+        <!-- Themer Script (Remove if not needed) -->
+        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/js/core/themer.js"></script>
+
+        <!-- Demo Scripts (remove if not needed) -->
+        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/js/demo/demo.js"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/js/demo/demo.dashboard.js"></script>
+		
+    
+    <body>
+        <div id="mws-header" class="clearfix">
+            <!-- Logo Container -->
+            <div id="mws-logo-container">
+
+                <!-- Logo Wrapper, images put within this wrapper will always be vertically centered -->
+                <div id="mws-logo-wrap">
+                    <img src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/images/lw_logo_trans.png" alt="mws admin" />
+                </div>
+            </div>
+            <!-- User Tools (notifications, logout, profile, change password) -->
+            <div id="mws-user-tools" class="clearfix">
+                <!-- User Information and functions section -->
+                <div id="mws-user-info" class="mws-inset">
+
+                    <!-- User Photo -->
+                    <div id="mws-user-photo">
+                        <img src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/avatars/user.jpg" alt="User Photo" />
+                    </div>
+
+                    <!-- Username and Functions -->
+                    <div id="mws-user-functions">
+                        <div id="mws-username">
+                            Hello, <?php
+                            $auth = new My_Auth("admin");
+                            if ($auth->hasIdentity()) {
+                                $fname = $auth->getIdentity()->admin_fname;
+                                $lname = $auth->getIdentity()->admin_lname;
+
+                                echo $fname . " " . $lname;
+                            }
+                            ?>
+                        </div>
+                        <ul>
+                            <li><a href="#">Profile</a></li>
+                            <li><a href="#">Change Password</a></li>
+                            <li><a href="index.html">Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Start Main Wrapper -->
+        <div id="mws-wrapper">
+
+            <!-- Necessary markup, do not remove -->
+            <div id="mws-sidebar-stitch"></div>
+            <div id="mws-sidebar-bg"></div>
+
+            <!-- Sidebar Wrapper -->
+            <div id="mws-sidebar">
+
+                <!-- Main Navigation -->
+                <div id="mws-navigation">
+                    <ul>
+                        <li class="active">
+                            <a href="<?php echo $this->baseUrl(); ?>/admin" class='mws-i-24 i-home'>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li >
+                            <a href="<?php echo $this->baseUrl(); ?>/admin/admins" class='mws-i-24 i-user-2'>
+                                Admins
+                            </a>
+                        </li>
+                        <li >
+                            <a href="<?php echo $this->baseUrl(); ?>/admin/categories" class='mws-i-24 i-list-images'>
+                                Categories
+                            </a>
+                        </li>
+                        <li >
+                            <a href="<?php echo $this->baseUrl(); ?>/admin/items" class='mws-i-24 i-list-images'>
+                                Items
+                            </a>
+                        </li>
+                        <li >
+                            <a href="<?php echo $this->baseUrl(); ?>/admin/delivery-type" class='mws-i-24 i-truck'>
+                                Delivery Types
+                            </a>
+                        </li>
+                        <li >
+                            <a href="<?php echo $this->baseUrl(); ?>/admin/service-master" class='mws-i-24 i-users'>
+                                Service Master
+                            </a>
+                        </li>
+                        <li >
+                            <a href="<?php echo $this->baseUrl(); ?>/admin/item-price" class='mws-i-24 i-money'>
+                                Item Price
+                            </a>
+                        </li>
+                        <li >
+                            <a href="<?php echo $this->baseUrl(); ?>/admin/users" class='mws-i-24 i-users'>
+                                Users
+                            </a>
+                        </li>
+                        <li >
+                            <a href="<?php echo $this->baseUrl(); ?>/admin/orders" class='mws-i-24 i-list-images'>
+                                Orders
+                            </a>
+                        </li>
+                        <li >
+                            <a href="<?php echo $this->baseUrl(); ?>/admin/orders/summary" class='mws-i-24 i-book'>
+                                Orders Summary
+                            </a>
+                        </li>
+                        <li >
+                            <a href="<?php echo $this->baseUrl(); ?>/admin/user-transactions" class='mws-i-24 i-american-express'>
+                                User Transactions
+                            </a>
+                        </li>
+<!--                        <li >
+                            <a href="<?php echo $this->baseUrl(); ?>/admin/user-wallet" class='mws-i-24 i-home'>
+                                User Wallet
+                            </a>
+                        </li>-->
+                        <li >
+                            <a href="<?php echo $this->baseUrl(); ?>/admin/coupons" class='mws-i-24 i-archive'>
+                                Coupons
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- Main Container Start -->
+            <div id="mws-container" class="clearfix">
+                <!-- Inner Container Start -->
+                <div class="container">
+                    <?php echo $this->layout()->content; ?>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,186 @@
+.col-sm-2ex
+{
+	background-color:#f0f0ee;
+	margin:0px 27px;
+	padding:10px;
+}
+.linebreak{
+	height:22px;
+	display:none;
+}
+
+.overlap{
+	margin-left:-13%;
+}
+.marginleft{
+	width:5% !important;
+	display:none;
+}
+.col-sm-3ex
+{
+	background-color:#f0f0ee;
+	margin:0px 42px;
+	padding:10px;
+}
+.col-sm-5ex
+{
+	background-color:#f0f0ee;
+	margin:0px 55px;
+	padding:10px;
+}
+.head_color{
+	background-color:#3EAFFD;
+	color:white;
+	text-align:center;
+	padding-top:15px;
+}
+
+.btn-primary
+{
+	background-color:#3EAFFD;
+	border-color:#3EAFFD
+}
+.btn-success
+{
+	background-color:#85BE3C;
+	border-color:#85BE3C;
+}
+.navbar
+{
+	background-color:#fff; 
+	position:relative; 
+	margin:0;
+}
+.blue_tab
+{
+	background-color:#3EAFFD;  
+	padding:10px 0px; 
+	margin:0 2px; 
+	height:65px;
+}
+.green_tab
+{
+	background-color:#85BE3C;  
+	padding:10px 0px; 
+	margin:0 2px; 
+	height:65px;
+}
+.bgcolor
+{
+	background-color:#fff;
+}
+.grey{
+	background-color:#f0f0ee; 
+}
+.img_footer
+{
+	margin-right:15px;
+	height:50px;
+}
+.nav_li
+{
+	margin-top:15px;
+}
+.blue_tab_time
+{
+	border:solid 1px #3EAFFD;
+	margin-left:30px;
+}
+.green_tab_time
+{
+	border:solid 1px #85BE3C;
+	margin-left:30px;
+}
+.selected_blue
+{
+	background-color:rgba(62,175,253,0.7);
+}
+ .selected_green
+{
+	background-color:rgba(130,190,60,0.7);
+}
+
+#intro { 
+	/*background: url(../img/home_1.jpg) 50% 0 fixed;*/ 
+	background: url(../img/cover-page.jpg) 50% 0 fixed; 
+	height: auto;  
+	margin: 0 auto; 
+	width: 100%; 
+	/*color:#fefefe;*/
+	position: relative; 
+	/*padding: 100px 0;*/
+}
+#home { 
+	background-color:rgba(255,255,255,1); 
+	height: auto;  
+	margin: 0 auto; 
+	width: 100%; 
+	position: relative; 
+	/*padding: 65px 0;*/
+}
+
+#home_2 { 
+	background: url(../img/black_wall.png); 
+	height: auto;  
+	margin: 0 auto; 
+	width: 100%; 
+	position: relative; 
+	color:#fff;
+	padding: 65px 0;
+        background-repeat:no-repeat;
+}
+
+#home_3{
+	background: url(../img/choose-us.jpg) 50% 0 fixed; 
+	height: auto;  
+	margin: 0 auto; 
+	width: 100%; 
+	position: relative; 
+	color:#fff;
+	padding: 20px 0;
+}
+
+#about { 
+	/*background: url(../img/black_wall.png) 50% 0 fixed;*/ 
+	background-color: #f1f1f1; 
+	height: auto;
+	margin: 0 auto; 
+	width: 100%; 
+	position: relative;
+	/*padding: 100px 0 0 0;*/
+}
+
+td {
+	padding:15px;
+	border-top:0px !important;
+}
+
+th{
+	border-bottom:0px !important;
+}
+
+tr{
+	margin:20px;
+}
+
+/* Non-essential demo stuff */
+.hero-unit {
+	background-color: #fff;
+	box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+.media-object { width: 64px; height: 64px; padding-bottom: 30px }
+
+@media screen and (min-width:768px){
+	img.col-sm-2{
+		width:auto%;
+		max-height:45&;
+	}
+	
+	.col-sm-10{
+		max-height:100%;
+	}
+	
+	h1,h2,h3,h4,h5,h6{
+	}
+}
+

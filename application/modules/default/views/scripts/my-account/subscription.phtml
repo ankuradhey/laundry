@@ -1,0 +1,97 @@
+<?php echo $this->partial('index/headerstrip.phtml', array('headlineText' => 'Welcome, ' . $this->fname . ' ' . $this->lname)); ?>
+<div class="container" style="margin-top:60px;">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 bhoechie-tab-container">
+            <div class="col-md-3 bhoechie-tab-menu">
+                <div class="list-group">
+                    <a href="<?php echo $this->url(array("controller" => "my-account"), "default", true) ?>" class="<?php echo $this->file_render == "account_profile" ? "active" : "" ?> list-group-item text-left">
+                        Edit profile
+                    </a>
+                    <a href="<?php echo $this->baseUrl(); ?>/index/orderlist" class="list-group-item text-left">
+                        Order Summary
+                    </a>
+                    <a href="<?php echo $this->url(array("controller" => "my-account", "action" => "subscription"), "default", true) ?>" class="<?php echo $this->file_render == "account_subscription" ? "active" : "" ?> list-group-item text-left">
+                        Subscription
+                    </a>
+                    <a href="<?php echo $this->baseUrl(); ?>/index/logout" class="list-group-item text-left">
+                        Log out
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-8  bhoechie-tab">
+
+                <?php
+                if (count($this->packages))
+                    foreach ($this->packages as $package) {
+                        $active = $package->__get('usertrack_expiry_date') > date('Y-m-d') ? true : false;
+                        $clothesLeft = $package->__get('clothes_left');
+                        $pickupsLeft = $package->__get('pickups_left');
+                        if ($active && $clothesLeft > 1 && $pickupsLeft > 1)
+                            $scheduleUrl = $this->baseUrl('my-account/schedule?trckId=' . $package->__get('usertrack_id'));
+                        else
+                            $scheduleUrl = '#';
+                        ?>
+                        <div class="row">
+                            <div class="subscription-pack-block">
+                                <div class="col-sm-10 col-sm-offset-1">
+                                    <div class="row">
+                                        <div class="col-sm-6"><span class="-title"><?php echo $package->__get('package_name'); ?></span></div>
+                                        <?php
+                                        if ($active) {
+                                            ?>
+                                            <div class="col-sm-6 text-right">
+                                                <a href="<?php echo $scheduleUrl; ?>" class="btn btn-success">Schedule now</a>
+                                            </div>
+                                            <?php
+                                        }
+                                        ?>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <table>
+                                                <tr>
+                                                    <td>Date Of purchase</td>
+                                                    <td width="25px" class="text-center">:</td>
+                                                    <td><?php echo date('d F Y', strtotime($package->__get('usertrack_start_date'))); ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Ending On</td>
+                                                    <td>:</td>
+                                                    <td><?php echo date('d F Y', strtotime($package->__get('usertrack_expiry_date'))); ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Number of clothes left</td>
+                                                    <td>:</td>
+                                                    <td><?php echo $package->__get('clothes_left'); ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Number of pickups left</td>
+                                                    <td>:</td>
+                                                    <td><?php echo $package->__get('pickups_left'); ?></td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <?php
+                    } else {
+                    ?>
+                    <div class="row">
+                        <div class="subscription-pack-block">
+                            <div class="col-sm-10 col-sm-offset-1">
+                                <div class="row">
+                                    <div class="col-sm-6"><span class="-title">No Packages Subscribed Yet!</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <?php
+                }
+                ?>
+            </div>
+        </div>
+    </div>
+</div>

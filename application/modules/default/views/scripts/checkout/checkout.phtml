@@ -1,0 +1,502 @@
+<?php
+$auth = new My_Auth("user");
+$login_flag = FALSE;
+if ($auth->hasIdentity()) {
+    $login_flag = TRUE;
+    $user_id = $auth->getIdentity()->user_id;
+} else {
+    $user_id = 0;
+}
+
+$orderAddressMapper = new Application_Model_SavedAddressesMapper();
+?> 
+<div id="slider_wrapper2">
+    <div class="wrap" style="margin-top:110px;">
+
+        <h1>Checkout</h1>
+
+    </div>
+</div>
+<div class="faq-container" style="background: transparent;">
+    <div id="accordion" style="background: transparent">
+        <p class="accordion_header"><i class="fa fa-sign-in"></i>
+            <?php if ($login_flag): ?>
+                Welcome <?php echo $auth->getIdentity()->user_fname . " " . $auth->getIdentity()->user_lname; ?>
+            <?php else: ?>
+                Sign In 
+            <?php endif; ?>
+        </p>
+        <div>
+            <div id="signupalert" style="display: none;"></div>
+            <div class="panel-body">
+                <div class="row">
+                    <?php if ($login_flag == FALSE): ?>
+                        <div class="col-sm-6">
+
+                            <div class="row">
+                                <div class="col-sm-10">
+                                    <h5> I am returning customer</h5>
+
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Email</label>
+                                        <input type="email" class="form-control email" id="exampleInputEmail1" placeholder="Enter email" name="user_email">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputPassword1">Password</label>
+                                        <input type="password" class="form-control password" id="exampleInputPassword1" placeholder="Password" name="hashed_password">
+                                    </div>
+                                    <!--                                    <div class="checkbox">
+                                                                            <label>
+                                                                                <input type="checkbox"> I have Account
+                                                                            </label>
+                                                                        </div>-->
+                                    <!--<input type="hidden" name="request_type" value="login">-->
+                                    <button type="submit" class="btn btn-primary login">CONTINUE</button>
+
+                                </div>
+                            </div>
+
+
+
+                            <div class="clear"></div>
+                        </div>
+                        <div class="col-sm-6">
+
+                            <div class="row">
+                                <div class="col-sm-8 col-sm-offset-2">
+                                    <h5> Continue without Login</h5>
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Email</label>
+                                        <input type="email" class="form-control guest_email" id="exampleInputEmail1" placeholder="Enter email">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary no-login1">CONTINUE</button>
+
+                                </div>
+                            </div>
+
+
+
+                            <div class="clear"></div>
+                        </div>
+
+                    <?php else: ?>
+                        <div class="col-sm-6" >
+                            <div class="row">
+                                <div class="col-sm-8 col-sm-offset-2">
+                                    <h5> Logged in as <?php
+                                        $usersMapper = new Application_Model_UsersMapper();
+                                        $user = $usersMapper->getUserById($user_id);
+                                        if ($user) {
+                                            echo $user->__get("user_fname") . " " . $user->__get("user_lname");
+                                        } else {
+                                            echo "None";
+                                        }
+                                        ?></h5>
+                                    <button type="submit" class="btn btn-primary no-login">CONTINUE</button>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+                    <?php endif; ?>
+
+
+
+                </div>
+            </div>
+        </div>
+        <p class="accordion_header"><i class="fa fa-location-arrow"></i>Delivery Address </p>
+        <div>
+            <div id="address-alert" style="display: none;"></div>
+            <div class="panel-body">
+                <div class="row">
+
+                    <div class="col-sm-6" >
+                        <div class="row">
+                            <div class="col-sm-8 col-sm-offset-2 scroll">
+                                <div class="text-center center-block mg-bottom40">
+                                    <h4>DELIVERY ADDRESS</h4>
+                                </div>
+                                <?php
+                                $addresses = $orderAddressMapper->getUserAddress($user_id);
+                                if ($addresses):
+                                    foreach ($addresses as $address):
+                                        ?>
+                                        <div class="address-wrapper">
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <h4><?php echo $address->__get("contact_person_name"); ?><span class="pull-right">
+
+                                                        </span></h4>
+
+                                                </div>
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-12">
+
+                                                    <address>
+                                                        <strong><?php echo $address->__get("saved_address"); ?></strong><br>
+                                                        <?php echo "Near " . $address->__get("address_landmark"); ?><br>
+                                                        <?php echo $address->__get("address_city"); ?>, <?php echo $address->__get("address_state"); ?><br>
+                                                        <abbr title="Phone">P:</abbr> <?php echo $address->__get("contact_person_phn"); ?>
+                                                    </address>
+
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-12 text-center center-block">
+                                                    <a href="#" class="btn btn-warning continue-btn"
+                                                       data-id="<?php echo $address->__get("saved_address_id"); ?>"
+                                                       data-pincode="<?php echo $address->__get("address_pincode"); ?>"
+                                                       data-address="<?php echo $address->__get("saved_address"); ?>"
+                                                       data-landmark="<?php echo $address->__get("address_landmark"); ?>"
+                                                       data-phone="<?php echo $address->__get("contact_person_phn"); ?>"
+                                                       data-city="<?php echo $address->__get("address_city"); ?>"
+                                                       data-state="<?php echo $address->__get("address_state"); ?>"
+                                                       >CONTINUE</a>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="clear"></div>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <div class="address-wrapper">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <h4>
+                                                    <span class="pull-right">No Address found add new one..</span>
+                                                </h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                    <div class="col-sm-5">
+                        <div class="text-center center-block mg-bottom40">
+                            <h4>ADD NEW DELIVERY ADDRESS</h4>
+                        </div>
+                        <div class="row">
+                            <?php if ($this->address_hasMessage): ?>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="alert alert-block alert-<?php echo $this->messageType ?> fade in">
+                                            <button data-dismiss="alert" class="close close-sm" type="button">
+                                                <i class="fa fa-times"></i>
+                                            </button>
+                                            <?php if ($this->messageType == "danger"): ?>
+                                                <strong>Oh snap!</strong>
+                                            <?php elseif ($this->messageType == "success"): ?>
+                                                <strong>Well done!</strong>
+                                            <?php elseif ($this->messageType == "info"): ?>
+                                                <strong>Heads up!</strong>
+                                            <?php elseif ($this->messageType == "warning"): ?>
+                                                <strong>Warning!</strong>
+                                            <?php endif; ?>
+                                            <?php echo $this->message; ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+
+                        </div>
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-3 control-label">Name</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control username" id="inputEmail3" placeholder="Name" name="user_name">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPassword3" class="col-sm-3 control-label">Pincode</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control address_pincode" id="inputPassword3" placeholder="Pincode" name="pincode">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPassword3" class="col-sm-3 control-label">Address</label>
+                                <div class="col-sm-9">
+                                    <textarea type="text" class="form-control address_address" id="inputPassword3" placeholder="Address" name="address"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPassword3" class="col-sm-3 control-label">Landmark</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control address_landmark" id="inputPassword3" placeholder="Landmark" name="landmark">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPassword3" class="col-sm-3 control-label">Phone</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control address_phone" id="inputPassword3" placeholder="Phone" name="phone">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPassword3" class="col-sm-3 control-label">City</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control address_city" id="inputPassword3" placeholder="City" name="city">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPassword3" class="col-sm-3 control-label">State</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control address_state" id="inputPassword3" placeholder="State" name="state">
+                                </div>
+                            </div>
+                            <!--                            <div class="form-group">
+                                                            <div class="col-sm-offset-3 col-sm-9">
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="terms"> terms & Condition
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>-->
+                            <div class="form-group">
+                                <div class="col-sm-offset-3 col-sm-9">
+                                    <input type="hidden" class="user_id" value="<?php echo $this->user_id; ?>">
+                                    <input type="hidden" id="guest_email" value="">
+                                    <!--<input type="hidden" name="request_type" value="add_address">-->
+                                    <!--<input type="hidden" name="address_id" value="" id="address_id">-->
+                                    <button type="submit" class="btn btn-warning add-address">Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <p class="accordion_header"><i class="fa fa-shopping-cart"></i>Products </p>
+        <div>
+            <div class="panel-body">
+                <?php
+                $i = 0;
+                $total = 0;
+                $session = new Zend_Session_Namespace("order");
+                $qtys = $session->quantity;
+                $prices = $session->price;
+                $items = $session->items;
+                $total_new = $session->total;
+                ?>
+                <div class="row">
+                    <p class="font-italic" style="display: none;"></p>
+                    <p class="font-italic-new" style="display: none;"></p>
+                </div>
+                <table class="table table-hover">
+                    <tbody><tr>
+
+                            <td>Item</td>
+                            <td>Quantity</td>
+                            <td>Price</td>
+                            <td>Delivery Details</td>
+                            <td>Subtotal</td>
+                        </tr>
+                        <?php
+                        if ($items):
+                            foreach ($items as $item):
+                                ?>
+                                <tr>
+                                    <td class="pad20"><?php
+                                        $itemMapper = new Application_Model_ItemsMapper();
+                                        $item_name = $itemMapper->getItemById($item);
+                                        if ($item_name) {
+                                            echo $item_name->__get("item_name");
+                                        } else {
+                                            echo "None";
+                                        }
+                                        ?>
+                                    </td>
+                                    <td class="pad20"><?php echo $qtys[$i]; ?></td>
+                                    <td class="pad20">Rs. <?php echo $prices[$i]; ?></td>
+                                    <td class="pad20 test"><p style="color: #000;" class="address-string"><?php
+                                            $add_session = new Zend_Session_Namespace("address");
+
+                                            $address = $add_session->address;
+
+                                            $city = $add_session->city;
+                                            $state = $add_session->state;
+                                            $pincode = $add_session->pincode;
+                                            $landmark = $add_session->landmark;
+                                            echo $address . "," . $landmark . "," . $city . "," . $state . "," . $pincode;
+                                            ?></p></td>
+                                    <td class="pad20">Rs. <?php
+                                        echo $qtys[$i] * $prices[$i];
+                                        $total += $qtys[$i] * $prices[$i];
+                                        ?></td>
+                                </tr>
+                                <?php
+                                $i++;
+                            endforeach;
+                        endif;
+                        ?>
+                        <tr></tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="pad20"><strong>SubTotal</strong></td>
+                            <td class="pad20"><strong>Rs.<?php echo $total; ?></strong></td>
+                        </tr>
+                        <?php if ($total <= 100): ?>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td class="pad20"><strong>Delivery Charges</strong></td>
+                                <td class="pad20"><strong>Rs.50</strong></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td class="pad20"><strong>Total</strong></td>
+                                <td class="pad20"><strong>Rs.<?php echo ($total + 50); ?></strong></td>
+                            </tr>
+                        <?php else: ?>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td class="pad20"><strong>Discount</strong></td>
+                                <td class="pad20 discount_amount"><strong>Rs.0</strong></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td class="pad20"><strong>Total</strong></td>
+                                <td class="pad20 revised_amount"><strong>Rs.<?php echo $total; ?></strong></td>
+                            </tr>
+
+                        <?php endif; ?>
+
+                    </tbody>
+                </table>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <input type="text" class="form-control coupon" placeholder="Enter Coupon Code" style="margin-bottom: 30px;">
+                    </div>
+                    <div class="col-sm-2">
+                        <button type="submit" class="btn btn-warning coupon-collapse" data-amount="<?php echo $total; ?>">Submit</button>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-warning product-collapse" data-amount="<?php echo $total; ?>">Save &amp; Continue</button>
+            </div>
+        </div>
+        <p class="accordion_header"><i class="fa fa-paypal"></i>Payment Method </p>
+        <div>
+            <?php if ($this->hasMessage): ?>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="alert alert-block alert-<?php echo $this->messageType ?> fade in">
+                            <button data-dismiss="alert" class="close close-sm" type="button">
+                                <i class="fa fa-times"></i>
+                            </button>
+                            <?php if ($this->messageType == "danger"): ?>
+                                <strong>Oh snap!</strong>
+                            <?php elseif ($this->messageType == "success"): ?>
+                                <strong>Well done!</strong>
+                            <?php elseif ($this->messageType == "info"): ?>
+                                <strong>Heads up!</strong>
+                            <?php elseif ($this->messageType == "warning"): ?>
+                                <strong>Warning!</strong>
+                            <?php endif; ?>
+                            <?php echo $this->message; ?>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
+            <form method="post">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-4" style="padding:10px">
+                            <ul class="nav tablist" role="tablist" id="payment_check">
+                                <?php if ($login_flag): ?>
+                                    <li role="presentation" class="active"  data-id="Cash On Delivery"><a href="#cod" aria-controls="home" role="tab" data-toggle="tab"><i class="fa fa-money"></i> COD</a></li>
+                                    <li role="presentation" data-id="package"><a href="#package" aria-controls="profile" role="tab" data-toggle="tab" ><i class="fa fa-bank"></i> Package</a></li>
+                                    <li role="presentation" data-id="online-payment"><a href="#online-payment" aria-controls="messages" role="tab" data-toggle="tab" ><i class="fa fa-credit-card"></i> Online Payment</a></li>
+                                    <li role="presentation" data-id="wallet"><a href="#wallet" aria-controls="settings" role="tab" data-toggle="tab" ><i class="fa fa-money"></i> My Wallet</a></li>
+                                <?php else: ?>
+                                    <li role="presentation" class="active"  data-id="Cash On Delivery"><a href="#cod" aria-controls="home" role="tab" data-toggle="tab"><i class="fa fa-money"></i> COD</a></li>
+                                    <li role="presentation" data-id="online-payment"><a href="#online-payment" aria-controls="messages" role="tab" data-toggle="tab" ><i class="fa fa-credit-card"></i> Online Payment</a></li>
+                                <?php endif; ?>
+
+
+                            </ul>
+                        </div>
+                        <div class="col-sm-8"style="padding:10px" >
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane active" id="cod">You have selected Cash On Delivery as your Payment Type.</div>
+                                <div role="tabpanel" class="tab-pane" id="package">
+
+                                    <table class="table" style="float:right;width:80%;">
+                                        <tr>
+                                            <th>Package Name</th>
+                                            <th>Clothes Left</th>
+                                            <th>Pickups Left</th>
+                                            <th>Expiry Date</th>
+                                            <th>Pay using</th>
+                                        </tr>
+                                        <?php if ($this->userPackages): ?>
+                                            <?php foreach ($this->userPackages as $package): ?>
+                                                <tr>
+                                                    <td><?php
+                                                        $packagesMapper = new Application_Model_PackagesMapper();
+                                                        $package_name = $packagesMapper->getPackageById($package->__get("package_id"));
+                                                        if ($package_name) {
+                                                            echo $package_name->__get("package_name");
+                                                        } else {
+                                                            echo "None";
+                                                        }
+                                                        ?></td>
+                                                    <td><?php echo $package->__get("clothes_left"); ?></td>
+                                                    <td><?php echo $package->__get("pickups_left"); ?></td>
+                                                    <td><?php echo $package->__get("expiry_date"); ?></td>
+                                                    <td>
+
+                                                        <input type="radio" name="user_package_id" value="<?php echo $package->__get("user_package_id"); ?>">
+                                                    </td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        <?php endif; ?>
+
+                                    </table>
+
+
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="online-payment">You have selected Online Payment as your Payment Type.</div>
+                                <div role="tabpanel" class="tab-pane" id="wallet">You Have Rs. <?php echo $this->wallet_amount; ?> in Your Wallet.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" value="" class="disc_amount" name="discount_amount">
+                    <input type="hidden" value="" class="rev_amount" name="revised_amount">
+                    <input type="hidden" value="<?php echo $this->del_name; ?>" name="delivery_type">
+                    <input type="hidden" value="<?php echo $this->service_id; ?>" name="service_name">
+                    <input type="hidden" value="<?php echo $this->date; ?>" name="pickup_date">
+                    <input type="hidden" value="<?php echo $this->time; ?>" name="pickup_time">
+                    <input type="hidden" value="<?php echo $this->del_date; ?>" name="del_date">
+                    <input type="hidden" value="<?php echo $this->del_time; ?>" name="del_time">
+                    <input type="hidden" name="request_type" value="payment_type">
+                    <input type="hidden" name="payment_type" value="Cash On Delivery" id="payment_value">
+                    <button type="submit" class="btn btn-warning pull-right final-collapse">Save &amp; Continue</button>
+                </div>
+
+            </form>
+        </div>
+
+    </div> 
+</div>
+
+<div class="blue-bar">
+
+</div>

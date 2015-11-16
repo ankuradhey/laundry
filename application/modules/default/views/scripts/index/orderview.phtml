@@ -1,0 +1,271 @@
+<?php
+$thumb = $this->baseUrl() . "/public/thumbs/thumb.php";
+echo $this->partial('index/headerstrip.phtml', array('headlineText' => $this->headlineText))
+?>
+<form action='<?php echo $this->baseUrl('index/processcart'); ?>' method='post' onsubmit="return nextStep();">
+    <div class="container-fluid grey-label-instruction" style="border-bottom:solid 1px #ccc;">
+        <div class="container">
+            <div class='row-fluid service-list-cart'>
+                <div class="col-md-8 text-center custom-tabs">
+                    <div class="col-md-6 tab tab-service <?php echo $this->orderType == 'service'?'active':''; ?>" data-target="#service-list" onclick="switchOrder('service',this)">
+                        SERVICES
+                    </div>
+                    <div class="col-md-6 tab tab-package <?php echo $this->orderType == 'package'?'active':''; ?>" data-target="#package-list" onclick="switchOrder('package',this)">
+                        PACKAGES
+                    </div>
+                </div>
+                <div class="col-md-4" style="padding:20px;">
+                    <div class="col-md-6 pull-right">
+                        <input type="hidden" id="itemselected" name="itemselected" autocomplete="off" value='<?php echo count($this->selectedServices)?:count($this->selectedPackages); ?>'>
+                        <input type="hidden" id="itemprice" name="itemprice" value="" autocomplete="off">
+                        <input type="hidden" id="city" name="city" value="<?php echo $this->city; ?>">
+                        <button type="submit" class="btn btn-success btn-block" id="buttonclick">Schedule Order</button>
+                    </div>
+<!--                    <p id="itemdetail" class="total-item-info pull-right"><?php // echo count($this->selectedServices); ?></p>
+                    <p class="total-item-text total-item-info pull-right">Total Items:</p>-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container" style="padding:40px 0px 0 0;margin-bottom:150px;">
+        <!-- Example row of columns -->
+        <div class="row service-list <?php echo $this->orderType == 'package'?'hidden':''; ?>" id="service-list">
+            <?php
+            $j = '0';
+            foreach ($this->category as $item) {
+                $image = $this->baseUrl() . '/public/img/services/' . $item->__get('service_image');
+                $filepath = $_SERVER['DOCUMENT_ROOT'] . $image;
+                ?>
+                <div class="col-md-3 text-center single-service" id="maindiv_<?php echo $item->__get('service_id'); ?>" >
+                    <img src="<?php echo $thumb; ?>?src=<?php echo $image; ?>&h=150&w=150&zc=1" alt="" class="img-circle"/>
+                    <h2 class="block-title"> <?php echo $item->__get('service_name'); ?> </h2>
+                    <div class="product-items">
+                        <span class="badge icon_service" id="icon_<?php echo $item->__get('service_id'); ?>" style="<?php echo in_array($item->__get('service_id'), $this->selectedServices) ? "" : "display:none;" ?>">
+                            <i class="glyphicon glyphicon-ok" style="color:#29E529;"></i>
+                        </span>
+                    </div>
+                    <div class="product-action invisible">
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-success btn-block" onclick="selectproduct('<?php echo $item->__get('service_id'); ?>');">Add</button>
+                            <input class="itemcount-service" type="hidden" id="itemcount-<?php echo $item->__get('service_id'); ?>" name="itemcount[service][<?php echo $item->__get('service_id'); ?>]" value="<?php echo in_array($item->__get('service_id'), $this->selectedServices) ? "1" : ""; ?>" autocomplete="off">
+                        </div>
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-disable btn-block" onclick="removeproduct('<?php echo $item->__get('service_id'); ?>')">Remove</button>
+                        </div>
+                    </div>
+                    <input type="hidden" class="decorate_service" name="decorate" id="decorate_<?php echo $item->__get('service_id'); ?>" value="<?php echo in_array($item->__get('service_id'), $this->selectedServices) ? "decorate" : ""; ?>" autocomplete="off">   
+                </div>
+                <?php
+                $j++;
+            }
+            ?>
+        </div>
+        <div class="row services-list text-center packages-list <?php echo $this->orderType == 'service'?'hidden':''; ?>" id="package-list">
+            <?php
+            $j = '0';
+            foreach ($this->packages as $package) {
+                $image = $this->baseUrl() . '/public/img/packages/' . $package->__get('package_icon');
+                $filepath = $_SERVER['DOCUMENT_ROOT'] . $image;
+                ?>
+                <div class="col-md-3 text-center single-package" id="maindiv_package_<?php echo $package->__get('package_id'); ?>">
+                    <div class="heading">
+                        <img src="<?php echo $image; ?>" width="50" height="50">
+                        <h2 class="block-title"> <?php echo $package->__get('package_name'); ?> </h2>
+                    </div>
+                    <div class="details">
+                        <ul>
+                            <li><?php echo $package->__get("no_of_clothes");?> Clothes</li>
+                            <li><?php echo $package->__get("saving_percent");?>% Saving</li>
+                            <li>Free Pickup &amp; Delivery <br /> Twice a week</li>
+                            <li>1 Month Validity</li>
+                        </ul>
+                    </div>
+                    <div class="product-items">
+                        <span class="badge icon_package" id="icon_package_<?php echo $package->__get('package_id'); ?>" 
+                              style="<?php echo in_array($package->__get('package_id'), $this->selectedPackages) ? "" : "display:none;" ?>">
+                            <i class="glyphicon glyphicon-ok" style="color:#29E529;"></i>
+                        </span>
+                    </div>
+                    <div class="product-action invisible">
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-success btn-block" onclick="selectpackage('<?php echo $package->__get('package_id'); ?>');">Add</button>
+                            <input type="hidden" class="itemcount-package" id="itemcount-package-<?php echo $package->__get('package_id'); ?>" name="itemcount[package][<?php echo $package->__get('package_id'); ?>]" value="<?php echo in_array($package->__get('package_id'), $this->selectedPackages) ? "1" : ""; ?>" autocomplete="off">
+                        </div>
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-disable btn-block" onclick="removepackage('<?php echo $package->__get('package_id'); ?>')">Remove</button>
+                        </div>
+                    </div>
+                    <input type="hidden" class="decorate_package" name="decorate_package" id="decorate_package_<?php echo $package->__get('package_id'); ?>" value="<?php echo in_array($package->__get('package_id'), $this->selectedPackages) ? "decorate" : ""; ?>" autocomplete="off">   
+                </div>
+                <?php
+                $j++;
+            }
+            ?>
+        </div>
+    </div>
+    <input type='hidden' name='step' value='services'>
+</form>
+<?php echo $this->getHelper('CartSteps')->getSteps(1,$this->orderType); ?>
+<script type="text/javascript">
+    function switchOrder(tab, _this){
+        var $element = $(_this);
+        if(!$element.hasClass('active')){
+            $('.service-list-cart .tab').removeClass('active');
+            $element.addClass('active');
+            var targetElement = $($element.data('target'));
+            targetElement.toggleClass('hidden');
+            $('#service-list, #package-list').removeClass('hidden').addClass('hidden');
+            $('#'+tab+'-list').removeClass('hidden');
+            
+            //remove selected services/package
+            if(tab == 'service'){
+                $(".itemcount-package").val('');
+                $(".decorate_package").val('');
+                //remove all badges
+                $(".badge.icon_package").css('display', 'none');
+            }else{
+                $(".itemcount-service").val('');
+                $(".decorate_service").val('');
+                //remove all badges
+                $(".badge.icon_service").css('display', 'none');
+            }
+            
+            //change cart steps 
+            if(tab == 'service'){
+                $('#cart-step-1').empty().text('ADD SERVICES');
+                $('#cart-step-3').empty().text('SCHEDULE');
+                $('#cart-step-4').empty().text('SUMMARY');
+            }else{
+                $('#cart-step-1').empty().text('ADD PACKAGE');
+                $('#cart-step-3').empty().text('SUMMARY');
+                $('#cart-step-4').empty().text('PAYMENT');
+            }
+        }
+    }
+    
+    function removeproduct(id) {
+        var decort = $("#decorate_" + id).val();
+        if (decort) {
+            var itemcount = $("#itemcount-" + id).val();
+            var itemcount = parseInt(itemcount) ? parseInt(itemcount) - 1 : 1;
+            if (parseInt(itemcount) == NaN) {
+                $("#itemcount-" + id).val('');
+                $("#icon_" + id).hide();
+            } else {
+                $("#itemcount-" + id).val(parseInt(itemcount));
+                //  $("#icon_" + id).empty().text(parseInt(itemcount));
+            }
+            if (!itemcount) {
+                $("#decorate_" + id).val('');
+                $("#icon_" + id).css('display', 'none');
+            }
+            var totalItems = $('#itemselected').val();
+            totalItems = totalItems ? parseInt(totalItems) - 1 : 0;
+            $('#itemselected').val(totalItems);
+
+//            var msg = totalItems + " items";
+
+            //var msg = $("#itemcount-" + id).val() + "item";
+//            var msg = totalItems + " item";
+//            var msg = totalItems;
+//            $("#itemdetail").html(msg);
+        }
+        return;
+    }
+    
+    function removepackage(id) {
+        var decort = $("#decorate_package_" + id).val();
+        if (decort) {
+            var itemcount = $("#itemcount-package-" + id).val();
+            var itemcount = parseInt(itemcount) ? parseInt(itemcount) - 1 : 1;
+            if (parseInt(itemcount) == NaN) {
+                $("#itemcount-package-" + id).val('');
+                $("#icon_package_" + id).hide();
+            } else {
+                $("#itemcount-package-" + id).val(parseInt(itemcount));
+                //  $("#icon_" + id).empty().text(parseInt(itemcount));
+            }
+            if (!itemcount) {
+                $("#decorate_package_" + id).val('');
+                $("#icon_package_" + id).css('display', 'none');
+            }
+            var totalItems = $('#itemselected').val();
+            totalItems = totalItems ? parseInt(totalItems) - 1 : 0;
+            $('#itemselected').val(totalItems);
+
+//            var msg = totalItems + " items";
+
+            //var msg = $("#itemcount-" + id).val() + "item";
+//            var msg = totalItems + " item";
+//            var msg = totalItems;
+//            $("#itemdetail").html(msg);
+        }
+        return;
+    }
+    
+    function selectproduct(id) {
+        var decorate = $("#decorate_" + id).val();
+        if (!decorate) {
+            $("#icon_" + id).css('display', 'inline-block');
+            $("#decorate_" + id).val('decorate');
+            var itemcount = $("#itemcount-" + id).val();
+            var itemcount = parseInt(itemcount) ? parseInt(itemcount) + 1 : 1;
+            $("#itemcount-" + id).val(itemcount);
+            //$("#icon_" + id).empty().text(itemcount);
+            var msg = itemcount + "item";
+            var totalItems = $('#itemselected').val();
+            totalItems = totalItems ? parseInt(totalItems) + 1 : 1;
+            $('#itemselected').val(totalItems);
+//            var msg = totalItems + " items";
+//            var msg = totalItems;
+//            $("#itemdetail").html(msg);
+        }
+    }
+    
+    function selectpackage(id) {
+        var decorate = $("#decorate_package_" + id).val();
+        if (!decorate) {
+            //only one package at a time
+            $('.icon_package').css('display','none');
+            $("#icon_package_" + id).css('display', 'inline-block');
+            $('.decorate_package').val('');
+            $("#decorate_package_" + id).val('decorate');
+            $('.itemcount-package').val('');
+            var itemcount = $("#itemcount-package-" + id).val();
+            var itemcount = parseInt(itemcount) ? parseInt(itemcount) + 1 : 1;
+            $("#itemcount-package-" + id).val(itemcount);
+            //$("#icon_" + id).empty().text(itemcount);
+            var msg = itemcount + "item";
+            var totalItems = $('#itemselected').val();
+            totalItems = totalItems ? parseInt(totalItems) + 1 : 1;
+            $('#itemselected').val(totalItems);
+//            var msg = totalItems + " items";
+//            var msg = totalItems;
+//            $("#itemdetail").html(msg);
+        }
+    }
+    
+
+    function nextStep() {
+        var totalItems = $('#itemselected').val();
+        var url = "<?php echo $this->baseUrl(); ?>/index/pickup";
+        if (parseInt(totalItems) > 0) {
+            return true;
+        } else {
+            alert("Please select atleast one item");
+            return false;
+        }
+    }
+    
+    if(window.sessionStorage.getItem('orderType') == 'package'){
+        $('.tab').removeClass('active');
+        $('.tab-package').addClass('active');
+        var packageId = window.sessionStorage.getItem('orderTypeId');
+        window.sessionStorage.clear();
+        window.location.href=window.location.href.split('#_=_').join('')+'?ordertype=package&id='+packageId;
+    }
+    
+    if(window.sessionStorage.getItem('locationCity')){
+        $('#city').val((window.sessionStorage.getItem('locationCity')));
+    }
+</script>

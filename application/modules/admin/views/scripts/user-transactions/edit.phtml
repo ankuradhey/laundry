@@ -1,0 +1,42 @@
+<?php if ($this->hasMessage): ?>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="alert alert-block alert-<?php echo $this->messageType ?> fade in">
+                <button data-dismiss="alert" class="close close-sm" type="button">
+                    <i class="fa fa-times"></i>
+                </button>
+                <?php if ($this->messageType == "danger"): ?>
+                    <strong>Oh snap!</strong>
+                <?php elseif ($this->messageType == "success"): ?>
+                    <strong>Well done!</strong>
+                <?php elseif ($this->messageType == "info"): ?>
+                    <strong>Heads up!</strong>
+                <?php elseif ($this->messageType == "warning"): ?>
+                    <strong>Warning!</strong>
+                <?php endif; ?>
+                <?php echo $this->message; ?>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>
+
+<section class="panel panel-default">
+    <header class="panel-heading font-bold"> Edit Wallet Entry </header>
+    <div class="panel-body">
+        <form class="form-horizontal" method="post">
+            <?php
+            $elements = $this->form->getElements();
+            foreach ($elements as $element):
+                ?>
+                <div class="control-group">
+                    <?php echo $element; ?>
+                </div>
+            <?php endforeach; ?>
+
+            <div class="col-sm-4 col-sm-offset-2"> 
+                <input type="hidden" name="request_type" value="edit">
+                <button type="submit" class="btn btn-primary">Edit</button> 
+            </div>
+        </form>
+    </div>
+</section>

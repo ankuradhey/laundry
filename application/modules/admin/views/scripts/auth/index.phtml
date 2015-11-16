@@ -1,0 +1,42 @@
+<div id="mws-login-form">
+
+    <form class="mws-form" method="post" novalidate="novalidate">
+        <?php if ($this->hasMessage): ?>
+            <div class="mws-form-message <?php echo $this->messageType=='danger'?'error':$this->messageType; ?>">
+                        <?php if ($this->messageType == "danger"): ?>
+                            <strong>Oh snap!</strong>
+                        <?php elseif ($this->messageType == "success"): ?>
+                            <strong>Well done!</strong>
+                        <?php elseif ($this->messageType == "info"): ?>
+                            <strong>Heads up!</strong>
+                        <?php elseif ($this->messageType == "warning"): ?>
+                            <strong>Warning!</strong>
+                        <?php endif; ?>
+                        <?php echo $this->message; ?>
+            </div>
+        <?php endif; ?>
+
+        <div class="mws-form-row">
+            <div class="mws-form-item large">
+                <input type="text" name="admin_username" class="mws-login-username mws-textinput required" placeholder="username" />
+            </div>
+        </div>
+        <div class="mws-form-row">
+            <div class="mws-form-item large">
+                <input type="password" name="hashed_password" class="mws-login-password mws-textinput required" placeholder="password" />
+            </div>
+        </div>
+        <div class="mws-form-row mws-inset">
+            <ul class="mws-form-list inline">
+                <li><input type="checkbox" /> <label>Remember me</label></li>
+            </ul>
+            <input type="hidden" name="request_type" value="login">
+        </div>
+        <div class="mws-form-row">
+            <input type="submit" value="Login" class="mws-button green mws-login-button" />
+        </div>
+    </form>
+</div>
+
+
+

@@ -1,0 +1,403 @@
+<?php
+echo $this->partial('index/headerstrip.phtml', array('headlineText' => $this->headlineText));
+
+$now = new DateTime();
+$now->setTimezone(new DateTimeZone('Asia/Kolkata'));
+$timestamp = strtotime($now->format('H:00')) + 2 * 60 * 60;
+$next_time = date('H:00', $timestamp);
+$Current_time = $now->format('H:00') . '-' . $next_time . "&nbsp;";
+
+$currentTime = date('d-m-Y h:iA');
+$currentTime = strtotime($currentTime);
+
+//check if delivery method is express || regular
+//in case of regular there is 2 days gap i.e. 3rd day
+//in case of express there is 1 days gap i.e. 2nd day
+$currentTimeDelivery = strtotime("+2 day", $currentTime);
+$nextDayIndex = 2;
+?>
+<form action='<?php echo $this->baseUrl(); ?>/my-account/orderpackage' method='post'>
+    <div class='container-fluid'>
+        <div class="row grey-label-instruction" style="padding:20px 0">
+            <div class="container service-list-cart" >
+                <a class="col-md-1" href="<?php echo $this->baseUrl(); ?>/index/address">
+                    <h4><i class="glyphicon glyphicon-chevron-left"></i>Back</h4>
+                </a>
+                <div class="col-md-9">
+                    <h4 class='text-center headline'>We will collect from this address and deliver back here too</h4>
+                </div>
+                <div class="col-md-2 pull-right">
+                    <button type="submit" class="btn btn-success btn-block" id="buttonclick">Schedule Order</button>
+                </div>
+            </div>
+        </div>
+
+        <div class='row grey-label-instruction'>
+            <div class='container'>
+                <div class='row-fluid'>
+                    <div class='col-md-6'>
+                        <img class ='pull-left' src="<?php echo $this->baseUrl(); ?>/public/img/blue_truck.png" height="55" width='100' style='padding:10px;'>
+                        <h4 class='text-center headline pickup-date-headline' style='padding:15px;'>
+                            <?php
+                            echo $Current_time . " " . date('l, F jS ');
+                            ?>
+                        </h4>
+                    </div>
+                    <div class='col-md-6'>
+                        <img class='pull-left' src="<?php echo $this->baseUrl(); ?>/public/img/green_truck.png" height="55" width='100' style='padding:10px;'>
+                        <h4 class='text-center headline delivery-date-headline' style='padding:15px;'>
+                            <?php
+                            echo $Current_time . " " . date('l, F jS ');
+                            ?>
+                        </h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php
+    //useful for now
+    $slottimes = 120;
+    $duration = 60;
+    $business_start = '09:00AM';
+    $business_end = '11:00PM';
+    $start = strtotime($business_start);
+
+    $nextstart = strtotime($business_start) + 7200;
+
+    $end = strtotime($business_end);
+    $nextSlotTime = array();
+    for ($i = $start; $i <= $end; $i += (60 * $slottimes)) {
+        $slotlist[] = date('g:iA', $i);
+    }
+
+    for ($i = $nextstart; $i <= $end; $i += (60 * $slottimes)) {
+        $nextSlotTime[] = date('g:iA', $i);
+    }
+
+    $appstarttime = array('11:00AM', '1:00PM', $business_end);          //business end-time always be in array
+    $previoustime = NULL;
+    $nexttime = array($business_end);
+    $merge = array();
+
+
+//when today time slot is finished
+    if ($end < strtotime(date('g:ia'))) {
+        $addI = 1;
+    } else {
+        $addI = 0;
+    }
+    ?>
+    <div class='container'>
+        <div class='row scheduler-block'>
+
+            <div class='col-md-6'>
+                <div id="pickup-date-block" class='pickup-date-block'>
+                    <!-- Nav Tabs -->
+                    <ul class='nav nav-tabs' role='tablist'>
+                        <?php
+                        for ($i = 0 + $addI; $i < 7 + $addI; $i++) {
+                            ?>
+                            <li role='presentation' class='<?php echo $i == 0 + $addI ? 'active' : ''; ?>'>
+                                <?php
+                                $tabCurrentDay = date('D', strtotime("+$i day", strtotime(date('l M j'))));
+                                $tabCurrentDate = date('d', strtotime("+$i day", strtotime(date('l M j'))));
+                                ?>
+                                <a href='#<?php echo $tabCurrentDay . "-" . $tabCurrentDate; ?>' arial-controls='<?php echo $tabCurrentDay; ?>' role='tab' data-toggle='tab'>
+                                    <?php
+                                    echo "<span>" . date('D', strtotime("+$i day", strtotime(date('l M j')))) . "<span>";
+                                    echo '<br>';
+                                    echo "<span style='font-size:12px;'>" . date('M', strtotime("+$i day", strtotime(date('l M j')))) . "</span>";
+                                    echo '<br>';
+                                    echo "<span>" . date('d', strtotime("+$i day", strtotime(date('l M j')))) . "</span>";
+                                    ?>
+                                </a>
+                            </li>
+                            <?php
+                        }
+                        ?>
+                    </ul>
+
+                    <!-- Tab Panes -->
+                    <div class='tab-content'>
+                        <?php
+                        $flagCurrent = false;
+                        for ($i = 0 + $addI; $i < 7 + $addI; $i++) {
+
+                            $tabCurrentDay = date('D', strtotime("+$i day", strtotime(date('l M j'))));
+                            $tabCurrentDate = date('d', strtotime("+$i day", strtotime(date('l M j'))));
+                            $tabDate = date('d-m-Y ', strtotime("+$i day", strtotime(date('l M j'))));
+                            ?>
+                            <div role='tabpanel' class='tab-pane <?php echo $i == 0 + $addI ? "active" : ""; ?>'  id='<?php echo $tabCurrentDay . "-" . $tabCurrentDate; ?>'>
+                                <ul class='collection_times times'>
+                                    <?php
+                                    foreach ($slotlist as $key => $single) {
+                                        $selected = false;
+                                        if (isset($nextSlotTime[$key])) {
+                                            $disableSlotCheck = ($currentTime) > strtotime($tabDate . $nextSlotTime[$key]) ? 'btn-default color-black' : '';
+                                            if (!$disableSlotCheck) {
+                                                if ($currentTime >= strtotime($tabDate . $single) && $currentTime < strtotime($tabDate . $nextSlotTime[$key])) {
+                                                    $currentTimeDelivery = strtotime('+2 day', $currentTime);
+                                                    $currentSlotCheck = 'active btn-success';
+                                                    $flagCurrent = true;
+                                                    $selected = true;
+                                                }else {
+                                                    //if not found in current slot
+                                                    if (!$flagCurrent && $currentTime < strtotime($tabDate . $single)) {
+                                                        $currentTimeDelivery = strtotime('+2 day', strtotime($tabDate . $single));
+                                                        $currentSlotCheck = 'active btn-success';
+                                                        $flagCurrent = true;
+                                                        $selected = true;
+                                                    } else {
+                                                        $currentSlotCheck = 'btn-primary';
+                                                    }
+                                                }
+                                            }
+                                            else
+                                                $currentSlotCheck = $disableSlotCheck;
+                                            ?>
+                                            <li class="collection_1_07 btn <?php echo $currentSlotCheck; ?>" id="pickupSlot_<?php echo date('Y-n-j-G-i', strtotime($tabDate . $nextSlotTime[$key])); ?>" data-slot="<?php echo $single . "-" . $nextSlotTime[$key]; ?>" data-date="<?php echo date('Y, m, d, H, i, s', strtotime($tabDate . $nextSlotTime[$key])); ?>" data-headline="<?php echo date('l, F d', strtotime($tabDate . $nextSlotTime[$key])) ?>" data-time="<?php echo strtotime($tabDate . $nextSlotTime[$key]); ?>" onclick='selectTimeSlot(this);'>
+
+                                                <?php
+                                                if ($selected) {
+                                                    ?>
+                                                    <input type="radio" name="pickupDate" value="<?php echo $tabDate; ?>" checked='checked' class="hidden">
+                                                    <input type='radio' name='pickupTimeSlot' value='<?php echo $single . "-" . $nextSlotTime[$key]; ?>' checked='checked' class="hidden">
+                                                    <?php
+                                                } else {
+                                                    ?>
+                                                    <input type='radio' name='pickupTimeSlot' value='<?php echo $single . "-" . $nextSlotTime[$key]; ?>' class="hidden">
+                                                    <input type="radio" name="pickupDate" value="<?php echo $tabDate; ?>"  class="hidden">
+                                                    <?php
+                                                }
+                                                ?>
+                                                <?php echo $single . "-" . $nextSlotTime[$key]; ?>
+                                            </li>
+                                            <?php
+                                        }
+                                    }
+                                    ?>
+                                </ul>
+                            </div>
+                            <?php
+                        }
+                        ?>
+                    </div>
+                </div>
+            </div>
+            <div class='col-md-6'>
+                <div id="delivery-date-block" class='pickup-date-block'>
+                    <!-- Nav Tabs -->
+                    <ul class='nav nav-tabs' role='tablist'>
+                        <?php
+                        for ($i = 0 + $addI; $i < 10 + $addI; $i++) {
+                            $tabCurrentDay = date('D', strtotime("+$i day", strtotime(date('l M j'))));
+                            $tabCurrentDate = date('d', strtotime("+$i day", strtotime(date('l M j'))));
+                            $tabDate = date('d-m-Y ', strtotime("+$i day", strtotime(date('l M j'))));
+                            ?>
+                            <li role='presentation' class='<?php echo $i == $nextDayIndex + $addI ? 'active' : ''; ?> deliverySlotNav_<?php echo date('Y-n-d', strtotime($tabDate)); ?>'>
+                                <a href='#<?php echo $tabCurrentDay . "-" . $tabCurrentDate; ?>2' arial-controls='<?php echo $tabCurrentDay; ?>2' role='tab' data-toggle='tab'>
+                                    <?php
+                                    echo "<span>" . date('D', strtotime("+$i day", strtotime(date('l M j')))) . "<span>";
+                                    echo '<br>';
+                                    echo "<span style='font-size:12px;'>" . date('M', strtotime("+$i day", strtotime(date('l M j')))) . "</span>";
+                                    echo '<br>';
+                                    echo "<span>" . date('d', strtotime("+$i day", strtotime(date('l M j')))) . "</span>";
+                                    ?>
+                                </a>
+                            </li>
+                            <?php
+                        }
+                        ?>
+                    </ul>
+
+                    <!-- Tab Panes -->
+                    <div class='tab-content'>
+                        <?php
+                        for ($i = 0 + $addI; $i < 10 + $addI; $i++) {
+                            $tabCurrentDay = date('D', strtotime("+$i day", strtotime(date('l M j'))));
+                            $tabCurrentDate = date('d', strtotime("+$i day", strtotime(date('l M j'))));
+                            $tabDate = date('d-m-Y ', strtotime("+$i day", strtotime(date('l M j'))));
+                            ?>
+                            <div role='tabpanel' class='tab-pane <?php echo $i == $nextDayIndex + $addI ? "active" : ""; ?>' id='<?php echo $tabCurrentDay . "-" . $tabCurrentDate; ?>2'>
+                                <ul class='collection_times times'>
+                                    <?php
+                                    foreach ($slotlist as $key => $single) {
+                                        if (isset($nextSlotTime[$key])) {
+
+                                            $disableSlotCheck = ($currentTimeDelivery) > strtotime($tabDate . $nextSlotTime[$key]) ? 'btn-default color-black' : '';
+
+
+                                            if (!$disableSlotCheck) {
+                                                //condition for checking current time slot
+                                                $currentSlotCheck = ($currentTimeDelivery >= strtotime($tabDate . $single) && $currentTimeDelivery < strtotime($tabDate . $nextSlotTime[$key])) ? 'active btn-success' : 'btn-primary';
+                                            }
+                                            else
+                                                $currentSlotCheck = $disableSlotCheck;
+                                            ?>
+                                            <li class="collection_1_07 <?php echo $currentSlotCheck; ?>" 
+                                                id="deliverySlot_<?php echo date('Y-n-j-G-i', strtotime($tabDate . $nextSlotTime[$key])); ?>" onclick='selectDeliveryTimeSlot(this)' 
+                                                data-slot="<?php echo $single . "-" . $nextSlotTime[$key]; ?>" 
+                                                data-headline="<?php echo date('l, F d', strtotime($tabDate . $nextSlotTime[$key])) ?>" 
+                                                data-time="<?php echo strtotime($tabDate . $nextSlotTime[$key]); ?>"
+                                                data-date="<?php echo date('Y, m, d, H, i, s', strtotime($tabDate . $nextSlotTime[$key])); ?>">
+                                                    <?php
+                                                    if ($currentTimeDelivery >= strtotime($tabDate . $single) && $currentTimeDelivery < strtotime($tabDate . $nextSlotTime[$key])) {
+                                                        ?>
+                                                    <input type="radio" name="deliveryDate" value="<?php echo $tabDate; ?>" checked='checked' class="hidden">
+                                                    <input type='radio' name='deliveryTimeSlot' value='<?php echo $single . "-" . $nextSlotTime[$key]; ?>' checked='checked' class="hidden">
+                                                    <?php
+                                                } else {
+                                                    ?>
+                                                    <input type="radio" name="deliveryDate" value="<?php echo $tabDate; ?>" class="hidden">
+                                                    <input type='radio' name='deliveryTimeSlot' value='<?php echo $single . "-" . $nextSlotTime[$key]; ?>' class="hidden">
+                                                    <?php
+                                                }
+                                                ?>
+                                                <?php echo $single . "-" . $nextSlotTime[$key]; ?>
+                                            </li>
+                                            <?php
+                                        }
+                                    }
+                                    ?>
+                                </ul>
+                            </div>
+                            <?php
+                        }
+                        ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" name="trackId" value="<?php echo $this->trackId; ?>">
+    <input type='hidden' name='step' value='schedule'>
+</form>
+<script type='text/javascript'>
+                                    var weekArray = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                                    var monthArray = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                                    var deliveryType = '<?php echo $this->deliveryType; ?>';
+                                    function selectTimeSlot($this) {
+                                        if (!$($this).hasClass('btn-default')) {
+
+                                            var selectedTime = $($this).data('time');
+                                            var selectedDate = $($this).data('date');
+                                            selectedDate = selectedDate.split(',');
+                                            var selectedSlot = new Date(selectedDate[0], selectedDate[1] - 1, selectedDate[2], selectedDate[3], selectedDate[4], selectedDate[5]);
+                                            var deliveryGap = deliveryType == 'Regular' ? 259200000 : 172800000;
+                                            deliveryGap = deliveryType == 'Fixed Slot' ? 43200000 : deliveryGap;
+                                            //sets pickup date in headline
+                                            setPickupDateHeadline($this, selectedSlot);
+
+                                            //                                var pickupSlot = selectedSlot.getTime() + parseInt(172800000);
+                                            var pickupSlot = selectedSlot.getTime() + parseInt(deliveryGap);
+                                            pickupSlot = new Date(pickupSlot);
+                                            console.log(pickupSlot);
+                                            //sets delivery date in headline
+                                            setDeliveryDateHeadline($this, pickupSlot);
+
+                                            pickupSlot = pickupSlot.getFullYear() + '-' + (pickupSlot.getMonth() + 1) + '-' + pickupSlot.getDate() + '-' + pickupSlot.getHours() + '-' + pad(pickupSlot.getMinutes(), 2);
+                                            //activates current pickup slot and selects input radio and deactivates earlier activated pickupslots
+                                            activateCurrentSlot($this);
+                                            //activates delivery slot and disables previous delivery slots which does not fall in criteria
+                                            activateDeliverySlotClass(pickupSlot);
+
+                                            //activate delivery slot tab
+                                            activateDeliveryTab(pickupSlot);
+                                        }
+                                    }
+
+                                    function activateDeliveryTab(deliverySlot) {
+                                        var $slotElem = $('#deliverySlot_' + deliverySlot);
+                                        var dateAttr = $slotElem.data('date');
+                                        dateAttr = dateAttr.split(',');
+                                        $('#delivery-date-block ul li').removeClass('active');
+                                        //check nav tab to be activated
+                                        console.log('.deliverySlotNav_' + dateAttr[0] + '-' + $.trim(dateAttr[1]) + '-' + $.trim(dateAttr[2]));
+
+                                        $('.deliverySlotNav_' + dateAttr[0] + '-' + $.trim(dateAttr[1]) + '-' + pad($.trim(dateAttr[2]), 2)).addClass('active');
+
+                                        //content tab activated
+                                        $('#delivery-date-block .tab-content .tab-pane').removeClass('active');
+                                        $slotElem.closest('.tab-pane').addClass('active');
+                                    }
+
+                                    function selectDeliveryTimeSlot($this) {
+                                        if (!$($this).hasClass('btn-default')) {
+                                            var selectedTime = $($this).data('time');
+                                            var selectedDate = $($this).data('date');
+                                            selectedDate = selectedDate.split(',');
+                                            var selectedSlot = new Date(selectedDate[0], selectedDate[1] - 1, selectedDate[2], selectedDate[3], selectedDate[4], selectedDate[5]);
+                                            activateCurrentSlot($this);
+                                            setDeliveryDateHeadline($this, selectedSlot);
+                                        }
+                                    }
+
+                                    function setDeliveryDateHeadline($this, deliverySlot) {
+                                        $('.delivery-date-headline').empty().text($($this).data('slot') + ' ' + weekArray[deliverySlot.getDay()] + ', ' + monthArray[deliverySlot.getMonth()] + ' ' + deliverySlot.getDate());
+                                    }
+
+                                    function setPickupDateHeadline($this, selectedSlot) {
+                                        $('.pickup-date-headline').empty().text($($this).data('slot') + ' ' + weekArray[selectedSlot.getDay()] + ', ' + monthArray[selectedSlot.getMonth()] + ' ' + selectedSlot.getDate());
+                                    }
+
+                                    //manages activation of current slot selected and disables other previous activated slots
+                                    function activateCurrentSlot($this) {
+                                        //remove success active and apply default
+                                        $($this).closest('.tab-content').find('.btn-success').children('input').removeAttr('checked');
+                                        $($this).closest('.tab-content').find('.btn-success').removeClass('btn-success').removeClass('active').addClass('btn-primary');
+
+
+                                        $($this).parent().children('li').removeClass('active');
+                                        $($this).parent().children('li').removeClass('btn-success');
+                                        $($this).addClass('active');
+                                        $($this).addClass('btn-success');
+                                        $($this).children('input').attr('checked', 'checked');
+                                    }
+
+                                    //activates delivery slot and disables delivery slot which are less than the time gap required
+                                    function activateDeliverySlotClass(pickupSlot) {
+                                        //remove selected deliveryDate
+                                        $('#delivery-date-block .tab-content').find('.btn-success').children('input').removeAttr('checked');
+                                        $('#delivery-date-block .tab-content').find('.btn-success').removeClass('btn-success').removeClass('active').addClass('btn-primary');
+                                        $('#deliverySlot_' + pickupSlot).addClass('active').addClass('btn-success').removeClass('color-black').removeClass('btn-default');
+                                        $('#deliverySlot_' + pickupSlot).children('input').attr('checked', 'checked');
+
+                                        //disable all previous slots and remove disability on all available slots
+                                        var deliveryTime = $('#deliverySlot_' + pickupSlot).data('time');
+                                        $('#delivery-date-block .tab-content ul > li').each(function(index, item) {
+                                            //                                    console.log($(item).attr('class'),$(item).data('time'),deliveryTime);
+                                            if (deliveryTime > $(item).data('time') && !$(item).hasClass('btn-default')) {
+                                                $(item).removeClass('btn-primary').removeClass('btn-success').removeClass('active').addClass('btn-default').addClass('color-black');
+                                            } else if (deliveryTime < $(item).data('time') && $(item).hasClass('btn-default')) {
+                                                $(item).removeClass('btn-default').removeClass('color-black').addClass('btn-primary');
+                                            }
+                                        })
+                                    }
+
+                                    //on load set pickup and delivery date
+                                    $(document).ready(function(e) {
+                                        //delivery date
+<?php
+if ($this->deliveryType != 'Fixed Slot') {
+    ?>
+                                            var slot = $('#delivery-date-block .tab-content').find('.btn-success.active').data('slot');
+                                            var headline = $('#delivery-date-block .tab-content').find('.btn-success.active').data('headline');
+                                            $('.delivery-date-headline').empty().text(slot + ' ' + headline);
+
+                                            //pickup date
+                                            slot = $('#pickup-date-block .tab-content').find('.btn-success.active').data('slot');
+                                            headline = $('#pickup-date-block .tab-content').find('.btn-success.active').data('headline');
+                                            $('.pickup-date-headline').empty().text(slot + ' ' + headline);
+
+    <?php
+}
+?>
+                                    });
+
+                                    function pad(n, width, z) {
+                                        z = z || '0';
+                                        n = n + '';
+                                        return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+                                    }
+</script>

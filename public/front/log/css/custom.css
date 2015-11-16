@@ -1,0 +1,11 @@
+.navf ul li
+{
+float:left;
+padding :10px;
+font-size:20px;
+}
+.navf ul li a
+{
+font-size:15px;
+font-weight: 700;
+}

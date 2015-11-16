@@ -1,0 +1,93 @@
+<div id="slider_wrapper2">
+    <div class="wrap mgt100">
+
+        <h1>Login to your account</h1>
+
+    </div>
+</div>
+<?php if ($this->hasMessage): ?>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="alert alert-block alert-<?php echo $this->messageType ?> fade in">
+                <button data-dismiss="alert" class="close close-sm" type="button">
+                    <i class="fa fa-times"></i>
+                </button>
+                <?php if ($this->messageType == "danger"): ?>
+                    <strong>Oh snap!</strong>
+                <?php elseif ($this->messageType == "success"): ?>
+                    <strong>Well done!</strong>
+                <?php elseif ($this->messageType == "info"): ?>
+                    <strong>Heads up!</strong>
+                <?php elseif ($this->messageType == "warning"): ?>
+                    <strong>Warning!</strong>
+                <?php endif; ?>
+                <?php echo $this->message; ?>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>
+
+<div class="clear"></div>
+
+<div class="content" style="background:transparent">
+    <div class="wrap" style="background: transparent; padding: 10px;">
+
+
+
+
+        <div class="half-left" style="padding:20px;">
+            <h3>SINGLE USER LOGIN</h3>
+
+            <form id="contactform" method="post">
+                <table>
+                    <tr>
+                        <td><input type="text" id="name" name="user_email" style="width:260px;" placeholder="Enter Email Id" /></td>
+                    </tr>
+                    <tr>
+                        <td><input type="password" id="email" name="hashed_password" style="width:260px;" placeholder="Password" /></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="hidden" name="request_type" value="login">
+                            <input type="submit" value="login" id="send" class="button" />
+                            <a href="<?php echo $this->baseUrl();?>/index/forgot-password">Forgot Password ?</a>
+                        </td>
+                       
+                    </tr>
+                </table>
+
+            </form>
+
+            <div class="clear"></div>
+        </div>
+
+        <div class="half-right" style="padding-left:0px;padding:20px;">
+            <h3>COMPANY LOGIN</h3>
+            <form id="contactform" method="post">
+                <table>
+                    <tr>
+                        <td><input type="text" id="name" name="name" style="width:260px;" placeholder="email" /></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" id="email" name="email" style="width:260px;" placeholder="password" /></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="submit" value="login" id="send" class="button" />
+
+                        </td>
+                    </tr>
+                </table>
+
+            </form>
+
+        </div>
+
+        <div class="clear"></div>
+        <div class="reg-link"><a href="<?php echo $this->baseUrl();?>/index/register">Not registered yet ? Register Now</a></div>
+    </div>
+</div>
+
+<div class="blue-bar">
+
+</div>

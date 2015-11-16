@@ -1,0 +1,95 @@
+<div class="mws-panel grid_8">
+    <div class="mws-panel-header">
+        <span class="mws-i-24 i-speech-bubble-2">Add Delivery Type</span>
+    </div>
+    <div class="mws-panel-body">
+        <form class="mws-form" method="post" enctype="multipart/form-data">
+            <?php if ($this->hasMessage): ?>
+                <div class="mws-form-message <?php echo $this->messageType == 'danger' ? 'error' : $this->messageType; ?> fade in">
+                    <?php if ($this->messageType == "danger"): ?>
+                        <strong>Oh snap!</strong>
+                    <?php elseif ($this->messageType == "success"): ?>
+                        <strong>Well done!</strong>
+                    <?php elseif ($this->messageType == "info"): ?>
+                        <strong>Heads up!</strong>
+                    <?php elseif ($this->messageType == "warning"): ?>
+                        <strong>Warning!</strong>
+                    <?php endif; ?>
+                    <?php echo $this->message; ?>
+                </div>
+            <?php endif; ?>
+
+            <div class="mws-form-block">
+                <?php
+                $elements = $this->form->getElements();
+                foreach ($elements as $element):
+                    ?>
+                    <div class="mws-form-row">
+                        <?php echo $element; ?>
+                    </div>
+                    <?php
+                endforeach;
+                ?>
+                <div class="mws-button-row">
+                    <input type="hidden" name="request_type" value="add">
+                    <button type="submit" class="mws-button red" >Add</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="mws-panel grid_8">
+    <div class="mws-panel-header">
+        <span class="mws-i-24 i-table-1">All Delivery Types</span>
+    </div>
+    <div class="mws-panel-body">
+        <table class="mws-datatable-fn mws-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if ($this->deliveries): ?>
+                    <?php foreach ($this->deliveries as $delivery): ?>
+                        <tr>
+                            <td><?php echo $delivery->__get("delivery_type_name"); ?></td>
+                            <td>
+                                <?php
+                                $secure = New My_Secure();
+                                $id = $secure->encode($delivery->__get("delivery_type_id"));
+                                ?>
+
+                                <a href="<?php echo $this->baseUrl(); ?>/admin/delivery-type/edit/id/<?php echo $id; ?>"><button class="btn btn-warning btn-mini"><i class="icon-wrench  bigger-110 icon-only"></i></button></a>
+                                <a href="#" data-id="<?php echo $delivery->__get("delivery_type_id"); ?>"  class="delete"><button class="btn btn-grey btn-mini"><i class="icon-trash  icon-only"></i></button></a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" style="display:none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="myModalLabel">Confirm Delete</h4>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <input type="hidden" name="request_type" value="delete"/>
+                    <input type="hidden" name="id" id="delete_id" value=""/>
+                    <button type="submit" class="btn btn-primary btn-danger">Confirm Delete</button>
+                </div>
+            </form>
+        </div><!-- modal-content -->
+    </div><!-- modal-dialog -->
+</div>

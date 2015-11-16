@@ -1,0 +1,65 @@
+<?php
+echo $this->partial('index/headerstrip.phtml', array('headlineText' => 'Welcome, ' . $this->fname . ' ' . $this->lname));
+
+if ($this->hasMessage):?>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="alert alert-block alert-<?php echo $this->messageType ?> fade in">
+                <button data-dismiss="alert" class="close close-sm" type="button">
+                    <i class="fa fa-times"></i>
+                </button>
+                <?php if ($this->messageType == "danger"): ?>
+                    <strong>Oh snap!</strong>
+                <?php elseif ($this->messageType == "success"): ?>
+                    <strong>Well done!</strong>
+                <?php elseif ($this->messageType == "info"): ?>
+                    <strong>Heads up!</strong>
+                <?php elseif ($this->messageType == "warning"): ?>
+                    <strong>Warning!</strong>
+                <?php endif; ?>
+                <?php echo $this->message; ?>
+            </div>
+        </div>
+    </div>
+    
+<?php endif; ?>
+<div class="clear"></div>
+<div class="container" style="margin-top:60px;">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 bhoechie-tab-container">
+            <div class="col-md-3 bhoechie-tab-menu">
+                <div class="list-group">
+                    <a href="<?php echo $this->url(array("controller"=>"my-account"),"default",true)?>" class="<?php echo $this->file_render=="account_profile"?"active":""?> list-group-item text-left">
+                        Edit profile
+                    </a>
+                    <a href="<?php echo $this->baseUrl(); ?>/index/orderlist" class="list-group-item text-left">
+                        Order Summary
+                    </a>
+                    <a href="<?php echo $this->url(array("controller"=>"my-account","action"=>"subscription"),"default",true)?>" class="<?php echo $this->file_render=="account_subscription"?"active":""?> list-group-item text-left">
+                        Subscription
+                    </a>
+                    <a href="<?php echo $this->baseUrl(); ?>/index/logout" class="list-group-item text-left">
+                        Log out
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-8  bhoechie-tab">
+                <?php
+				if(isset($this->file_render) && $this->file_render!='')
+					echo $this->render("my-account/".$this->file_render.".phtml");
+				
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+$("input[type='text'],input[type='email']").focus(function(){	
+	$(this).parents(".form-group").addClass("active");
+})
+
+$("input[type='text'],input[type='email']").blur(function(){	
+	$(".form-group.active").removeClass("active");
+})
+</script>

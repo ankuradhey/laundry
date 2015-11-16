@@ -1,0 +1,408 @@
+<div id="unslider_wrapper">
+
+    <div class="unslider" id="title_message">
+        <ul>
+           
+<!--            <li style="background: url('<?php echo $this->baseUrl(); ?>/front/images/slider6.jpg') center center;background-repeat: no-repeat; background-size: cover;">
+            </li>-->
+            <li style="background: url('<?php echo $this->baseUrl(); ?>/front/images/slide3.jpg') center center;background-repeat: no-repeat; background-size: cover;">
+            </li>
+            <li style="background: url('<?php echo $this->baseUrl(); ?>/front/images/slide4.jpg') center center;background-repeat: no-repeat; background-size: cover;">
+            </li>
+			 <li style="background: url('<?php echo $this->baseUrl(); ?>/front/images/slide1.jpg') center center;background-repeat: no-repeat; background-size: cover;">
+            </li>
+
+        </ul>
+        <a href="#" class="unslider-arrow prev"></a>
+        <a href="#" class="unslider-arrow next"></a>
+    </div>
+
+
+
+    <div class="clear"></div>
+</div>
+<div id="slider_wrapper">
+    <div class="slidedown">
+      <p id="title_message">  <a id="up" href="#down" class="tab-button1" style=" margin-top:  -50px !important;">Place Your Order</a></p>
+
+
+        <div class="up"></div>
+
+        <a id="down" href="#up"></a>
+        <div class="down"></div>
+    </div>
+    <form method="post" action="<?php echo $this->baseUrl(); ?>/checkout/index" id="myForm">
+        <div class="wrap">
+
+            <div class="tabs">
+
+                <div class="tab-content">
+                    <div id="tab1" class="tab active" style="margin-top: 00px;">
+                        <span class="tab-price" >
+                            <div style="margin-top: 60px">
+                                <img style="margin-top: -22px" width="150px" src='<?php echo $this->baseUrl(); ?>/front/images/top-icon.png'/>
+                            </div>
+                        </span>
+
+                        <h1>Do What You Love</h1>
+                        <h3>We Got Your Laundry</h3>
+                        <p>LaundryWala is designed to be the easiest way to get your laundry or dry-cleaning done.</p>
+                        <p>So you can go back to doing what you love</p>
+                       <p id="title_message1"> <a id="order_now" href="#tab2" class="tab-button tab1-button tabs-yscroll" style="margin-left: 190px;">Order Now</a></p>
+                    </div>
+
+                    <div id="tab2" class="tab" style="margin-top: 60px">
+                        <span class="tab-price">
+                            <img src="<?php echo $this->baseUrl(); ?>/front/images/Delivery.png">
+
+                        </span>
+
+                        <h1>Select Delivery Type</h1>
+                        <p>Avail Express delivery service and get back your clothes within 24hours.</p>
+                        <?php
+                        $deliveryTypeMapper = new Application_Model_DeliveryTypeMasterMapper();
+                        $deliveryTypes = $deliveryTypeMapper->getAllDeliveryTypeMaster();
+                        if ($deliveryTypes):
+                            for ($i = 0; $i < 2; $i++):
+                                ?>
+                                <input type="hidden" value="" name="delivery_type_name" class="del_type">
+                                <a  href="#tab3" class="tab-button delivery_name tabs-yscroll" data-name="<?php echo $deliveryTypes[$i]->__get("delivery_type_name"); ?>"><?php echo $deliveryTypes[$i]->__get("delivery_type_name"); ?></a>
+
+                            <?php endfor; ?>
+                        <?php endif; ?>
+                        <p style="font-size: 20px;">*Express prices are twice the regular prices.</p>
+                    </div>
+
+                    <div id="tab3" class="tab" style="margin-top: 70px;">
+                        <span class="tab-price">
+                            <img src="<?php echo $this->baseUrl(); ?>/front/images/Service.png">
+
+                        </span>
+
+                        <h1>Select Service</h1>
+                        <p>We offer Laundry and Dry-cleaning services with free pickup and delivery at your doorstep.</p>
+                        <?php
+                        $servicesMapper = new Application_Model_ServiceMasterMapper();
+                        $services = $servicesMapper->getAllServiceMasters();
+                        if ($services):
+                            for ($i = 0; $i < 2; $i++):
+                                ?>
+                                <input type="hidden" value="2" id="time-set">
+                                <input type="hidden" value="" name="service_id" class="serv_name">
+                                <a href="#tab4" class="tab-button service_name tabs-yscroll" data-id="<?php echo $services[$i]->__get("service_id"); ?>"><?php echo $services[$i]->__get("service_name"); ?></a>
+                            <?php endfor; ?>
+                        <?php endif; ?>
+                    </div>
+
+                    <div id="tab4" class="tab" style="margin-top: 35px;">
+                        <span class="tab-price tab-date">
+                            <img width="150px" src="<?php echo $this->baseUrl(); ?>/front/images/date.png">
+
+                        </span>
+
+                        <h1>Select date &amp; Time</h1>
+                        <p style="font-size: 18px;"> Enter the time and day that works best for you. </p>
+                        
+                        <div style="width: 100%; margin-top: 10px;">
+                            <div style="width: 50%; float: left"><h3 class="head3">Select Pickup Date</h3></div>
+                            <div style="width: 50%; float: left"><h3 class="head3">Select Pickup Time</h3></div>
+                        </div>
+                        <div style="width: 100%; margin-top: 10px;">
+                            <div style="width: 50%; float: left"><input type="text" class="form-control tab-button small order_date" name="date" style="font-size: 16px;color:#6AB2DC; "></div>
+                            <div style="width: 50%; float: left">
+                                
+                                    <select id="setTimeExample" class="time ui-timepicker-input tab-button small" style="margin-top:0px;font-size: 14px;" name="time" autocomplete="off">
+                                        <?php
+                                        $j = 9;
+                                        for ($i = 0; $i <= 5; $i++):
+                                            ?>
+                                        <option style="font-size: 10px;"><?php
+                                                echo $j . ":00-";
+                                                $j = $j + 2;
+                                                echo $j . ":00";
+                                                ?></option>
+                                        <?php endfor; ?>
+                                    </select>
+                                
+                            </div>
+                        </div>
+                        <div class="delivery_date_time" style="display: none;">
+                            <div style="width: 100%; margin-top:px;">
+                                <div style="width: 50%; float: right;margin-top:10px"><h3 class="head3">Select Delivery Time</h3></div>
+                                <div style="width: 50%; float: right;margin-top:10px"><h3 class="head3">Select Delivery Date</h3></div>
+
+                            </div>
+
+                            <div style="width: 100%; margin-top: px;">
+                                <div style="width: 50%; float: right;  margin-top: -7px;">
+                                   
+                                        <select id="setTimeExample" type="text" class="delivery_time ui-timepicker-input tab-button small" autocomplete="off" name="delivery_time" style="font-size: 14px;">
+                                            <?php
+                                            $j = 9;
+                                            for ($i = 0; $i <= 5; $i++):
+                                                ?>
+                                                <option style="font-size: 10px;"><?php
+                                                    echo $j . ":00-";
+                                                    $j = $j + 2;
+                                                    echo $j . ":00";
+                                                    ?></option>
+                                            <?php endfor; ?>
+                                        </select>
+                                    
+                                </div>
+                                <div style="width: 50%; float: right;  margin-top: 5px;"><input type="text" class="delivery_date form-control tab-button small" name="delivery_date" style="font-size: 16px;color: #6AB2DC;"></div>
+
+                            </div>
+                        </div>
+
+                        <div class="clear"></div>
+                        <input type="hidden" name="request_type" value="order">
+                        
+                        <a href="#" id="order_place" class="tab-button small"  style="background: #6ab2dc;
+                           color: #fff;margin-top: 5px;
+                           margin-left: 125px;
+                           width: 32%;">Place My order</a>
+
+                    </div>
+                </div>
+                <p id="slideDown"></p>
+                <ul class="tab-links">
+                    <li class="active"><a href="#tab1" class="tabs-yscroll"><i class="icon-hdd" style="height:20px;"></i><span>PLACE ORDER</span></a></li>
+                    <li><a href="#tab2" class="tabs-yscroll"><img src="<?php echo $this->baseUrl(); ?>/front/images/Delivery.png"><span>SELECT DELIVERY TYPE</span></a></li>
+                    <li><a href="#tab3" class="tabs-yscroll"><img src="<?php echo $this->baseUrl(); ?>/front/images/Service.png"><span>SELECT SERVICE</span></a></li>
+                    <li><a href="#tab4" class="tabs-yscroll"><img src="<?php echo $this->baseUrl(); ?>/front/images/date.png"><span>SELECT DATE &amp; TIME</span></a></li>
+                </ul>
+
+            </div>
+
+        </div>
+    </form>
+</div>
+
+<div class="clear"></div>
+<div class="mg-bottom40" style="background: #B2D458;padding-top: 20px;">
+    <div class="wrap">
+        <div class="heading"><span style="background: #dbdbdb"><em>services</em> for you</span></div> 
+    </div>
+
+    <div class="stats_wrap">
+        <div class="wrap">
+
+
+            <div class="one_third">
+                <div class="stats">
+                    <p><img src="<?php echo $this->baseUrl(); ?>/front/images/icon-1.png"></p>
+                    <h5 style="text-align: center"><span class="">Dry Cleaning</span></h5>
+                    <h5>We provide the highest quality dry cleaning at your doorstep. From silks to leathers, to drapes and wedding gowns, we do it all, better and faster than anyone! Best of all, we do it all in a 100% perc-free dry cleaning process that is a win-win for your health and the environment too.</h5>
+                </div>
+            </div>
+            <div class="one_third">
+                <div class="stats">
+                    <p><img src="<?php echo $this->baseUrl(); ?>/front/images/icon-2.png"></p>
+                    <h5 style="text-align: center"><span class="">Laundry</span></h5>
+                    <h5> Tired of broken buttons? Not only do we take the utmost care in cleaning your laundry items, but, we also deploy a 6 point inspection process that makes sure you get your shirts back with no broken buttons and more attention to detail than ever before!</h5>
+                </div>
+            </div>
+            <div class="one_third last">
+                <div class="stats">
+                    <p><img src="<?php echo $this->baseUrl(); ?>/front/images/icon-3.png"></p>
+                    <h5  style="text-align: center"><span class="">Wash & Fold</span></h5>
+                    <h5> Tired of doing laundry and losing your patience in the process? If so, you're going to love our wash & fold service. Just throw all your garments that don't need ironing into a separate bag and we'll take it from there.We'll separate your lights and darks and clean them with the best detergents and fabric softeners.</h5>
+                </div>
+            </div>
+
+
+
+
+            <div class="clear"></div>
+        </div>
+    </div>
+</div>
+<div class="clear"></div>
+
+<div class="content">
+
+    <div class="wrap">
+        <div class="heading"><span><em>packages</em> for you</span></div>
+        <div class="clear"></div>
+
+        <div class="pricing_wrapper">
+            <div class="one_fourth">
+                <div class="pricing">
+                    <div class="pricing_top">
+                        <img src="<?php echo $this->baseUrl(); ?>/front/images/category.png"/>
+                        <h4>Package</h4>
+                        <p>Price</p>
+                    </div>
+
+                    <ul>
+                        <li><i class="icon-hdd"></i><strong>No of Clothes</strong></li>
+                        <li><i class="icon-dashboard"></i><strong>You Pay</strong> </li>
+                        <li><i class="icon-envelope"></i><strong>You Save</strong> </li>
+                        <li><i class="icon-globe"></i><strong>Free Pickup & Delivery</strong> </li>
+                        <li><i class="icon-globe"></i><strong>Validity</strong> </li>
+                        <li><strong>Purchase</strong> </li>
+                    </ul>
+                </div>
+            </div>
+            <?php
+            $packagesMapper = new Application_Model_PackagesMapper();
+            $packages = $packagesMapper->getAllPackages();
+            if ($packages):
+                for ($i = 0; $i < 3; $i++):
+                    ?>
+                    <form method="post">
+                        <div class="one_fourth <?php if ($i == 2): ?>last<?php endif; ?>">
+                            <div class="pricing">
+                                <div class="pricing_ribbon">
+                                    <!--<p>sale</p>-->
+                                </div>
+                                <div class="pricing_top">
+                                    <img src="<?php echo $this->baseUrl(); ?>/front/images/<?php echo $packages[$i]->__get("package_icon"); ?>"/>
+                                    <h4><?php echo $packages[$i]->__get("package_name"); ?></h4>
+                                    <p>Rs.<?php echo $packages[$i]->__get("package_price"); ?> / Month</p>
+                                </div>
+
+                                <ul>
+                                    <li><i class="icon-hdd"></i><strong><?php echo $packages[$i]->__get("no_of_clothes"); ?></strong></li>
+                                    <li><i class="icon-envelope"></i><strong>Rs. <?php echo $packages[$i]->__get("package_price"); ?></strong> </li>
+                                    <li><i class="icon-dashboard"></i><strong><?php echo $packages[$i]->__get("saving_percent"); ?>%</strong></li>
+                                    <li><i class="icon-globe"></i><strong><?php echo $packages[$i]->__get("no_of_pickups"); ?></strong> </li>
+                                    <li><i class="icon-globe"></i><strong><?php echo $packages[$i]->__get("validity"); ?> month</strong> </li>
+                                    <input type="hidden" >
+                                    <li class="pricing_order"><a href="<?php echo $this->baseUrl(); ?>/payment/index/package_id/<?php echo $packages[$i]->__get("package_id"); ?>">Order Now</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </form>
+                    <?php
+                endfor;
+            endif;
+            ?>
+        </div>
+
+
+    </div>
+
+
+
+
+
+
+    <div class="wrap" id="title_message">
+        <div class="clear"></div>
+
+        <div class="heading" style="padding: 25px 0;margin-bottom:20px;"><span>Our <em> Clients</em></span></div>
+
+        <div class="list_carousel">
+            <ul id="carousel">
+                
+                <li><img src="<?php echo $this->baseUrl(); ?>/front/images/park.png" alt=""></li>
+                <li><img src="<?php echo $this->baseUrl(); ?>/front/images/carousel/2.png" alt=""></li>
+                <li><img src="<?php echo $this->baseUrl(); ?>/front/images/carousel/3o.png" alt=""></li>
+                <li><img src="<?php echo $this->baseUrl(); ?>/front/images/carousel/4.png" alt=""></li>
+                <li><img src="<?php echo $this->baseUrl(); ?>/front/images/pixlane.png" alt=""></li>
+                <li><img src="<?php echo $this->baseUrl(); ?>/front/images/nandos.png" alt=""></li>
+            </ul>
+            <div class="clearfix"></div>
+            <a id="prev2" class="prev" href="#"><i class="icon-arrow-left"></i></a>
+            <a id="next2" class="next" href="#"><i class="icon-arrow-right"></i></a>
+        </div>
+
+        <div class="clear"></div>
+        <div class="space"></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+
+
+</div>
+
+<div class="wrap" style="padding-bottom: 20px;">
+
+    <div class="clear"></div>
+
+
+    <div class="heading" style="margin-top:40px;"><span>Why Choose <em>Us</em> ?</span></div>
+
+    <div class="one_third">
+        <div class="box_feature">
+            <div class="box_feature_icon"><span><img src="<?php echo $this->baseUrl(); ?>/front/images/icon1.png"></span></div>
+            <div class="box_feature_text">
+                <h6>HIGH QUALITY SERVICES</h6>
+                <p>Laundry services coupled with customised experience</p>
+            </div>
+        </div>
+    </div>
+    <div class="one_third">
+        <div class="box_feature">
+            <div class="box_feature_icon"><span><img src="<?php echo $this->baseUrl(); ?>/front/images/icon2.png"></span></div>
+            <div class="box_feature_text">
+                <h6>CUTTING EDGE TECHNOLOGY</h6>
+                <p>Latest technology machines and internationally standardized chemicals</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="one_third last">
+        <div class="box_feature">
+            <div class="box_feature_icon"><span><img src="<?php echo $this->baseUrl(); ?>/front/images/icon3.png"></span></div>
+            <div class="box_feature_text">
+                <h6>ONLINE ORDER & PICK UP</h6>
+                <p>Free pick up and delivery within 24 hours under express service</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="clear"></div>
+    <div class="space2"></div>
+
+    <div class="one_third">
+        <div class="box_feature">
+            <div class="box_feature_icon"><span><img src="<?php echo $this->baseUrl(); ?>/front/images/icon4.png"></span></div>
+            <div class="box_feature_text">
+                <h6>ONE STOP SOLUTION</h6>
+                <p>Washing, Dry Cleaning & Ironing in one place for you</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="one_third">
+        <div class="box_feature">
+            <div class="box_feature_icon"><span><img src="<?php echo $this->baseUrl(); ?>/front/images/icon5.png"></span></div>
+            <div class="box_feature_text">
+                <h6>SAFETY OF CLOTHES</h6>
+                <p>Expert Staff with in depth knowledge of fabric & garments</p>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="one_third last">
+        <div class="box_feature">
+            <div class="box_feature_icon"><span><img src="<?php echo $this->baseUrl(); ?>/front/images/icon6.png"></span></div>
+            <div class="box_feature_text">
+                <h6>COMPLETE SATISFACTION</h6>
+                <p>We ensure a smile with every service we provide</p>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="clear"></div>
+
+
+</div>

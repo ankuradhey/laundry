@@ -1,0 +1,50 @@
+<div id="slider_wrapper2" style="margin-top:100px;">
+    <div class="wrap">
+
+        <h1>My Wallet</h1>
+
+    </div>
+</div>
+
+<div class="clear"></div>
+
+<div class="content" style="background: transparent">
+    <form method="post" action="<?php echo $this->baseUrl(); ?>/payment/index">
+        <input type="hidden" name="transaction_type" value="wallet">
+        <input type="submit" value="Add Fund" id="send" class="button hide_button" disabled/>
+        <input type="hidden" class="total_fund" value="<?php echo $this->total_amount;?>">
+        <input type="text" id="email" name="amount" placeholder="Enter Amount" class="button1 amount" />
+    </form>
+    <div class="wrap" style="padding: 50px; min-height:600px;">
+
+        <table class="table tablenew_1" style="margin-bottom: 50px;">
+
+            <tr >
+                <th class="tablenew_2" >Entry Type</th>
+                <th class="tablenew_2">Entry Amount</th>
+                <th class="tablenew_2">Date</th>
+            </tr>
+
+            <?php
+            if ($this->wallets):
+                foreach ($this->wallets as $wallet):
+                    ?>
+
+                    <tr>
+                        <td class="tablenew_2" style="font-size: 18px;"><strong><?php echo $wallet->__get("entry_type"); ?></strong></td>
+                        <td class="tablenew_2" style="font-size: 18px;"><strong><?php echo $wallet->__get("entry_amount"); ?></strong></td>
+                        <td class="tablenew_2" style="font-size: 18px;"><strong><?php echo $wallet->__get("timestamp"); ?></strong></td>
+                    </tr>
+                    <?php
+                endforeach;
+            endif;
+            ?>
+        </table>
+    </div>
+</div>
+<div class="wave" id="title_message">
+    <img src="<?php echo $this->baseUrl(); ?>/front/images/wave.png"/>
+</div>
+<div class="blue-bar">
+
+</div>

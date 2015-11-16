@@ -1,0 +1,64 @@
+<?php
+$thumb = $this->baseUrl() . "/public/thumbs/thumb.php";
+$userInfo = array('userName' => $this->user_fname . ' ' . $this->user_lname, 'phone' => '7062232497', 'profileImage' => $this->user_img);
+echo $this->partial('index/headerstrip.phtml', array('headlineText' => $this->headlineText, 'userInfo' => $userInfo));
+?>
+<form action="<?php echo $this->baseUrl(); ?>/index/processcart" method='post' name="address" class="" role="form" >
+    <div class='container-fluid'>
+        <div class='row grey-label-instruction' style="padding:20px 0;">
+            <div class="container">
+                <?php
+                if($this->orderType == 'service'){
+                ?>
+                    <a class="col-md-1" href="<?php echo $this->baseUrl(); ?>/index/items">
+                        <h4><i class="glyphicon glyphicon-chevron-left"></i>Back</h4>
+                    </a>
+                <?php
+                }else{
+                ?>
+                    <a class="col-md-1" href="<?php echo $this->baseUrl(); ?>/index/orderview">
+                        <h4><i class="glyphicon glyphicon-chevron-left"></i>Back</h4>
+                    </a>
+                <?php
+                }
+                ?>
+                <div class='col-sm-9'>
+                    <h4 class='text-center headline'>We will collect from this address and deliver back here too</h4>
+                </div>
+                <div class='col-sm-2'>
+                    <button type="submit" class="btn btn-success" style="width:100%;">Proceed</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container" style="padding:60px 0;">
+        <!-- Example row of columns -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Flat/House No</label>
+                    <input type="Text" class="form-control header-input-control" required name='order_address_flat' value='<?php echo $this->address[0]? : ''; ?>'>
+                </div>
+                <div class="form-group">
+                    <label>Locality</label>
+                    <input type="Text" class="form-control header-input-control" required name='order_address_locality' value='<?php echo $this->address[1]? : ''; ?>'>
+                </div>
+                <div class="form-group">
+                    <label>Area/City</label>
+                    <input type="Text" class="form-control header-input-control" readonly required name='order_city' value='<?php echo $this->city? : ''; ?>'>
+                </div>
+            </div>
+            <div class="col-md-6" style="background-color:#fff !important; " >
+                <div class="form-group">
+                    <label>Delivery Notes</label>
+                    <textarea class="form-control header-input-control" rows="6" id="comment" name='order_delivery_note'><?php echo $this->address[3]? : ''; ?></textarea>
+                </div>
+                <div class="button-group">
+                    <input type='hidden' name='step' value='address'>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<?php echo $this->getHelper('CartSteps')->getSteps(2,$this->orderType); ?>

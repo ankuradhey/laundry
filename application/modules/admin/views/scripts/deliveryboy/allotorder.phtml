@@ -1,0 +1,40 @@
+<div class="mws-panel grid_8">
+    <div class="mws-panel-header">
+        <span class="mws-i-24 i-speech-bubble-2">Allot Order</span>
+    </div>
+    <div class="mws-panel-body">
+        <form method="post" class="mws-form">
+            <?php if ($this->hasMessage): ?>
+                <div class="mws-form-message <?php echo $this->messageType == 'danger' ? 'error' : $this->messageType; ?> fade in">
+                    <?php if ($this->messageType == "danger"): ?>
+                        <strong>Oh snap!</strong>
+                    <?php elseif ($this->messageType == "success"): ?>
+                        <strong>Well done!</strong>
+                    <?php elseif ($this->messageType == "info"): ?>
+                        <strong>Heads up!</strong>
+                    <?php elseif ($this->messageType == "warning"): ?>
+                        <strong>Warning!</strong>
+                    <?php endif; ?>
+                    <?php echo $this->message; ?>
+                </div>
+            <?php endif; ?>
+
+            <div class="mws-form-block">
+                <?php
+                $elements = $this->form->getElements();
+                foreach ($elements as $element):
+                    ?>
+                    <div class="mws-form-row">
+                        <?php echo $element; ?>
+                    </div>
+                    <?php
+                endforeach;
+                ?>
+                <div class="mws-button-row">
+                    <input type="hidden" name="request_type" value="add">
+                    <button type="submit" class="mws-button red" >Allot</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

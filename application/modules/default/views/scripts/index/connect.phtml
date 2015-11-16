@@ -1,0 +1,81 @@
+<?php
+function display($input) {
+	if(is_object($input)) {
+		$input = (array) $input;
+	}
+	if(is_array($input)) {
+		echo '<dl>';
+		foreach($input as $key => $value) {
+			echo '<dt>' . $key . '</dt>';
+			echo '<dd>';
+			if(is_array($value) || is_object($value))
+				display($value);
+			else 
+				echo $value;
+			echo '</dd>';
+		}
+		echo '</dl>';
+	}
+	else {
+		echo $input;
+	}
+}
+?>
+
+<?php foreach ($this->providers as $provider):?>
+	<dl>
+		<h3>
+			<dt>Provider name</dt>
+			<dd><?= $provider->getName(); ?></dd>
+		</h3>
+		<dt>Id from provider</dt>
+		<dd><?=$provider->getId(); ?></dd>
+	<?php 
+	switch ($provider->getName()) {
+		case 'facebook': 
+		?>
+			<dt>Profile</dt>
+			<dd>
+				<?php 
+				$profile = $provider->getApi()->getProfile(); 
+				display($profile);
+				?>
+			</dd>
+			<dt>Picture</dt>
+			<dd>
+				<img src="<?=$provider->getApi()->getPicture(); ?>">
+			</dd>
+		<?php 
+		break; 
+		case 'twitter': 
+		?>
+			<dt>Profile</dt>
+			<dd>
+				<?php 
+				$profile = $provider->getApi()->getProfile(); 
+				display($profile);
+				?>
+			</dd>
+			<dt>Picture</dt>
+			<dd>
+				<img src="<?=$provider->getApi()->getPicture(); ?>">
+			</dd>
+		<?php 
+		break; 
+		case 'google': 
+		?>
+			<dt>Profile</dt>
+			<dd>
+				<?php 
+				$profile = $provider->getApi()->getProfile(); 
+				display($profile);
+				?>
+			</dd>
+		<?php 
+		break; 
+	}
+	?>
+	</dl>
+<?php 
+endforeach;
+?>

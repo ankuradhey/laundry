@@ -1,0 +1,260 @@
+<?php
+$thumb = $this->baseUrl() . "/public/thumbs/thumb.php";
+$userInfo = array('userName' => $this->user_fname . ' ' . $this->user_lname, 'phone' => '7062232497', 'profileImage' => $this->user_img);
+echo $this->partial('index/headerstrip.phtml', array('headlineText' => $this->headlineText, 'userInfo' => $userInfo));
+?>
+<form action="<?php echo $this->baseUrl(); ?>/index/saveorder" method="post">
+    <div class='container-fluid'>
+        <div class='row grey-label-instruction' style="padding:20px 0;">
+            <div class="container service-list-cart" >
+                <a class="col-md-1" href="<?php echo $this->baseUrl(); ?>/index/pickup">
+                    <h4><i class="glyphicon glyphicon-chevron-left"></i>Back</h4>
+                </a>
+                <div class='col-sm-9'>
+                    <h4 class='text-center headline'>Your card details are securely stored and we will never share your contact details with third parties</h4>
+                </div>
+                <div class='col-sm-2'>
+                    <button type="submit" class="btn btn-success btn-block" id="buttonclick">PROCEED</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container main-container" style="margin-bottom:100px;">
+        <div class="row">
+            <div class="col-md-6">
+                <?php
+                    if($this->orderType == 'service'){
+                ?>
+                <div class="col-md-12">
+                    <h3 class="form_head">Times</h3>
+                    <p data-datetime="2015-10-30 16:00:00" class="collection_summary">
+                        <span class="collection_color">Collection</span> <?php echo $this->pickupDate . ' ' . $this->pickup; ?>
+                    </p>
+                    <p data-datetime="2015-11-01 21:00:00" class="delivery_summary">
+                        <span class="delivery_color">Delivery</span> <?php echo $this->deliveryDate . ' ' . $this->delivery; ?>
+                    </p>
+                </div>
+                <?php
+                    }
+                ?>
+                <div class="col-md-12">
+                    <h3 class="form_head">Contact </h3>
+                    <div class="row">
+                        <div class="col-md-8 span_blocks">
+                            <p class="">
+                                <span>Name</span> <br class="clear">
+                                <?php echo $this->user_fname . " " . $this->user_lname; ?>
+                            </p>
+    <!--                        <p class="">
+                                <span>E-mail</span> <br class="clear">
+                                anku_radhey@rediff.com
+                            </p>-->
+                        </div>
+                        <div class="col-md-4 span_blocks">
+                            <p>
+                                <span>Phone</span> <br class="clear">
+                                --
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="col-md-12">
+                    <h3 class="form_head">Address</h3>
+                    <address class="address_line">
+                        <?php echo $this->address; ?>
+                    </address>
+                </div>
+                <div class="col-md-12">
+                    <h3 class="form_head">Order Summary</h3>
+                    <ul class="cart-summary">
+                        <?php
+                        $totalPrice = 0;
+                        if($this->orderType == 'service'){
+                        if (isset($this->serviceItems['service'])) {
+                            foreach ($this->serviceItems['service'] as $serviceKey => $service) {
+                                $price = $quantity = 0;
+                                foreach ($service['category'] as $category) {
+                                    foreach ($category['items'] as $items) {
+                                        $quantity += $items['quantity'];
+                                        $totalPrice = $price += $items['unitprice'] * $items['quantity'];
+                                    }
+                                }
+                                ?>
+                                <li>
+                                    <div class="img-circle pull-left service-without-items" style="">
+                                        <img class="img-circle" src="<?php echo $this->baseUrl(); ?>/public/img/services/<?php echo $this->services[$serviceKey]['image']; ?>" width="50" height="50"> 
+                                    </div>
+                                    <span class="name pull-left"><?php echo $service['name'] ?></span>
+                                    <!--<span data-id="49" class="remove webicon pull-right cart_remove cp">Z</span>-->
+                                    <span class="price pull-right">
+                                        Rs. 
+                                        <?php
+                                        echo $price;
+                                        ?>
+                                    </span>
+                                    <span class="badge qty pull-right"><?php echo $quantity; ?></span>
+                                </li>
+                                <li>
+                                    <span class="name pull-left">Delivery Charge</span> 
+                                    <span class="price pull-right">
+                                        <?php
+                                        if ($totalPrice < 200) {
+                                            $totalPrice += 50;
+                                            $deliveryCharge = 50;
+                                            echo 50;
+                                        } else {
+                                            echo 0;
+                                            $deliveryCharge = 0;
+                                        }
+                                        ?>
+                                    </span>
+                                </li>
+                                <li>
+                                    <span class="name pull-left">Service Tax(14%)</span> 
+                                    <span class="price pull-right">
+                                        <?php
+                                        echo $serviceTax = $totalPrice * 14 / 100;
+                                        $totalPrice += $totalPrice * 14 / 100;
+                                        ?>
+                                    </span>
+                                </li>
+                                <li>
+                                    <span class="name pull-left">Total Price</span> 
+                                    <span class="price pull-right"><?php echo $totalPrice; ?></span>
+
+                                    <input type="hidden" name="delivery_charge" value="<?php echo $deliveryCharge; ?>">
+                                    <input type="hidden" name="service_tax" value="<?php echo $serviceTax; ?>">
+                                    <input type="hidden" name="order_amount" value="<?php echo $totalPrice; ?>">
+                                </li>
+                                <?php
+                            }
+                        } else {
+                            foreach ($this->services as $service) {
+                                ?>
+                                <li>
+                                    <div class="img-circle pull-left service-without-items" style="">
+                                        <img class="img-circle responsive" src="<?php echo $this->baseUrl(); ?>/public/img/services/<?php echo $service['image']; ?>" width="50" height="50">
+                                    </div>
+                                    <span class="name pull-left"><?php echo $service['name'] ?></span>
+                                </li>
+                                <input type="hidden" name="order_amount" value="0">
+                                <input type="hidden" name="delivery_charge" value="0">
+                                <input type="hidden" name="service_tax" value="0">
+                                <?php
+                            }
+                        }
+                        }else{
+                        ?>
+                                <li>
+                                    <div class="img-circle pull-left package-without-items" style="">
+                                        <img class="img-circle" src="<?php echo $this->baseUrl(); ?>/public/img/packages/<?php echo $this->packages['image']; ?>" width="30" height="30" style="width:30px;"> 
+                                    </div>
+                                    <span class="name pull-left"><?php echo $this->packages['name'] ?></span>
+                                    <span class="price pull-right">
+                                        Rs.<?php
+                                        echo $totalPrice = $this->packages['price'];
+                                        ?>
+                                    </span>
+                                    <span class="badge qty pull-right">1</span>
+                                </li>
+                                <li>
+                                    <span class="name pull-left">Delivery Charge</span> 
+                                    <span class="price pull-right">
+                                        <?php
+                                        if ($totalPrice < 200) {
+                                            $totalPrice += 50;
+                                            $deliveryCharge = 50;
+                                            echo 50;
+                                        } else {
+                                            echo 0;
+                                            $deliveryCharge = 0;
+                                        }
+                                        ?>
+                                    </span>
+                                </li>
+                                <li>
+                                    <span class="name pull-left">Service Tax(14%)</span> 
+                                    <span class="price pull-right">
+                                        <?php
+                                        echo $serviceTax = $totalPrice * 14 / 100;
+                                        $totalPrice += $totalPrice * 14 / 100;
+                                        ?>
+                                    </span>
+                                </li>
+                                <li>
+                                    <span class="name pull-left">Total Price</span> 
+                                    <span class="price pull-right"><?php echo $totalPrice; ?></span>
+
+                                    <input type="hidden" name="delivery_charge" value="<?php echo $deliveryCharge; ?>">
+                                    <input type="hidden" name="service_tax" value="<?php echo $serviceTax; ?>">
+                                    <input type="hidden" name="order_amount" value="<?php echo $totalPrice; ?>">
+                                </li>
+                                <?php
+                        }
+                                ?>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<?php 
+if($this->orderType == 'package')
+    $step = 3;
+else
+    $step = 4;
+
+echo $this->getHelper('CartSteps')->getSteps($step,$this->orderType); 
+
+?>
+
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" style="text-align:center">Verify Number</h4>
+            </div>
+            <div class="modal-body" style="text-align:center">
+                <p><em>We will send an SMS with confirmation code to this number</em></p>
+
+                <form action="post" name="address" class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <div class="col-sm-1"></div>
+                        <div class="col-sm-2">
+                            <input type="text" class="form-control" placeholder="+91">
+                        </div>
+                        <div class="col-sm-1"></div>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" placeholder="Mobile No.">
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <p style="text-align:center;"><em>Please Enter the Activation Code Here</em></p>
+                    <div class="form-group" >
+                        <div class="col-sm-3"></div>
+                        <div class="col-sm-6">
+                            <input type="Text" class="form-control" >
+                        </div>
+                        <div class="col-sm-3"></div>
+                    </div>
+                    <div class="form-group" >
+                        <div class="col-sm-4"></div>
+                        <div class="col-sm-4">
+                            <button type="button" class="btn btn-success" style="width:100%; text-align:center;">Done</button>
+                        </div>
+                        <div class="col-sm-4"></div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>

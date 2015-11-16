@@ -1,0 +1,205 @@
+
+
+.align-center {
+    margin: auto;
+}
+
+.mtop20{
+	margin-top:20px;
+}
+.mbottom20{
+	margin-bottom:20px;
+}
+
+.profile-block {
+    padding: 10px;
+    border: 1px solid #ccc;
+    box-shadow: 1px 1px 1px 1px #ccc;
+	display:inline-block;
+	width:100%;
+	background:#fff;
+}
+.profile-block input,
+.profile-block input:focus {
+    
+    box-shadow: 0px 0px 0px 0px #fff;
+	outline:none;
+	
+}
+.profile-block .form-group {
+    padding: 10px;
+    
+}
+
+.profile-block .form-group.active{
+	background: rgb(51, 122, 183);
+	color:#fff;
+}
+.profile-block .form-group.active input{
+	padding:10px;
+}
+
+.profile-block .col-sm-3{
+	width:25% !important;
+}
+
+
+.home-top-logo {
+    position: relative;
+    z-index: 1;
+}
+.home-top-logo .logo-td{
+	display:inline-block;
+
+}
+table.home-top-logo td:first-child, 
+table.home-top-logo td:last-child {
+    vertical-align: middle;
+}
+table.home-top-logo td:first-child:after, 
+table.home-top-logo td:last-child:after {
+    content: "";
+    border-bottom: 1px solid #fff;
+    display: inline-block;
+    width: 100%;
+	opacity:0.5;
+}
+
+#featured .featured-list-wrapper > div{
+	min-height: 100px;
+    vertical-align: middle;
+}
+
+#featured .featured-list-wrapper > div:before{
+	content:"";
+	height:100px;
+	display:inline-block;
+	vertical-align:middle;
+}
+
+#featured .featured-list-wrapper > div a{
+	
+	display:inline-block;
+	vertical-align:middle;
+}
+
+.footer-links img {
+    max-width: 32px;
+}
+
+
+.ratelist-body{
+	background-color:#fff;
+	margin-bottom:20px;
+}
+#rate-filters-frm select{
+    padding: 8px;
+    width: 100%;
+    border: 2px solid #000;
+    font-size: 1.2em;
+    color: #00afef;
+    text-transform: uppercase;
+	
+	-webkit-appearance:none;
+    -moz-appearance:none;
+    appearance:none;
+    cursor:pointer;
+	
+	-webkit-border-radius:4px;
+    -moz-border-radius:4px;
+    border-radius:4px;
+}
+
+
+/* Targetting Webkit browsers only. FF will show the dropdown arrow with so much padding. */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    select {padding-right:18px}
+}
+
+.select-cover {position:relative}
+.select-cover:after {content: '';
+    color: #aaa;
+    /* -webkit-transform: rotate(90deg); */
+    -moz-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    right: 20px;
+    top: 20px;
+    padding: 0 0 2px;
+    position: absolute;
+    pointer-events: none;
+    background-image: url(../img/downarrow.png);
+    width: 31px;
+    height: 18px;
+    background-size: 22px;
+    background-repeat: no-repeat;
+	}
+
+.pricelist-tab{
+	margin:20px 0 20px 0; 
+}
+
+
+.pricelist-tab td{
+	padding:10px;	
+	color:#000;
+	font-size:1.2em;
+}
+
+.pricelist-tab td:first-child{
+	color:#3a3a3a;
+}
+
+hr.pricelist-seprator {
+    border: 1px solid #dbdbdb;
+}
+
+.subscription-pack-block {
+    background: #fff;
+    display: inline-block;
+    width: 100%;
+    padding: 15px 0;
+    box-shadow: 2px 2px 2px 0px #ccc;
+	margin-bottom:30px;
+}
+
+.subscription-pack-block td{
+	padding:5px 0px;
+}
+.subscription-pack-block .-title{
+	font-size:1.5em;
+	font-weight:bold;
+}
+
+.awesomplete ul li {
+    color: #000;
+}
+
+div.awesomplete > ul{
+	background-color:#fff;
+	top:63px;
+}
+
+#package-list .single-package .heading{
+	padding:20px;
+}
+#package-list .single-package .block-title{
+	font-size:30px;
+	margin:20px 10px 15px 10px;
+}
+
+#package-list .single-package{
+    float: none;
+    display: inline-block;
+	padding-top:10px;
+	padding-bottom:0px;
+}
+
+#package-list .single-package:hover {
+    background: #F0F0EE;
+}
+
+.packages-list .single-package:hover .product-action {
+ 
+    position: relative;
+    top: -25px;
+}

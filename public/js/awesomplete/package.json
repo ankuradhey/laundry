@@ -1,0 +1,23 @@
+{
+  "name": "awesomplete",
+  "version": "0.0.0",
+  "description": "http://leaverou.github.io/awesomplete/",
+  "main": "awesomplete.js",
+  "scripts": {
+    "test": "karma start --single-run"
+  },
+  "repository": "LeaVerou/awesomplete",
+  "author": "Lea Verou",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/LeaVerou/awesomplete/issues"
+  },
+  "homepage": "https://leaverou.github.io/awesomplete/",
+  "devDependencies": {
+    "jasmine-core": "^2.3.0",
+    "karma": "^0.12.31",
+    "karma-chrome-launcher": "^0.1.8",
+    "karma-jasmine": "^0.3.5",
+    "karma-phantomjs-launcher": "^0.1.4"
+  }
+}

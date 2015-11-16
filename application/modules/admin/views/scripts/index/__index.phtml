@@ -1,0 +1,190 @@
+<div class="mws-panel grid_8">
+    <div class="mws-panel-header">
+        <span class="mws-i-24 i-speech-bubble-2">Filter</span>
+    </div>
+    <div class="mws-panel-body">
+        <form method="post" class="mws-form">
+            <?php if ($this->hasMessage): ?>
+                <div class="mws-form-message <?php echo $this->messageType == 'danger'?'error':$this->messageType; ?> fade in">
+                    <?php if ($this->messageType == "danger"): ?>
+                        <strong>Oh snap!</strong>
+                    <?php elseif ($this->messageType == "success"): ?>
+                        <strong>Well done!</strong>
+                    <?php elseif ($this->messageType == "info"): ?>
+                        <strong>Heads up!</strong>
+                    <?php elseif ($this->messageType == "warning"): ?>
+                        <strong>Warning!</strong>
+                    <?php endif; ?>
+                    <?php echo $this->message; ?>
+                </div>
+            <?php endif; ?>
+
+            <div class="mws-form-block">
+                <div class="mws-form-row">
+                    <label>Select User</label>
+                    <div class="mws-form-item medium">
+                        <select name="user_email">
+                            <option value="">Select User</option>
+                            <?php
+                            $usersMapper = new Application_Model_UsersMapper();
+                            $users = $usersMapper->getAllUsers();
+                            if ($users):
+                                foreach ($users as $user):
+                                    ?>
+                                    <option value="<?php echo $user->__get("user_email"); ?>" <?php if ($this->user_email == $user->__get("user_email")): ?> selected="selected" <?php endif; ?>><?php echo $user->__get("user_fname"); ?></option>
+                                    <?php
+                                endforeach;
+                            endif;
+                            ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="mws-form-row">
+                    <label>Delivery Type</label>
+                    <div class="mws-form-item medium">
+                        <select name="delivery_type" >
+                            <option value="">Select Delivery Type</option>
+                            <?php
+                            $deliveryTypeMasterMapper = new Application_Model_DeliveryTypeMasterMapper();
+                            $types = $deliveryTypeMasterMapper->getAllDeliveryTypeMaster();
+                            if ($types):
+                                foreach ($types as $type):
+                                    ?>
+                                    <option value="<?php echo $type->__get("delivery_type_name"); ?>" <?php if ($this->del_type == $type->__get("delivery_type_name")): ?> selected="selected" <?php endif; ?>><?php echo $type->__get("delivery_type_name"); ?></option>
+                                    <?php
+                                endforeach;
+                            endif;
+                            ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="mws-form-row">
+                    <input type="text" class="datepicker mws-textinput" name="delivery_date" placeholder="Enter Delivery Date">
+                </div>
+                <div class="mws-form-row">
+                    <input type="text" class="datepicker mws-textinput" name="pickup_date" placeholder="Enter PickupDate">
+                </div>
+                <div class="mws-button-row">
+                    <input type="hidden" name="request_type" value="filter">
+                    <button type="submit" class="mws-button red" >Filter</button>
+                    <button type="reset" class="mws-button gray cancel_filter" >Cancel Filter</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<br/>
+<div class="mws-panel grid_8">
+    <div class="mws-panel-header">
+        <span class="mws-i-24 i-table-1">Orders</span>
+    </div>
+    <div class="mws-panel-body">
+        <div class="mws-panel-toolbar top clearfix ">
+            <ul>
+                <li><a class="mws-ic-16 ic-cross" href="javascript:void(0)" title="Delete" onclick="deleteitem()">Mark Processed</a></li>
+<!--                <form method="post" action="<?php echo $this->baseUrl(); ?>/admin/print/print-bill" target="_blank" class="print_bill_form" style="display: none">
+                    <input type="hidden" name="request_type" value="print_bill">
+                    <input type="hidden" name="order_ids" value="" class="print_bill_ids">
+                </form>-->
+                <li><a class="mws-ic-16 ic-cross" href="javascript:void(0)" title="Delete" onclick="deleteitem()">Print Bill</a></li>
+            </ul>
+        </div>
+        <table class="mws-datatable-fn mws-table">
+            <thead>
+                <tr>
+                    <th width="3%"><input type="checkbox" name="deletebcchk" id="deletebcchk" onclick="return checkall(this)" /></th>
+                    <th>Order Id</th>
+                    <th>User Name</th>
+                    <th>User Email</th>
+                    <th>User Number</th>
+                    <th>User Address</th>
+                    <th>Payment Method</th>
+                    <th>Payment Status</th>
+                    <th>Order Total</th>
+                    <th>Delivery Type</th>
+                    <th>Service Name</th>
+                    <th>Order Date</th>
+                    <th>Pickup Date</th>
+                    <th>Delivery Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if ($this->orders): ?>
+                    <?php foreach ($this->orders as $order): ?>
+                        <tr>
+                            <td class="center">
+                                <label>
+                                    <input type="checkbox" class="order_id_check" name="order_id_check[]" value="<?php echo $order->__get("order_id"); ?>" />
+                                    <span class="lbl"></span>
+                                </label>
+                            </td>
+                            <td><?php echo $order->__get("order_id"); ?></td>
+                            <td><?php echo $order->__get("user_fname") . " " . $order->__get("user_lname"); ?></td>
+                            <td><?php echo $order->__get("user_email"); ?></td>
+                            <td><?php echo $order->__get("user_phn_number"); ?></td>
+                            <td><?php echo $order->__get("user_address") . "," . $order->__get("address_city") . "," . $order->__get("address_city") . "," . $order->__get("address_pincode"); ?></td>
+                            <td><?php echo $order->__get("payment_method"); ?></td>
+                            <td><?php echo $order->__get("payment_status"); ?></td>
+                            <td><?php echo $order->__get("order_total"); ?></td>
+                            <td><?php echo $order->__get("delivery_type"); ?></td>
+                            <td><?php
+                                $serviceMasterMapper = new Application_Model_ServiceMasterMapper();
+                                $service_id = $order->__get("service");
+                                $service_name = "";
+                                if ($service_id != NULL) {
+                                    $service = $serviceMasterMapper->getServiceMasterById($service_id);
+                                    if ($service) {
+                                        $service_name = $service->__get("service_name");
+                                    }
+                                }
+                                echo $service_name;
+                                ?></td>
+
+                            <td><?php
+                                $timestamp = $order->__get("timestamp");
+                                echo $date = new Zend_Date($timestamp, "dd-MMM-yyyy");
+                                ?></td>
+                            <td><?php
+                                $pickup_date = $order->__get("pickup_date");
+                                $zendDate = new Zend_Date($pickup_date, "dd-MMM-yyyy");
+                                echo $zendDate->toString("dd-MMM-yyyy") . "/" . $order->__get("pickup_time");
+                                ?></td>
+                            <td><?php
+                                $delivery_date = $order->__get("delivery_date");
+                                $zend_date = new Zend_Date($delivery_date, "dd-MMM-yyyy");
+                                echo $zend_date->toString("dd-MMM-yyyy") . "/" . $order->__get("delivery_time");
+                                ?></td>
+                            <td>
+                                <a href="<?php echo $this->baseUrl(); ?>/admin/orders/edit/id/<?php echo $order->__get("order_id"); ?>"><button class="btn btn-warning btn-mini"><i class="icon-wrench  bigger-110 icon-only"></i></button></a>
+                                <a href="#" data-id="<?php echo $order->__get("order_id"); ?>"  class="delete"><button class="btn btn-grey btn-mini"><i class="icon-trash  icon-only"></i></button></a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" style="display:none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="myModalLabel">Confirm Delete</h4>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <input type="hidden" name="request_type" value="delete"/>
+                    <input type="hidden" name="id" id="delete_id" value=""/>
+                    <button type="submit" class="btn btn-primary btn-danger">Confirm Delete</button>
+                </div>
+            </form>
+        </div><!-- modal-content -->
+    </div><!-- modal-dialog -->
+</div>

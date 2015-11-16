@@ -1,0 +1,18 @@
+<div class="pull-right">
+    <div class="dataTables_paginate paging_bootstrap pagination">
+        <ul>
+            <?php if (isset($this->previous)): ?>
+                <li class="prev disabled"><a href="<?php echo $this->url(array('page' => $this->previous)); ?>/?<?php echo $_SERVER['QUERY_STRING']; ?>"><i class="icon-double-angle-left"></i></a></li>
+            <?php endif; ?>
+            <?php foreach ($this->pagesInRange as $page): ?>
+                <li <?php if ($this->current === $page): ?> class="active" <?php endif; ?>><a href="<?php echo $this->url(array('page' => $page)); ?>/?<?php echo $_SERVER['QUERY_STRING']; ?>"><?php echo $page; ?></a></li>
+            <?php endforeach; ?>
+            <?php if (isset($this->next)): ?>
+                <li class="next"><a href="<?php echo $this->url(array('page' => $this->next)); ?>/?<?php echo $_SERVER['QUERY_STRING']; ?>">
+                        <i class="icon-double-angle-right"></i>
+                    </a>
+                </li>
+            <?php endif; ?>
+        </ul>
+    </div>
+</div>

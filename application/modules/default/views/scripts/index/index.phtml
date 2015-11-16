@@ -1,0 +1,524 @@
+<style>
+    #top{
+        position:fixed;
+        top:-100px;
+    }
+</style>
+
+<section id="intro" data-speed="4" data-type="background">
+    <table class="home-top-logo">
+        <tr>
+            <td width="50%"></td>
+            <td class="logo-td"><img src='<?php echo $this->baseUrl(); ?>/public/img/laundry mascot.png' width="300"></td>
+            <td width="50%"></td>                	
+        </tr>
+    </table>
+
+    <div class="container header-video-content" style="">
+        <div class="row-fluid">
+            <video loop="" autoplay="" id="bkgdvideo">
+                <source type="video/webm" src="<?php echo $this->baseUrl(); ?>/public/videos/Laundrap.webm"></source>
+                <source type="video/mp4" src="<?php echo $this->baseUrl(); ?>/public/videos/video-1445946498.mp4"></source> 
+            </video>
+            <div class="col-sm-12 text-center" >
+
+                <h3 class="head-title text-">Finest quality and affordable laundry convenience for your valuable clothes.</h3>
+            </div>
+            <div class="col-sm-6" style="border-right:solid 1px #a1a1a1;padding:40px 15px" >
+                <h2>Order on Mobile</h2>
+                <h3 class="head-input-pre-title">One tap to easier life. Download the application.</h3>
+                <div class="form-group">
+                    <div class="input-group" style="width:100%;">
+                        <input type="Text" class="form-control header-input-control" placeholder="ENTER YOUR MOBILE NUMBER">
+                        <div class="input-group-addon header-group-addon btn btn-success">GET DOWNLOAD LINK</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6" style="padding:40px 15px;">
+                <h2>Order on Web.</h2>
+                <h3 class="head-input-pre-title">30 seconds is all it takes!
+                </h3>
+                <div class="form-group">
+                    <div class="input-group" style="width:100%;">
+                        <input type="text" id="pincodetxt" class="form-control header-input-control"  
+                               data-placement="top"
+                               data-trigger="manual"
+                               data-toggle="popover"
+                               placeholder="ENTER AREA LOCALITY">
+                        <div class="input-group-addon header-group-addon btn btn-success" id="checklogin" data-href="<?php echo $this->baseUrl('index/orderview'); ?>">ORDER NOW</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Section 2-->
+<section id="how-it-works" class="top-slant">
+    <div class='container easy-clean-block'>
+        <h2 class='text-center block-title' style='color:#3498db;'>How it Works</h2>
+        <div data-transition-full-view="true" class="hidden-xs" id="overview-line" style="margin-right: 12.5%;"></div>
+        <ul class='row-fluid easy-steps-list text-center'>
+            <li class='col-md-3 clearfix'>
+                <span class='easy-label step-1'>Place the order</span>
+                <div class='img-circle step-1'>
+                    <img src='<?php echo $this->baseUrl(); ?>/public/img/icons/spa11.png' width='50' height='50'>
+                </div>
+                <span class='easy-desc step-1'>
+                    Washing, ironing and/or dry cleaning, you can trust us with all! 
+                </span>
+            </li>
+            <li class='col-md-3 clearfix'>
+                <span class='easy-label step-2'>Enter location</span>
+                <div class='img-circle step-2'>
+                    <img src='<?php echo $this->baseUrl(); ?>/public/img/icons/situation.png' width='50' height='50'>
+                </div>
+                <span class='easy-desc'>
+                    We pickup and deliver laundry at your convenient location.
+                </span>
+            </li>
+            <li class='col-md-3 clearfix'>
+                <span class='easy-label step-3'>Schedule</span>
+                <div class='img-circle step-3'>
+                    <img src='<?php echo $this->baseUrl(); ?>/public/img/icons/calendar60.png' width='50' height='50'>
+                </div>
+                <span class='easy-desc'>
+                    Choose your convenient time for pickup and drop. We are open 7 days a week, 6 AM - 11 PM.
+                </span>
+            </li>
+            <li class='col-md-3 clearfix'>
+                <span class='easy-label step-4'>Done!</span>
+                <div class='img-circle step-4'>
+                    <img src='<?php echo $this->baseUrl(); ?>/public/img/icons/thumb57.png' width='50' height='50'>
+                </div>
+                <span class='easy-desc'>
+                    You can now focus on other important tasks while we process your laundry through our 7 step process. 
+
+                </span>
+            </li>
+        </ul>
+    </div>
+</section>
+<section id="packages">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-md-push-2 clearfix">
+                <div class="section-heading scrollpoint sp-effect3 active animated fadeInDown">
+                    <h2 class='block-title'>We curate, you choose. </h2>
+                    <span class="divider"></span>
+                    <h3 class='block-sub-title'>Try package that best suits your needs! </h3>
+                </div>
+            </div>
+        </div>
+        <div class="row packages-list">
+            <?php foreach ($this->packages as $package) { ?>
+                <div class="col-md-4">
+                    <div class="pack scrollpoint sp-effect6 active animated bounceIn package-single">
+                        <div class="heading">
+                            <!--<h3>Single</h3>-->
+                            <img class="regular" src="<?php echo $this->baseUrl() . '/public/img/packages/' . $package->__get('package_icon') ?>" width="65">
+                            <img class="hovered" src="<?php echo $this->baseUrl() . '/public/img/packages/' . str_replace(".", "-2.", $package->__get('package_icon')) ?>" width="65">
+                            <h1><i class="fa fa-inr"></i><?php echo $package->__get('package_price') ?></h1>
+                            <h5>monthly</h5>
+                        </div>
+                        <div class="details">
+                            <ul>
+                                <li><?php echo $package->__get('no_of_clothes') ?> Clothes</li>
+                                <li><?php echo $package->__get('saving_percent') ?>% Saving</li>
+                                <li>Free Pickup & Delivery - Twice a week</li>
+                                <li><?php echo $package->__get("validity") ?> Month Validity</li>
+                            </ul>
+                            <a class="btn btn-sign-up btn-block loginrequired" data-order-type="package" data-id="1" data-href="<?php echo $this->baseUrl('index/orderview?ordertype=package&id=' . $package->__get("package_id")) ?>" href="javascript:void(0)">Buy Now</a>
+                        </div>
+                    </div>
+                </div>
+            <?php } ?>
+            <?php /* ?><div class="col-md-4">
+              <div class="pack scrollpoint sp-effect6 active animated bounceIn package-single">
+              <div class="heading">
+              <!--<h3>Single</h3>-->
+              <img class="regular" src="<?php echo $this->baseUrl(); ?>/public/img/packages/single.png" width="65">
+              <img class="hovered" src="<?php echo $this->baseUrl(); ?>/public/img/packages/single-2.png" width="65">
+              <h1><i class="fa fa-inr"></i>999</h1>
+              <h5>monthly</h5>
+              </div>
+              <div class="details">
+              <ul>
+              <li>50 Clothes</li>
+              <li>35% Saving</li>
+              <li>Free Pickup & Delivery - Twice a week</li>
+              <li>1 Month Validity</li>
+              </ul>
+              <a class="btn btn-sign-up btn-block loginrequired" data-order-type="package" data-id="1" data-href="<?php echo $this->baseUrl('index/orderview?ordertype=package&id=1') ?>" href="javascript:void(0)">Buy Now</a>
+              </div>
+              </div>
+              </div>
+              <div class="col-md-4">
+              <div class="pack scrollpoint sp-effect6 active animated bounceIn package-couple">
+              <div class="heading">
+              <img class="regular" src="<?php echo $this->baseUrl(); ?>/public/img/packages/couple.png" width="65">
+              <img class="hovered" src="<?php echo $this->baseUrl(); ?>/public/img/packages/couple-2.png" width="65">
+              <h1><i class="fa fa-inr"></i>1899</h1>
+              <h5>monthly</h5>
+              </div>
+              <div class="details">
+              <ul>
+              <li>110 Clothes</li>
+              <li>35% Saving</li>
+              <li>Free Pickup & Delivery - Twice a week</li>
+              <li>1 Month Validity</li>
+              </ul>
+              <a class="btn btn-sign-up btn-block loginrequired" data-order-type="package" data-id="2" data-href="<?php echo $this->baseUrl('index/orderview?ordertype=package&id=2') ?>" href="javascript:void(0)">Buy Now</a>
+
+              </div>
+              </div>
+              </div>
+              <div class="col-md-4">
+              <div class="pack scrollpoint sp-effect6 active animated bounceIn package-family">
+              <div class="heading">
+              <img class="regular" src="<?php echo $this->baseUrl(); ?>/public/img/packages/family.png" width="65">
+              <img class="hovered" src="<?php echo $this->baseUrl(); ?>/public/img/packages/family-2.png" width="65">
+              <h1><i class="fa fa-inr"></i>2399</h1>
+              <h5>monthly</h5>
+              </div>
+              <div class="details">
+              <ul>
+              <li>200 Clothes</li>
+              <li>35% Saving</li>
+              <li>Free Pickup & Delivery - Twice a week</li>
+              <li>1 Month Validity</li>
+              </ul>
+              <a class="btn btn-sign-up btn-block loginrequired" data-order-type="package" data-id="3" data-href="<?php echo $this->baseUrl('index/orderview?ordertype=package&id=3') ?>" href="javascript:void(0)">Buy Now</a>
+
+              </div>
+              </div>
+              </div><?php */ ?>
+        </div>
+    </div>
+</section>
+<section id='choosingUs'>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-md-push-2 clearfix">
+                <div class="section-heading blue scrollpoint sp-effect3 active animated fadeInDown">
+                    <h1 class='block-title'>Why choose Laundrywala 
+                    </h1>
+                    <span class="divider"></span>
+                    <h3 class='block-sub-title'>We are obsessed towards providing quality service.</h3>
+                </div>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col-md-4'>
+                <ul class='choosing-points'>
+                    <li>
+                        <div class='left-block text-left'>
+                            <p class='heading' style=''>Exceptional service</p>
+                            <p class='description'>Best app features coupled with 24x7 customer support to assure good experience.</p>
+                        </div>
+                        <div  class="right-block"><!-- simple frame -->
+                            <div id="u24152" class='img-circle img-point'></div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class='left-block text-left'>
+                            <p class='heading'>Technology & Innovation</p>
+                            <p class='description'>Our cutting edge technology and standardized process ensures reliable service. We lay prime importance on hygiene. </p>
+                        </div>
+                        <div  class="right-block"><!-- simple frame -->
+                            <div id="cuttingEdge" class='img-circle img-point'></div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class='left-block text-left'>
+                            <p class='heading'>Quality assurance</p>
+                            <p class='description'>We provide the best quality treatment to every cloth you trust us with. Every garment is processed through 7 steps, ensuring spick and span results</p>
+                        </div>
+                        <div  class="right-block"><!-- simple frame -->
+                            <div id="qualityAssure" class='img-circle img-point'></div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class='col-md-4 text-center'>
+                <img src='<?php echo $this->baseUrl(); ?>/public/img/service_img_home2-u24208-fr.png'>
+            </div>
+            <div class='col-md-4'>
+                <ul class='choosing-points right'>
+                    <li>
+                        <div  class="right-block"><!-- simple frame -->
+                            <div id="oneStop" class='img-circle img-point'></div>
+                        </div>
+                        <div class='left-block text-left'>
+                            <p class='heading'>One Stop Solution</p>
+                            <p class='description'>Washing, dry-cleaning and ironing - one destination, Laundrywala.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div  class="right-block"><!-- simple frame -->
+                            <div id="freePickup" class='img-circle img-point'></div>
+                        </div>
+                        <div class='left-block text-left'>
+                            <p class='heading'>Free pickup and delivery</p>
+                            <p class='description'>Our executive will pick-up and deliver clothes at your doorstep under express service & regular service..
+                            </p>
+                        </div>
+                    </li>
+                    <li>
+                        <div  class="right-block"><!-- simple frame -->
+                            <div id="convenience" class='img-circle img-point'></div>
+                        </div>
+                        <div class='left-block text-left'>
+                            <p class='heading'>Convenience</p>
+                            <p class='description'>Your convenience is important to us. Pick the best time and location for pickup and delivery.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+<section id='app-features'>
+    <div class='container'>
+        <div class='row'>
+            <div class='col-md-8 col-md-push-2 clearfix'>
+                <div class="section-heading scrollpoint sp-effect3 active animated fadeInDown">
+                    <h2 class='block-title'>DOWNLOAD OUR LATEST APP</h2>
+                    <span class="divider"></span>
+                    <h3 class='block-sub-title'>Get the best out from our sleek and easy to use mobile app</h3>
+                </div>
+            </div>
+            <div class='col-md-12 text-center' style='margin-bottom:50px;'>
+                <img src='<?php echo $this->baseUrl(); ?>/public/img/play_logo_trans.png' width='136' height='42'>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Section #4 -->
+<section id='testimonials'>
+    <div class='container'>
+        <div class="row">
+            <div class="col-md-8 col-md-push-2 clearfix">
+                <div class="section-heading blue scrollpoint sp-effect3 active animated fadeInDown">
+                    <h2 class='block-title'>TESTIMONIALS</h2>
+                    <span class="divider"></span>
+                    <h3 class='block-sub-title'>"What our clients had to say"</h3>
+                </div>
+            </div>
+        </div>
+        <div class='row testimonial-list'>
+            <div class="col-md-6 clearfix mgb50">
+                <div class='row-fluid'>
+                    <div class='col-md-3 text-center'>
+                        <img src='<?php echo $this->baseUrl(); ?>/public/img/mayank-prakash-testimonial.jpg' width='70' height='70' style='margin-bottom:5px;'>
+                        <p class='author-name' style='margin-bottom:0;'>Mayank Prakash</p>
+                        <!--<span class='author-post'>Founder</span>-->
+                    </div>
+                    <div class='col-md-9 testimonial-text'>
+                        <div  data-mu-ie-matrix-dy="-4" data-mu-ie-matrix-dx="-4" data-mu-ie-matrix="progid:DXImageTransform.Microsoft.Matrix(M11=0.7071,M12=0.7071,M21=-0.7071,M22=0.7071,SizingMethod='auto expand')" id="u30666" class="grpelem">
+                            <!-- simple frame -->
+                        </div>
+                        <p>"Just wanted to let you know that I was absolutely thrilled by the level of your services. Indeed fills a void. Thanks so much! Your washing is better than most's dry cleaning!".</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 clearfix mgb50">
+                <div class='row-fluid'>
+                    <div class='col-md-3 text-center'>
+                        <img src='<?php echo $this->baseUrl(); ?>/public/img/Mohammad Tauqueer testimonial.jpg' width='70' height='70' style='margin-bottom:5px;'>
+                        <p class='author-name' style='margin-bottom:0;'>Mohammad Tauqueer</p>
+                    </div>
+                    <div class='col-md-9 testimonial-text'>
+                        <div  data-mu-ie-matrix-dy="-4" data-mu-ie-matrix-dx="-4" data-mu-ie-matrix="progid:DXImageTransform.Microsoft.Matrix(M11=0.7071,M12=0.7071,M21=-0.7071,M22=0.7071,SizingMethod='auto expand')" id="u30666" class="grpelem">
+                            <!-- simple frame -->
+                        </div>
+                        <p>"Excellent service, very professional... you people have made our life easy... this is one of the much awaited service".</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 clearfix mgb50">
+                <div class='row-fluid'>
+                    <div class='col-md-3 text-center'>
+                        <img src='<?php echo $this->baseUrl(); ?>/public/img/manish-goyal-testimonial.jpg' width='70' height='70' style='margin-bottom:5px;'>
+                        <p class='author-name' style='margin-bottom:0;'>Manish Goyal</p>
+                    </div>
+                    <div class='col-md-9 testimonial-text'>
+                        <div  data-mu-ie-matrix-dy="-4" data-mu-ie-matrix-dx="-4" data-mu-ie-matrix="progid:DXImageTransform.Microsoft.Matrix(M11=0.7071,M12=0.7071,M21=-0.7071,M22=0.7071,SizingMethod='auto expand')" id="u30666" class="grpelem">
+                            <!-- simple frame -->
+                        </div>
+                        <p>"Excellence service, would recommend to any travelers in NOIDA. Quick, convenient and reliable.".</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 clearfix mgb50">
+                <div class='row-fluid'>
+                    <div class='col-md-3 text-center'>
+                        <img src='<?php echo $this->baseUrl(); ?>/public/img/Varun Bansal testimonial.jpg' width='70' height='70' style='margin-bottom:5px;'>
+                        <p class='author-name' style='margin-bottom:0;'>Varun Bansal</p>
+                    </div>
+                    <div class='col-md-9 testimonial-text'>
+                        <div  data-mu-ie-matrix-dy="-4" data-mu-ie-matrix-dx="-4" data-mu-ie-matrix="progid:DXImageTransform.Microsoft.Matrix(M11=0.7071,M12=0.7071,M21=-0.7071,M22=0.7071,SizingMethod='auto expand')" id="u30666" class="grpelem">
+                            <!-- simple frame -->
+                        </div>
+                        <p>"Best Service. Prompt Pickup and World Class After Process. This is what defines Laundry Wala. Must try if you looking for a reliable option. Your clothes are returned back in a way which shall leave you mesmerized ! ".</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section id='featured'>
+    <div class='container'>
+        <div class='row'>
+            <div class="col-md-8 col-md-push-2 clearfix">
+                <div class="section-heading scrollpoint sp-effect3 active animated fadeInDown">
+                    <h2 class='block-title'>WE ARE FEATURED</h2>
+                    <span class="divider"></span>
+                    <h3 class='block-sub-title'>Kind words from the press</h3>
+                </div>
+            </div>
+        </div>
+        <div class='row featured-list-wrapper text-center'>
+            <div class='col-md-3'>
+                <a target="_blank" href='http://www.cleanindiajournal.com/the-story-of-laundrywala/'>
+                    <img class='img-responsive' src='<?php echo $this->baseUrl(); ?>/public/img/cij_logo1.jpg' width='200' height='40'>
+                </a>
+            </div>
+            <div class='col-md-3'>
+                <a target="_blank"` href='http://inc42.com/startups/laundrywala/'>
+                    <img class='img-responsive' src='<?php echo $this->baseUrl(); ?>/public/img/42mag-logo-203x150-e1428779078319.png'>
+                </a>
+            </div>
+            <div class='col-md-3'>
+                <a target="_blank" href='https://twitter.com/LaundryWala/status/631035396579692544/photo/1'>
+                    <img class='img-responsive' src='<?php echo $this->baseUrl(); ?>/public/img/toi logo.png' width='70' height='70'>
+                </a>
+            </div>
+            <div class='col-md-3'>
+                <a target="_blank" href='http://www.yosuccess.com/interviews/divya-aggarwal-laundrywala/'>
+                    <img class='img-responsive' src='<?php echo $this->baseUrl(); ?>/public/img/yosuccesslogo.png'>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header login_modal_header text-center">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h2 class="modal-title" id="myModalLabel">Login to Your Account</h2>
+            </div>
+            <div class="modal-body login-modal pull-center text-center">
+                <p>
+                    Login using either facebook or google and then you can order.
+                </p>
+                <br/>
+                <div class="clearfix"></div>
+                <div id='social-icons-conatainer col-md-6 '>
+                    <a href="<?php echo $this->facebookAuthUrl ?>" class="btn btn-fb-login btn-default facebook"> <i class="fa fa-facebook modal-icons"></i> Sign In with Facebook </a>
+                    <a href="<?php echo $this->googleAuthUrl ?>" class="btn btn-default google"> <i class="fa fa-google-plus modal-icons"></i> Sign In with Google </a>
+                </div>																												
+            </div>
+            <div class="clearfix"></div>
+            <div class="modal-footer login_modal_footer">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade loginModal"  tabindex="-1" role="dialog" aria-labelledby="loginModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body clearfix">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h2 class="text-center">LOGIN</h2>
+                <div class="container-fluid">
+                    <ul class="col-md-8 col-md-offset-2" style="list-style-type:none;">
+                        <li>
+                            <a class="btn btn-fb-login btn-block" href="<?php echo $this->facebookAuthUrl ?>"><i class="fa fa-facebook-f pull-left" style="padding-right:15px;border-right:1px solid #fff;font-size:18px;text-align:left;"></i>Facebook login</a>
+                            <a class="btn btn-fb-login btn-block" href="<?php echo $this->googleAuthUrl ?>"><i class="fa fa-facebook-f pull-left" style="padding-right:15px;border-right:1px solid #fff;font-size:18px;text-align:left;"></i>Facebook login</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer inner-shadow btn-success" >
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        var input = document.getElementById("pincodetxt");
+        var awesomplete = new Awesomplete(input);
+        awesomplete.list = <?php echo json_encode($this->locations); ?>;
+        $('#pincodetxt').popover({"placement":"top"});
+        
+        
+        $("#checklogin").click(function() {
+            
+            var availableLocations = <?php echo json_encode($this->locations); ?>;
+            var allowOrder = false;
+            var popover = $('#pincodetxt').data('bs.popover');
+            
+            if (!$("#pincodetxt").val()) {
+                popover.options.content = "Please enter location";
+                $('#pincodetxt').popover('show');
+                return false;
+            } else { //check if valid locations
+                var locationInput = $("#pincodetxt").val();
+                popover.options.content = "Currently we are not serving in this location";
+                $('#pincodetxt').popover('show');
+                if (availableLocations.indexOf(locationInput) == -1) {
+                    $('#pincodetxt').popover('show');
+                    allowOrder = false;
+                } else {
+                    window.sessionStorage.setItem('locationCity',$('#pincodetxt').val());
+                    $('#pincodetxt').popover('hide');
+                    allowOrder = true;
+
+                    if (loggedin == 1) {
+                        window.location = $(this).data("href");
+                    } else {
+                        $('#loginModal').modal('show');
+                    }
+                }
+            }
+        });
+        
+        if ($("#top").is('*')) {
+            var elem = $('#top');
+            var offset = elem.offset();
+            var leftValue = offset.left;
+            var topValue = 60;
+
+            $(window).scroll(function(event) {
+                var y = $(this).scrollTop();
+                if (y >= topValue) {
+                    if ($('#top').hasClass('fixed')) {
+                    } else {
+                        $('#top').addClass('fixed');
+                        $('#top').css({
+                            top: '-100px',
+                        });
+                        $('#top').animate({
+                            top: '0',
+                        }, 500, function() {
+                        });
+                    }
+                } else {
+                    if ($('#top').hasClass('fixed')) {
+                        $('#top').animate({
+                            top: '-100px',
+                        }, 500, function() {
+                        });
+                        $('#top').removeClass('fixed');
+                    }
+                }
+            });
+        }
+    });
+
+
+</script>

@@ -1,0 +1,86 @@
+
+<div id="slider_wrapper2">
+    <div class="wrap">
+
+        <h1>View Orders</h1>
+
+    </div>
+</div>
+
+<div class="clear"></div>
+
+<div class="content">
+    <div class="wrap">
+
+        <div class="content_404">
+            <h3>Completed Orders </h3>
+            <table class="table tablenew_1">
+                <tr >
+                    <th class="tablenew_2">Order Id</th>
+                    <th class="tablenew_2">User's Name</th>
+                    <th class="tablenew_2">User Phone Number</th>
+                    <th class="tablenew_2">Address</th>
+                    <th class="tablenew_2">Order Status</th>
+                    <th class="tablenew_2">Order Total</th>
+                    <th class="tablenew_2">View Details</th>
+                </tr>
+                <?php if ($this->completed_orders): ?>
+                    <?php foreach ($this->completed_orders as $completed): ?>
+
+                        <tr>
+                            <td class="tablenew_2"> <?php echo $completed->__get("order_id"); ?> </td>
+                            <td class="tablenew_2"> <?php echo $completed->__get("user_fname") . " " . $completed->__get("user_lname"); ?></td>
+                            <td class="tablenew_2"> <?php echo $completed->__get("user_phn_number"); ?> </td>
+                            <td class="tablenew_2"> <?php echo $completed->__get("user_address") . " " . $completed->__get("address_city") . " " . $completed->__get("address_state") . " " . $completed->__get("address_pincode"); ?> </td>
+                            <td class="tablenew_2"> <?php echo $completed->__get("order_status"); ?> </td>
+                            <td class="tablenew_2"> <?php echo $completed->__get("order_total"); ?></td>
+                            <td class="tablenew_2">
+                                <?php $id = $completed->__get("order_id"); ?>
+                                <a href="<?php echo $this->baseUrl(); ?>/my-account/order-details/id/<?php echo $id; ?>"><button type="submit">View Details</button></a>
+                            </td>
+                        </tr>
+                        <?php
+                    endforeach;
+                endif;
+                ?>
+
+            </table>
+
+            <h3>Active Orders</h3>
+            <table class="table tablenew_1" style="margin-bottom: 50px;">
+                <tr >
+                    <th class="tablenew_2">Order Id</th>
+                    <th class="tablenew_2">User's Name</th>
+                    <th class="tablenew_2">User Phone Number</th>
+                    <th class="tablenew_2">Address</th>
+                    <th class="tablenew_2">Order Status</th>
+                    <th class="tablenew_2">Order Total</th>
+                    <th class="tablenew_2">View Details</th>
+                </tr>
+                <?php if ($this->active_orders): ?>
+                    <?php foreach ($this->active_orders as $active): ?>
+
+                        <tr>
+                            <td class="tablenew_2"> <?php echo $active->__get("order_id"); ?> </td>
+                            <td class="tablenew_2"> <?php echo $active->__get("user_fname") . " " . $active->__get("user_lname"); ?></td>
+                            <td class="tablenew_2"> <?php echo $active->__get("user_phn_number"); ?> </td>
+                            <td class="tablenew_2"> <?php echo $active->__get("user_address") . " " . $active->__get("address_city") . " " . $active->__get("address_state") . " " . $active->__get("address_pincode"); ?> </td>
+                            <td class="tablenew_2"> <?php echo $active->__get("order_status"); ?> </td>
+                            <td class="tablenew_2"> <?php echo $active->__get("order_total"); ?></td>
+                            <td class="tablenew_2">
+                                <?php $id = $active->__get("order_id"); ?>
+                                <a href="<?php echo $this->baseUrl(); ?>/my-account/order-details/id/<?php echo $id; ?>"><button type="submit">View Details</button></a>
+                            </td>
+                        </tr>
+                        <?php
+                    endforeach;
+                endif;
+                ?>
+            </table>
+
+        </div>
+
+        <div class="clear"></div>
+
+    </div>
+</div>

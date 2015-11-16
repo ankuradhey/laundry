@@ -1,0 +1,28 @@
+<div class="container-fluid cart-steps">
+    <div class="container">
+        <div class="col-md-3" >
+            <div class="img-circle step-number <?php echo $this->currentStep >= 1 ? 'active':'';?> pull-left">
+                <span>1</span>
+            </div>
+            <span class="pull-left step-label" id="cart-step-1"><?php echo $this->orderType=='service'?'ADD SERVICES':'ADD PACKAGE' ?></span>
+        </div>
+        <div class="col-md-3" >
+            <div class="img-circle step-number <?php echo $this->currentStep >= 2 ? 'active':'';?> pull-left">
+                <span>2</span>
+            </div>
+            <span class="pull-left step-label" id="cart-step-2">ADDRESS</span>
+        </div>
+        <div class="col-md-3" >
+            <div class="img-circle step-number <?php echo $this->currentStep >= 3 ? 'active':'';?> pull-left">
+                <span>3</span>
+            </div>
+            <span class="pull-left step-label" id="cart-step-3"><?php echo $this->orderType=='service'?'SCHEDULE':'SUMMARY' ?></span>
+        </div>
+        <div class="col-md-3" >
+            <div class="img-circle step-number <?php echo $this->currentStep >= 4 ? 'active':'';?> pull-left">
+                <span>4</span>
+            </div>
+            <span class="pull-left step-label" id="cart-step-4"><?php echo $this->orderType=='service'?'SUMMARY':'PAYMENT' ?></span>
+        </div>
+    </div>
+</div>

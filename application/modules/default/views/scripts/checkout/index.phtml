@@ -1,0 +1,162 @@
+<div id="slider_wrapper2" style="margin-top:80px;">
+    <div class="wrap">
+
+        <h1>Select Garments</h1>
+
+    </div>
+</div>
+
+<div class="clear"></div>
+<form method="post" action="<?php echo $this->baseUrl(); ?>/checkout/checkout" id="myForm1">
+    <div class="content" style="background: transparent">
+        <div class="wrap" style="background: transparent; padding: 10px;">
+
+            <div class="row">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <?php
+                    $is_live = TRUE;
+                    $categoriesMapper = new Application_Model_CategoriesMapper();
+                    $categories = $categoriesMapper->getAllCategories($is_live);
+                    if ($categories):
+                        $f1 = false;
+                        foreach ($categories as $category):
+                            ?>
+                            <li role="presentation" class="<?php if (!$f1): ?>active<?php
+                                $f1 = true;
+                            endif;
+                            ?>"><a href="#<?php echo $category->__get("category_id"); ?>" role="tab" data-toggle="tab"><?php echo $category->__get("category_name"); ?></a></li>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    <li class="tot100">
+                        Total:Rs.<span id="total-amount">0</span>
+                    </li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="col-sm-2">
+                </div>
+                <div class="col-sm-8">
+                    <div class="tab-content" style="margin-top: 30px; text-align:center;">
+                        <?php
+                        $f = false;
+                        foreach ($categories as $cat):
+
+                            $itemPriceMapper = new Application_Model_ItemPriceMapper();
+                            $itemPrices = $itemPriceMapper->getItemPriceByServiceIdCatIdDelName($this->service_id, $this->del_name, $cat->__get("category_id"));
+                            ?>
+                            <div role="tabpanel" class="tab-pane <?php if (!$f): ?>active<?php
+                                $f = true;
+                            endif;
+                            ?>" id="<?php echo $cat->__get("category_id"); ?>">
+                                     <?php
+                                     if ($itemPrices):
+                                         $item_count = count($itemPrices);
+                                         $var = $item_count / 2;
+                                         $mid = ceil($var);
+                                         ?>
+                                    <div class="row">
+
+                                        <div class="col-sm-6">
+                                            <?php
+                                            for ($i = 0; $i < $mid; $i++):
+                                                ?>
+                                                <div class="form-group">
+                                                    <label for="inputEmail3" class="col-sm-6 control-label"><?php
+                                                        $itemsMapper = new Application_Model_ItemsMapper();
+                                                        $item = $itemsMapper->getItemById($itemPrices[$i]->__get("item_id"));
+                                                        if ($item) {
+                                                            echo $item->__get("item_name");
+                                                        } else {
+                                                            echo "None";
+                                                        }
+                                                        ?></label>
+                                                    <div class="col-sm-6">
+                                                        <div id="infant_count" class="segmented_controls make_field form-control1">
+                                                            <input type="hidden" class="qty"  value="" name="qty[]">
+                                                            <input type="hidden" class="price"  value="<?php echo $itemPrices[$i]->__get("price"); ?>" name="price[]">
+                                                            <input type="hidden" class="items"  value="<?php echo $itemPrices[$i]->__get("item_id"); ?>" name="items[]">
+                                                            <span class="minus" data-price="<?php echo $itemPrices[$i]->__get("price"); ?>"><i class="fa fa-minus"></i></span>
+                                                            <span class="infantCount form-control1 result">0</span>
+                                                            <span class="plus" data-price="<?php echo $itemPrices[$i]->__get("price"); ?>"><i class="fa fa-plus"></i></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <?php endfor; ?>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <?php
+                                            for ($j = $mid; $j < count($itemPrices); $j++):
+                                                ?>
+                                                <div class="form-group">
+                                                    <label for="inputEmail3" class="col-sm-6 control-label"><?php
+                                                        $itemsMapper = new Application_Model_ItemsMapper();
+                                                        $item = $itemsMapper->getItemById($itemPrices[$j]->__get("item_id"));
+                                                        if ($item) {
+                                                            echo $item->__get("item_name");
+                                                        } else {
+                                                            echo "None";
+                                                        }
+                                                        ?></label>
+                                                    <div class="col-sm-6">
+                                                        <div id="infant_count" class="segmented_controls make_field form-control1">
+                                                            <input type="hidden" class="qty"  value="" name="qty[]">
+                                                            <input type="hidden" class="price"  value="<?php echo $itemPrices[$j]->__get("price"); ?>" name="price[]">
+                                                            <input type="hidden" class="items"  value="<?php echo $itemPrices[$j]->__get("item_id"); ?>" name="items[]">
+                                                            <span class="minus" data-price="<?php echo $itemPrices[$j]->__get("price"); ?>"><i class="fa fa-minus"></i></span>
+                                                            <span class="infantCount form-control1 result">0</span>
+                                                            <span class="plus" data-price="<?php echo $itemPrices[$j]->__get("price"); ?>"><i class="fa fa-plus"></i></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <?php endfor; ?>
+                                        </div>
+
+                                    </div>
+
+                                <?php endif; ?>
+                            </div>
+                            <?php
+                        endforeach;
+                        ?>
+
+                    </div>
+
+                </div>
+                <div class="col-sm-2">
+                </div>
+            </div>
+            <div class="row" style="padding:10px;">
+                <div class="col-sm-4">
+                </div>
+                <div class="col-sm-6">
+                    <input type="hidden" name="request_type" value="item_details">
+                    <input type="hidden" value="<?php echo $this->del_name;?>" name="delivery_type">
+                    <input type="hidden" value="<?php echo $this->service_id;?>" name="service_name">
+                    <input type="hidden" value="<?php echo $this->date;?>" name="pickup_date">
+                    <input type="hidden" value="<?php echo $this->time;?>" name="pickup_time">
+                    <input type="hidden" value="<?php echo $this->del_date;?>" name="del_date">
+                    <input type="hidden" value="<?php echo $this->del_time;?>"  name="del_time">
+                    <a href="#" onclick="myFunction1()" class="tab-button small" style="background: #6ab2dc;
+                       color: #fff;margin-top: 40px;
+                       
+                       width: 200px;">Proceed To Checkout</a>
+
+                </div>
+
+            </div>
+
+
+
+
+
+
+
+            <div class="clear"></div>
+
+        </div>
+    </div>
+</form>
+<div class="blue-bar">
+
+</div>

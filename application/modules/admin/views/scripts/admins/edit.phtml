@@ -1,0 +1,64 @@
+<div class="mws-panel grid_8">
+    <div class="mws-panel-header">
+        <span class="mws-i-24 i-speech-bubble-2"> Edit Admin </span>
+    </div>
+    <div class="mws-panel-body">
+        <form class="mws-form" method="post" >
+            <?php if ($this->hasMessage): ?>
+                <div class="mws-form-message <?php echo $this->messageType == 'danger' ? 'error' : $this->messageType; ?> fade in">
+                    <?php if ($this->messageType == "danger"): ?>
+                        <strong>Oh snap!</strong>
+                    <?php elseif ($this->messageType == "success"): ?>
+                        <strong>Well done!</strong>
+                    <?php elseif ($this->messageType == "info"): ?>
+                        <strong>Heads up!</strong>
+                    <?php elseif ($this->messageType == "warning"): ?>
+                        <strong>Warning!</strong>
+                    <?php endif; ?>
+                    <?php echo $this->message; ?>
+                </div>
+            <?php endif; ?>
+
+            <div class="mws-form-block">
+                <?php
+                $elements = $this->form->getElements();
+                foreach ($elements as $element):
+                    ?>
+                    <div class="mws-form-row">
+                        <?php echo $element; ?>
+                    </div>
+                    <?php
+                endforeach;
+                ?>
+                <div class="mws-button-row">
+                    <input type="hidden" name="request_type" value="edit">
+                    <button type="submit" class="mws-button red" >Edit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div class="mws-panel grid_8">
+    <div class="mws-panel-header">
+        <span class="mws-i-24 i-speech-bubble-2"> Change Password </span>
+    </div>
+    <div class="mws-panel-body">
+        <form class="mws-form" method="post" >
+            <div class="mws-form-block">
+                <div class="mws-form-row">
+                    <?php echo $this->password_form->getElement("hashed_password"); ?>
+                </div>
+                <div class="mws-form-row">
+                    <?php echo $this->password_form->getElement("cpassword"); ?>
+                </div>
+                <div class="mws-button-row">
+                    <input type="hidden" name="request_type" value="change_password">
+                    <button type="submit" class="mws-button red" >Change</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+

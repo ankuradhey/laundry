@@ -1,0 +1,77 @@
+<?php
+    $namespace = new Zend_Session_Namespace('userInfo');
+
+?>
+<script type='text/javascript'>var loggedin = <?php echo isset($namespace->user_id)?1:0?></script>
+<header role="banner" id="top" class="navigation-bar navbar navbar-static-top bs-docs-nav" style='margin:0;'>
+    <div class="container">
+        <div class="navbar-header">
+            <button aria-expanded="false" aria-controls="bs-navbar" data-target="#bs-navbar" data-toggle="collapse" type="button" class="navbar-toggle collapsed">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="<?php echo $this->baseUrl(); ?>">
+                <img src="<?php echo $this->baseUrl(); ?>/public/img/lw_logo_trans.png" width="200" height="40">
+            </a>
+        </div>
+        <nav class="collapse navbar-collapse" id="bs-navbar">
+            <ul class="nav navbar-nav navbar-right header-links">
+                <!--<li><a class='txt' href="#">PRICE LIST</a></li>-->
+                <!--<li><a class='txt' href="<?php echo $this->baseUrl(); ?>/index/orderlist">VIEW ORDERS</a></li>-->
+                <li><a class='txt' href="<?php echo $this->baseUrl(); ?>/index/faq">FAQ'S</a></li>
+                <li><a class='txt' href="<?php echo $this->baseUrl('index/ratelist'); ?>">Rate List</a></li>
+                <li><a class='txt' href="#">BLOG</a></li>
+                <li><a class='txt' href="#packages">Packages</a></li>
+                <li>
+                    <a href="#" style='padding:0;margin-right:10px;'>
+                        <img src='<?php echo $this->baseUrl(); ?>/public/img/play_logo_trans.png' width='136' height='42'>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)" 
+                       id="orderbtn-top"
+                       data-href="<?php echo $this->baseUrl();?>/index/orderview" 
+                       class='btn btn-success' style='padding-top:10px;padding-bottom:10px;'>
+                        ORDER NOW
+                    </a>
+                </li>
+                <?php
+                if(isset($namespace->user_id)){
+					
+                ?>
+                <li>
+                    <div class="img-circle pull-left profile-img clearfix">
+                        <img src="<?php echo $namespace->user_img?>" class="img-circle responsive" style="height:30px;width:30px;">
+                    </div>
+                    <div class="pull-left profile-text">
+                        <div style="margin-top:5px;margin-bottom:0;position:relative;">
+                            <?php echo $this->userInfo['userName']; ?>
+                            <a href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="pull-right" style="height:100%;">
+                                <i class="caret"></i>
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="dLabel">
+                                <li>
+                                    <a href="<?php echo $this->url(array("controller"=>"my-account"),"default",true)?>">Edit Profile</a>
+                                </li>
+                                <li>
+                                    <a href="<?php echo $this->url(array('controller'=>'my-account','action'=>'subscription'),"default",true); ?>">My Packages</a>
+                                </li>
+                                <li>
+                                    <a href="<?php echo $this->baseUrl(); ?>/index/orderlist">Order History</a>
+                                </li>
+                                <li>
+                                    <a href="<?php echo $this->baseUrl(); ?>/index/logout">Logout</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+                <?php
+                }
+                ?>
+            </ul>
+        </nav>
+    </div>
+</header>

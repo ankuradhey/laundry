@@ -1,0 +1,99 @@
+<form method="post">
+    <div class="row">
+    <div class="profile-block mbottom20">
+        
+        <div class="col-sm-12">
+        
+            <div class="row">
+            <div class="col-sm-3 mtop20">
+                <img src="<?php echo $this->user_img?>" class="img-circle img-responsive"  />
+            </div>
+            <div class="col-sm-9">
+            <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input type="text" name="user_fname" value="<?php echo $this->fname; ?>" class="form-control" id="firstName" placeholder="First Name">
+            </div>
+            <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input type="text" name="user_lname" class="form-control" value="<?php echo $this->lname; ?>" id="lastName" placeholder="Last Name">
+            </div>
+            </div>
+            </div>
+            
+            <div class="row">
+            <div class="col-sm-6">
+            <div class="form-group">
+                <label for="email">Email address</label>
+                <input name="user_email" type="email" class="form-control" id="email" placeholder="Email" value="<?php echo @$this->email; ?>">
+            </div>
+            </div>
+            <div class="col-sm-6">
+            <div class="form-group">
+                <label for="phone">Phone</label>
+                <input type="text" class="form-control" id="phone" name="user_number" placeholder="Phone" value="<?php echo $this->phone; ?>">
+            </div>
+            </div>
+            </div>
+            
+        </div>
+        
+    </div>
+    </div>
+    
+    <div class="row">
+    <div class="profile-block mbottom20 mtop20">
+        <div class="row">
+        <div class="col-sm-12">
+        <div class="form-group">
+        <label for="address">Address</label>
+        <input type="text" class="form-control" id="address" name="user_address" placeholder="Address" value="<?php echo $this->address; ?>">
+        </div>
+        </div>
+        <div class="col-sm-12">
+        <div class="form-group">
+        <label for="address_additional">Address Additional</label>
+        <input type="text" class="form-control" id="address_additional" name="user_address_additional" placeholder="Address Additional" value="<?php echo $this->address_additional; ?>">
+    </div>
+        </div>
+        <div class="col-sm-12">
+        <div class="form-group">
+        <label for="country">Country</label>
+        <input type="text" class="form-control" id="country" name="user_country" placeholder="Country" value="<?php echo $this->country; ?>">
+    </div>
+        </div>
+        <div class="col-sm-12">
+        <div class="form-group">
+        <label for="address">State</label>
+        <input type="text" class="form-control" id="address" name="user_state" placeholder="State" value="<?php echo $this->state; ?>">
+    </div>
+        </div>
+        <div class="col-sm-12">
+        <div class="form-group">
+        <label for="city">City</label>
+        <input type="text" class="form-control" id="city" name="user_city" placeholder="Address" value="<?php echo $this->city; ?>">
+    </div>
+        </div>
+        </div>
+    </div>
+    </div>
+    
+    <div class="row">
+    
+    <div class="profile-block mbottom20">
+    <input type="hidden" name="request_type" value="update">
+    <button type="submit" class="btn btn-success">Update</button>
+    </div>
+    </div>
+    
+</form>
+
+
+<script>
+$("input[type='text'],input[type='email']").focus(function(){	
+	$(this).parents(".form-group").addClass("active");
+})
+
+$("input[type='text'],input[type='email']").blur(function(){	
+	$(".form-group.active").removeClass("active");
+})
+</script>

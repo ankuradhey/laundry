@@ -1,0 +1,194 @@
+<section class="panel panel-default">
+    <header class="panel-heading font-bold" style="font-size: 15px; margin-bottom: 30px;"><strong> Edit Order No.(<?php echo $this->order_id; ?>) </strong></header>
+    <hr/>
+    <div class="panel-body">
+        <form class="form-horizontal" method="post">
+
+            <div class="row">
+                <div class="span3">
+                    <label><strong>User Name</strong></label>
+                    <input type="text" class="" name="user_name" placeholder="Enter User Name" value="<?php echo $this->orders->__get("user_fname"); ?>">
+                </div>
+                <div class="span3">
+                    <label><strong>User Number</strong></label>
+                    <input type="text" class="" name="user_number" placeholder="Enter User Number" value="<?php echo $this->orders->__get("user_phn_number"); ?>">
+                </div>
+                <div class="span3">
+                    <label><strong>User Address</strong></label>
+                    <input type="text" class="" name="user_address" placeholder="Enter User Address" value="<?php echo $this->orders->__get("user_address"); ?>">
+                </div>
+                <div class="span3">
+                    <label><strong>Delivery Type</strong></label>
+                    <select class="form-control" name="delivery_type">
+                        <option value="">Select Delivery Type</option>
+                        <?php
+                        $deliveryTypeMasterMapper = new Application_Model_DeliveryTypeMasterMapper();
+                        $deliveryTypes = $deliveryTypeMasterMapper->getAllDeliveryTypeMaster();
+                        foreach ($deliveryTypes as $type):
+                            ?>
+                            <option value="<?php echo $type->__get("delivery_type_name"); ?>" <?php if ($this->orders->__get("delivery_type") == $type->__get("delivery_type_name")): ?>selected="selected"<?php endif; ?>><?php echo $type->__get("delivery_type_name"); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="span3">
+                    <label><strong>Service</strong></label>
+                    <select class="form-control" name="service_id">
+                        <option value="">Select Service</option>
+                        <?php
+                        $serviceMasterMapper = new Application_Model_ServiceMasterMapper();
+                        $servicesMaster = $serviceMasterMapper->getAllServiceMasters();
+                        foreach ($servicesMaster as $service):
+                            ?>
+                            <option value="<?php echo $service->__get("service_id"); ?>" <?php if ($this->orders->__get("service") == $service->__get("service_id")): ?>selected="selected"<?php endif; ?>><?php echo $service->__get("service_name"); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="span3" style="margin-top: 15px;">
+                    <label><strong>Total Amount</strong></label>
+                    <input type="text" class="" value="Rs.<?php echo $this->orders->__get("order_total");?>" disabled="">
+                </div>
+                <div class="span3" style="margin-top: 20px;">
+                    <input type="hidden" name="request_type" value="update_order_info">
+                    <button type="submit" class="btn btn-sm btn-success">Update</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</section>
+
+<section class="panel panel-default">
+    <div class="widget-head">
+        <div class="pull-left" style="font-size: 15px;"><strong>Item List</strong></div>
+
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped b-t b-light text-sm">
+            <thead>
+                <tr>
+                    <th>S.No</th>
+                    <th>Item Name</th>
+                    <th>Item Price</th>
+                    <th>Quantity</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if ($this->orderItems): $i = 1; ?>
+                    <?php foreach ($this->orderItems as $item): ?>
+                        <?php
+                        $item_id = $item->__get("item_id");
+                        $itemsMapper = new Application_Model_ItemsMapper();
+                        $menuItem = $itemsMapper->getItemById($item_id);
+                        ?>
+                        <tr>
+                            <td><?php echo $i++; ?></td>
+                            <?php if ($menuItem): ?>
+                                <td><?php echo $menuItem->__get("item_name"); ?></td>
+                            <?php else: ?>
+                                <td>Na</td>
+                            <?php endif; ?>
+                            <td>
+                                <?php echo $item->__get("unit_price"); ?>
+                            </td>
+
+                            <td>
+                                <form method="post">
+                                    <input type="text" value="<?php echo $item->__get("quantity"); ?>" name="qty" class="input_class" style="width: 13%;">
+                                    <input type="hidden" value="<?php echo $item->__get("order_item_id"); ?>" name="order_item_id">
+                                    <input type="hidden" name="request_type" value="update_qty">
+                                    <button type="submit" class="btn btn-success btn-mini" style="margin-bottom: 10px;"><i class="icon-refresh"></i></button>
+                                </form>
+                            </td>
+                            <td><button class="btn btn-danger delete btn-mini" style="margin-bottom: 10px;" data-id="<?php echo $item->__get("order_item_id"); ?>"><i class="icon-trash"></i></button></td>
+
+                        </tr>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+
+</section>
+
+<section class="panel panel-default">
+    <header class="panel-heading font-bold" style="font-size: 15px; margin-bottom: 30px;"><strong> Add Items</strong></header>
+    <hr/>
+    <div class="panel-body">
+        <form class="form-horizontal" method="post">
+
+            <div class="row">
+
+                <div class="span3">
+                    <label><strong>Select Category</strong></label>
+                    <select class="form-control category" name="category_id">
+                        <option value="none">Select Category</option>
+                        <?php
+                        $is_live = 1;
+                        $categoryMapper = new Application_Model_CategoriesMapper();
+                        $categories = $categoryMapper->getAllCategories($is_live);
+                        foreach ($categories as $category):
+                            ?>
+                            <option value="<?php echo $category->__get("category_id"); ?>"><?php echo $category->__get("category_name"); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+
+                <div class="span3">
+                    <label><strong>Select Service</strong></label>
+                    <select class="form-control service" name="service_id">
+                        <option value="none">Select Service</option>
+                        <?php
+                        $serviceMasterMapper = new Application_Model_ServiceMasterMapper();
+                        $servicesMaster = $serviceMasterMapper->getAllServiceMasters();
+                        foreach ($servicesMaster as $service):
+                            ?>
+                            <option value="<?php echo $service->__get("service_id"); ?>"><?php echo $service->__get("service_name"); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="span3">
+                    <label><strong>Item</strong></label>
+                    <select class="form-control items" name="item_id">
+                        <option value="none">Select Item</option>
+                    </select>
+                </div>
+                <div class="span3">
+                    <label><strong>Quantity</strong></label>
+                    <input type="text" class="" name="quantity">
+                </div>
+                <div class="span3" style="margin-top: 20px;">
+                    <input type="hidden" id="category_id" value="">
+                    <input type="hidden" id="service_id" value="">
+                    <input type="hidden" name="request_type" value="order_item_add">
+                    <button type="submit" class="btn btn-sm btn-success">Add</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</section>
+
+<div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" style="display:none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="myModalLabel">Confirm Delete</h4>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <input type="hidden" name="request_type" value="delete"/>
+                    <input type="hidden" name="item_id" id="delete_id" value=""/>
+                    <button type="submit" class="btn btn-primary btn-danger">Confirm Delete</button>
+                </div>
+            </form>
+        </div><!-- modal-content -->
+    </div><!-- modal-dialog -->
+</div>

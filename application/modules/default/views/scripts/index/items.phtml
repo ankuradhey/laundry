@@ -1,0 +1,499 @@
+<?php
+$thumb = $this->baseUrl() . "/public/thumbs/thumb.php";
+$userInfo = array('userName' => $this->user_fname . ' ' . $this->user_lname, 'phone' => '7062232497', 'profileImage' => $this->user_img);
+echo $this->partial('index/headerstrip.phtml', array('headlineText' => $this->headlineText, 'userInfo' => $userInfo))
+?>
+<form action="<?php echo $this->baseUrl() ?>/index/processcart" method="post" onsubmit="return validateForm();">
+
+    <div class='container-fluid grey-label-instruction' style="padding:20px 0;border-bottom:solid 1px #ccc;">
+        <div class='container'>
+            <div class='row-fluid'>
+                <a class="col-md-1" href="<?php echo $this->baseUrl(); ?>/index/orderview">
+                    <h4><i class="glyphicon glyphicon-chevron-left"></i>Back</h4>
+                </a>
+                <?php
+                if ($this->deliveryType != 'Fixed Slot') {
+                    ?>
+                    <div class="col-md-5">
+                        <h4 class="col-md-6 text-center" >CHOOSE DELIVERY TYPE</h4>
+                        <div class="col-md-6">
+                            <div class="btn-group btn-block" data-toggle="buttons">
+                                <label class='btn btn-primary active col-md-6' onclick='selectDeliveryType(this);'>
+                                    <input type='radio' name='delivery-type' id="delivery-type-regular" value='Regular' checked='checked'>Regular
+                                </label>
+                                <label class='btn btn-primary col-md-6' onclick='selectDeliveryType(this);'>
+                                    <input type='radio' name='delivery-type' id="delivery-type-express" value='Express' >Express
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <?php
+                } else {
+                    ?>
+
+
+                    <?php
+                }
+                ?>
+                <div class="col-md-6 pull-right">
+                    <h4 class="col-md-4 total-item-text"><span id="item-count-txt"><?php echo $this->selectedItemsCount? : 0; ?></span> Item for Rs. <span id="item-price-txt"><?php echo $this->selectedItemsPrice? : 0; ?></span></h4>
+                    <!--<p id="itemdetail" style="font-size:12px;">Minimum order value Rs. 200</p>-->
+                    <div class="col-md-4 pull-right">
+                        <a class="btn btn-success btn-block" href="<?php echo $this->baseUrl(); ?>/index/address">SKIP</a>
+                    </div>
+                    <div class="col-md-4 pull-right">
+                        <input type="hidden" id="itemselected" name="itemselected" autocomplete="off" value='<?php echo $this->selectedItemsCount; ?>'>
+                        <input type="hidden" id="itemprice" name="itemprice" value="<?php echo $this->selectedItemsPrice; ?>" autocomplete="off">
+                        <button type="submit" class="btn btn-success btn-block" id="buttonclick">GO TO ADDRESS</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class='container-fluid grey-label-instruction' style="padding-top:10px;">
+        <div class='row'>
+            <div class="container">
+                <div class="row">
+                    <?php
+                    $selectedService = null;
+                    foreach ($this->services as $itemKey => $item) {
+                        $selected = in_array($item->__get('service_id'), $this->selectedServices) ? 'selected' : 'disabled';
+                        $activeClass = '';
+                        //default selection of service - first come first serve
+                        if (!$selectedService && in_array($item->__get('service_id'), $this->selectedServices)) {
+                            $selectedService = $item->__get('service_id');
+                            $selectedServiceName = $item->__get('service_name');
+                            $activeClass = 'active';
+                            ?>
+                            <input type="hidden" name="selectedService" id="selectedService" value="<?php echo $selectedService; ?>">
+                            <?php
+                        }
+                        ?>
+                        <div class='col-md-3 service-tab <?php echo $selected; ?>' onclick="changeService(<?php echo $item->__get('service_id'); ?>, this)">
+                            <div class="img-circle pull-left img-service-icon <?php echo $selected . ' ' . $activeClass; ?> " style="background-image:url('<?php echo $this->baseUrl(); ?>/public/img/icons/<?php echo $item->__get('service_icon'); ?>')">
+                            </div>
+                            <h3 class="pull-left image-label-service"  style="text-transform: uppercase;"><?php echo $item->__get('service_name'); ?></h3>
+                        </div>
+                        <?php
+                    }
+                    ?>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <!-- Categories section -->
+            <div class="col-md-3 category-block">
+                <ul class="category-list-select">
+                    <?php
+                    $selectedCategory = null;
+                    foreach ($this->categories as $catKey => $category) {
+                        $selected = $catKey == 0 ? 'btn-success' : 'btn-default';
+
+                        //default selection of category
+                        if ($catKey == 0) {
+                            $selectedCategory = $category->__get('category_id');
+                            $selectedCategoryName = $category->__get('category_name');
+                            ?>
+                            <!-- Save category item selected -->
+                            <input type="hidden" name="categorySelected" id="categorySelected" value="<?php echo $selectedCategory; ?>">
+                            <?php
+                        }
+                        ?>
+                        <li class="btn btn-block text-center <?php echo $selected; ?>" onclick="changeCategory(<?php echo $category->__get('category_id'); ?>, this);">
+                            <?php echo $category->__get('category_name'); ?>
+                        </li>
+                        <?php
+                    }
+                    ?>
+                </ul>
+            </div>
+            <!-- items section -->
+            <div class="col-md-9">
+                <div class="table-responsive item-list">
+                    <table class="table itemListTable" id="itemListTable-<?php echo $selectedService . '-' . $selectedCategory . '-' . $this->deliveryType; ?>">
+                        <thead>
+                            <tr>
+                                <td><strong>ITEM</strong></td>
+                                <td><strong>QUANTITY</strong></td>
+                                <td><strong>PRICE</strong></td>
+                            </tr>
+                        </thead>
+                        <tbody data-category="<?php echo $selectedCategory; ?>" data-service="<?php echo $selectedService; ?>" data-delivery="Regular">
+                            <?php
+                            if (count($this->items)):
+                                foreach ($this->items as $item) {
+                                    $itemCount = 0;
+                                    if (isset($this->selectedItems[$item->__get('item_id')])) {
+                                        $itemCount = $this->selectedItems[$item->__get('item_id')];
+                                    }
+                                    ?>
+                                    <tr>
+                                        <td><?php echo $item->__get('item_name'); ?></td>
+                                        <td class="counter-action">
+                                            <span class="img-circle counter-trigger counter-decrease" onclick="quantityDecrement(this)" 
+                                                  data-price="<?php echo $item->__get('price'); ?>" 
+                                                  data-item-id='<?php echo $item->__get('item_id'); ?>'
+                                                  data-item-price-id='<?php echo $item->__get('item_price_id'); ?>'
+                                                  data-target="#item-<?php echo $item->__get('item_price_id'); ?>">-</span>
+                                            <span class="counter-number">
+                                                <?php echo $itemCount; ?>
+                                            </span>
+                                            <span class="img-circle counter-trigger counter-increase" 
+                                                  onclick="quantityIncrement(this)" 
+                                                  data-item-id='<?php echo $item->__get('item_id'); ?>'
+                                                  data-item-price-id='<?php echo $item->__get('item_price_id'); ?>'
+                                                  data-price="<?php echo $item->__get('price'); ?>" data-target="#item-<?php echo $item->__get('item_price_id'); ?>">+</span>
+                                        </td>
+                                        <td>
+                                            <input type="hidden" name="itemcart[service][<?php echo $selectedService; ?>][id]" value='<?php echo $selectedService; ?>'> 
+                                            <input type="hidden" name="itemcart[service][<?php echo $selectedService; ?>][name]" value='<?php echo $selectedServiceName; ?>'> 
+                                            <input type="hidden" name="itemcart[service][<?php echo $selectedService; ?>][category][<?php echo $selectedCategory; ?>][id]" value='<?php echo $selectedCategory; ?>'> 
+                                            <input type="hidden" name="itemcart[service][<?php echo $selectedService; ?>][category][<?php echo $selectedCategory; ?>][name]" value='<?php echo $selectedCategoryName; ?>'>
+                                            <input type="hidden" name="itemcart[service][<?php echo $selectedService; ?>][category][<?php echo $selectedCategory; ?>][items][<?php echo $item->__get('item_price_id'); ?>][id]" value='<?php echo $item->__get('item_id'); ?>'>
+                                            <input type="hidden" name="itemcart[service][<?php echo $selectedService; ?>][category][<?php echo $selectedCategory; ?>][items][<?php echo $item->__get('item_price_id'); ?>][price_id]" value='<?php echo $item->__get('item_price_id'); ?>'>
+                                            <input type="hidden" name="itemcart[service][<?php echo $selectedService; ?>][category][<?php echo $selectedCategory; ?>][items][<?php echo $item->__get('item_price_id'); ?>][name]" value='<?php echo $item->__get('item_name'); ?>'>
+                                            <input type="hidden" name="itemcart[service][<?php echo $selectedService; ?>][category][<?php echo $selectedCategory; ?>][items][<?php echo $item->__get('item_price_id'); ?>][unitprice]" value='<?php echo $item->__get('price'); ?>'>
+                                            <input type="hidden" name="itemcart[service][<?php echo $selectedService; ?>][category][<?php echo $selectedCategory; ?>][items][<?php echo $item->__get('item_price_id'); ?>][quantity]" id='service-wise-items-<?php echo $item->__get('item_price_id'); ?>' value='<?php echo $itemCount; ?>'>
+
+                                            <input type="hidden" name="item[<?php echo $item->__get('item_price_id'); ?>]" id="item-<?php echo $item->__get('item_price_id'); ?>" value="<?php echo $itemCount; ?>" >
+                                            <input type="hidden" name="itemprice[<?php echo $item->__get('item_price_id'); ?>]"  value="<?php echo $item->__get('price'); ?>" >
+                                            <input type="hidden" name="itemservice[<?php echo $item->__get('item_price_id'); ?>]"  value="<?php echo $selectedService; ?>" >
+                                            <input type="hidden" name="itemcategory[<?php echo $item->__get('item_price_id'); ?>]"  value="<?php echo $selectedCategory; ?>" >
+                                            <?php echo $item->__get('price'); ?>
+                                        </td>
+                                    </tr>
+                                    <?php
+                                }
+                            else:
+                                ?>
+                                <tr><td colspan="3">No Resuls Found!!</td></tr>
+                            <?php
+                            endif;
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--    <div class="container-fluid service-list-cart" >
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-2 pull-right">
+                        <a class="btn btn-success btn-block" href="<?php echo $this->baseUrl(); ?>/index/address">SKIP</a>
+                    </div>
+                    <div class="col-md-2 pull-right">
+                        <input type="hidden" id="itemselected" name="itemselected" autocomplete="off" value='<?php echo $this->selectedItemsCount; ?>'>
+                        <input type="hidden" id="itemprice" name="itemprice" value="<?php echo $this->selectedItemsPrice; ?>" autocomplete="off">
+                        <button type="submit" class="btn btn-success btn-block" id="buttonclick">GO TO ADDRESS</button>
+                    </div>
+                    <div class="col-md-2 pull-right total-item-info text-center">
+                        <p class="total-item-text"><span id="item-count-txt"><?php echo $this->selectedItemsCount? : 0; ?></span> Item for Rs. <span id="item-price-txt"><?php echo $this->selectedItemsPrice? : 0; ?></span></p>
+                        <p id="itemdetail" style="font-size:12px;">Minimum order value Rs. 200</p>
+                    </div>
+                </div>
+            </div>
+        </div>-->
+    <input type="hidden" name="step" value="items">
+</form>
+<?php echo $this->getHelper('CartSteps')->getSteps(1); ?>
+<script type="text/javascript">
+
+    //clear session storage on load
+    window.sessionStorage.clear();
+
+    function quantityDecrement(_this) {
+        $this = $(_this);
+        var target = $this.data('target');
+        var count = $(target).val();
+        var itemId = $this.data('item-price-id');
+        var singleItemPrice = $this.data('price');
+        if (count > 0) {
+            var finalVal = --count;
+            $(target).val(finalVal);
+            $this.parent('.counter-action').children('.counter-number').empty().text(finalVal);
+            //total value count
+            var totalCount = $('#itemselected').val();
+            $('#itemselected').val(--totalCount);
+            $('#item-count-txt').empty().text(totalCount);
+            $('#item-' + itemId).val(finalVal);
+            $('#service-wise-items-' + itemId).val(finalVal);
+
+            //total value price
+            var totalPrice = $('#itemprice').val();
+            //current Selected item price
+            totalPrice = totalPrice - singleItemPrice;
+            $('#item-price-txt').empty().text(totalPrice);
+
+            //save in datastorage
+            //                                var storageKey = 'itemlist_' + $('#itemListTable tbody').data('service') + '_' + $('#itemListTable tbody').data('category') + '_' + $('#itemListTable tbody').data('delivery');
+            //                                window.sessionStorage.setItem(storageKey, $('#itemListTable tbody').html());
+        }
+    }
+
+    function quantityIncrement(_this) {
+        $this = $(_this);
+        var target = $this.data('target');
+        var singleItemPrice = $this.data('price');
+        var itemId = $this.data('item-price-id');
+        var count = $(target).val();
+        console.log(parseInt($(target).val()));
+        if (!count)
+            count = 0;
+
+        var finalVal = ++count;
+        $(target).val(finalVal);
+
+        //show counter
+        $this.parent('.counter-action').children('.counter-number').empty().text(finalVal);
+        //save counter in input
+        $('#item-' + itemId).val(finalVal);
+        console.log($('#service-wise-items-' + itemId).get(0), '#service-wise-items-' + itemId);
+        $('#service-wise-items-' + itemId).val(finalVal);
+        //total value count
+        var totalCount = $('#itemselected').val() ? $('#itemselected').val() : 0;
+        $('#itemselected').val(++totalCount);
+        $('#item-count-txt').empty().text(totalCount);
+
+        //total value price
+        var totalPrice = $('#itemprice').val() ? $('#itemprice').val() : 0;
+        //current Selected item price
+        totalPrice = parseInt(totalPrice) + parseInt(singleItemPrice);
+        $('#itemprice').val(totalPrice);
+        $('#item-price-txt').empty().text(totalPrice);
+
+        //save in datastorage
+        //                            var storageKey = 'itemlist_' + $('#itemListTable tbody').data('service') + '_' + $('#itemListTable tbody').data('category') + '_' + $('#itemListTable tbody').data('delivery');
+        //                            window.sessionStorage.setItem(storageKey, $('#itemListTable tbody').html());
+
+    }
+
+    function changeCategory(categoryId, _this) {
+
+        $this = $(_this);
+        var serviceId = $('#selectedService').val();
+        var deliveryType = getDeliveryType();
+
+        //change category id in tbody data attribute
+        $('#categorySelected').val(categoryId);
+
+        //check if table is there - it means ajax is already done - data is fetched
+        var tableName = 'itemListTable-' + serviceId + '-' + categoryId + '-' + deliveryType;
+        if (!$('#' + tableName).length)
+        {
+            ajaxRequest(categoryId, deliveryType, serviceId, function(data, err) {
+                if (err)
+                    alert(err);
+
+                var finalHtml = data;
+                $('.category-list-select').children('li').removeClass('btn-success').addClass('btn-default');
+                $this.toggleClass('btn-success');
+                //creates or updates table html
+                createTable(serviceId, categoryId, deliveryType, finalHtml);
+            });
+
+        } else {
+            $('.category-list-select').children('li').removeClass('btn-success').addClass('btn-default');
+            $this.toggleClass('btn-success');
+        }
+        showTable(tableName);
+    }
+
+    function changeService(serviceId, _this) {
+        $this = $(_this);
+        if (($this).hasClass('selected')) {
+
+            //service id -serviceId
+            //get category id which is selected
+            var categoryId = $('#categorySelected').val();
+
+            //delivery type
+            var deliveryType = getDeliveryType();
+
+            //change service id in tbody data attribute
+            $('#itemListTable tbody').data('service', serviceId);
+            $('#selectedService').val(serviceId);
+
+            var tableName = 'itemListTable-' + serviceId + '-' + categoryId + '-' + deliveryType;
+            if (!$('#' + tableName).length)
+            {
+
+                ajaxRequest(categoryId, deliveryType, serviceId, function(data, err) {
+                    if (err)
+                        alert(err);
+
+                    var finalHtml = data;
+                    $('.img-service-icon').removeClass('active');
+                    $this.children('.img-service-icon').toggleClass('active');
+
+                    //creates or updates table html
+                    createTable(serviceId, categoryId, deliveryType, finalHtml);
+                });
+            } else {
+                $('.img-service-icon').removeClass('active');
+                $this.children('.img-service-icon').toggleClass('active');
+            }
+            showTable(tableName);
+        }
+    }
+
+    function changeDeliveryType(_this) {
+        var $this = $(_this);
+        var serviceId = $('#selectedService').val();
+        var deliveryType = getDeliveryType();
+        var categoryId = $('#categorySelected').val();
+
+        //check if table is there - it means ajax is already done - data is fetched
+        var tableName = 'itemListTable-' + serviceId + '-' + categoryId + '-' + deliveryType;
+        if (!$('#' + tableName).length)
+        {
+            ajaxRequest(categoryId, deliveryType, serviceId, function(data, err) {
+                if (err)
+                    alert(err);
+
+                var finalHtml = data;
+                //creates or updates table html
+                createTable(serviceId, categoryId, deliveryType, finalHtml);
+            });
+
+        }
+        showTable(tableName);
+
+    }
+
+    function createTable(serviceId, categoryId, deliveryType, finalHtml) {
+        //if no table is there then create it
+        var tableName = 'itemListTable-' + serviceId + '-' + categoryId + '-' + deliveryType;
+        //if table already exists
+        var tableHtml = '<table class="table itemListTable" id = "' + tableName + '" data-service = "' + serviceId + '" data-category ="' + categoryId + '" data-delivery= "' + deliveryType + '" >';
+        tableHtml += $('#itemListTemplate').html();
+        tableHtml += finalHtml;
+        tableHtml += '</table>';
+        $('.item-list.table-responsive').append(tableHtml);
+    }
+
+    function showTable(tableName) {
+        //hide all other tables
+        $('.itemListTable').hide();
+        //show just created table
+        $('#' + tableName).show();
+    }
+
+    function ajaxRequest(categoryId, deliveryType, serviceId, callback) {
+        //get list of items
+        $.ajax({
+            url: '<?php echo $this->baseUrl(); ?>/ajax/itemslist',
+            dataType: 'json',
+            sync: true,
+            data: {'category': categoryId, 'delivery': deliveryType, 'service': serviceId},
+            success: function(data) {
+                if (data.code == 200) {
+                    var html = $('#itemListValuesTemplate').html();
+                    var finalHtml = '';
+                    var items = data.data;
+                    for (var i in items) {
+                        finalHtml += html.replace(/{item_name}/g, items[i]['item_name'])
+                                .replace(/{item_price}/g, items[i]['price'])
+                                .replace(/{item_quantity}/g, items[i]['quantity'])
+                                .replace(/{item_id}/g, items[i]['item_id'])
+                                .replace(/{item_category}/g, items[i]['item_category'])
+                                .replace(/{item_category_name}/g, items[i]['item_category_name'])
+                                .replace(/{item_service}/g, items[i]['item_service'])
+                                .replace(/{item_service_name}/g, items[i]['item_service_name'])
+                                .replace(/{item_price}/g, items[i]['item_price'])
+                                .replace(/{item_price_id}/g, items[i]['item_price_id'])
+                                ;
+
+                    }
+
+                    if (!items.length)
+                        finalHtml += '<tr><td colspan="3">No Results found!!</td></tr>';
+
+                    callback(finalHtml, null);
+
+                } else {
+                    callback(null, 'An error occurred');
+                }
+            }
+        });
+    }
+
+    function getDeliveryType() {
+        if ($('#delivery-type-regular').prop('checked'))
+            return 'Regular';
+        else if ($('#delivery-type-express').prop('checked'))
+            return 'Express';
+        else {
+            return 'Fixed Slot';
+        }
+
+    }
+
+    function selectDeliveryType($this) {
+        $($this).children('input').attr('checked', 'checked');
+        changeDeliveryType($this);
+    }
+
+    function validateForm() {
+        if ($('#itemprice').val() < 200 && $('#itemprice').val() >= 1) {
+            alert('50 Rupees charge for order less than 200');
+        }
+
+        if ($('#itemprice').val() >= 1) {
+            return true;
+        }
+        else {
+            alert('Please select one item');
+            return false;
+        }
+    }
+</script>
+<script type="text/html" id="itemListTemplate">
+    <thead>
+    <tr>
+    <td><strong>ITEM</strong></td>
+    <td><strong>QUANTITY</strong></td>
+    <td><strong>PRICE</strong></td>
+    </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+</script>
+<script type="text/html" id="itemListValuesTemplate">
+    <tr>
+    <td>{item_name}</td>
+    <td class="counter-action">
+    <span data-target="#item-{item_price_id}" data-price="{item_price}" onclick="quantityDecrement(this)" 
+        data-item-id="{item_id}"
+        data-item-price-id = "{item_price_id}"
+    class="img-circle counter-trigger counter-decrease">-</span>
+    <span class="counter-number">{item_quantity}</span>
+    <span data-target="#item-{item_price_id}" data-price="{item_price}" onclick="quantityIncrement(this)" 
+        data-item-id="{item_id}"
+        data-item-price-id = "{item_price_id}"
+    class="img-circle counter-trigger counter-increase">+</span>
+    </td>
+    <td>
+        {item_price}
+        <input type="hidden" name="itemcart[service][{item_service}][id]" value='{item_service}'> 
+        <input type="hidden" name="itemcart[service][{item_service}][name]" value='{item_service_name}'> 
+        <input type="hidden" name="itemcart[service][{item_service}][category][{item_service}][id]" value='<?php echo $selectedCategory; ?>'> 
+        <input type="hidden" name="itemcart[service][{item_service}][category][{item_service}][name]" value='<?php echo $selectedCategoryName; ?>'>
+        <input type="hidden" name="itemcart[service][{item_service}][category][{item_service}][items][{item_price_id}][id]" value='{item_id}'>
+        <input type="hidden" name="itemcart[service][{item_service}][category][{item_service}][items][{item_price_id}][id]" value='{item_price_id}'>
+        <input type="hidden" name="itemcart[service][{item_service}][category][{item_service}][items][{item_price_id}][name]" value='{item_name}'>
+        <input type="hidden" name="itemcart[service][{item_service}][category][{item_service}][items][{item_price_id}][unitprice]" value='{item_price}'>
+        <input type="hidden" name="itemcart[service][{item_service}][category][{item_service}][items][{item_price_id}][quantity]" id='service-wise-items-{item_price_id}' value='0'>
+                                                        
+                                                        
+    <input type="hidden" value="{item_quantity}" id="item-{item_price_id}" name="item[{item_price_id}]">
+    <input type="hidden" name="itemprice[{item_price_id}]" value="{item_price}" >
+    <input type="hidden" name="itemservice[{item_price_id}]" value="{item_service}" >
+    <input type="hidden" name="itemcategory[{item_price_id}]" value="{item_category}" >
+    </td>
+    </tr>
+</script>

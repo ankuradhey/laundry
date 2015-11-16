@@ -1,0 +1,159 @@
+<div id="slider_wrapper2">
+    <div class="wrap mgt100">
+
+        <h1>Create your account</h1>
+
+    </div>
+</div>
+<?php if ($this->hasMessage): ?>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="alert alert-block alert-<?php echo $this->messageType ?> fade in">
+                <button data-dismiss="alert" class="close close-sm" type="button">
+                    <i class="fa fa-times"></i>
+                </button>
+                <?php if ($this->messageType == "danger"): ?>
+                    <strong>Oh snap!</strong>
+                <?php elseif ($this->messageType == "success"): ?>
+                    <strong>Well done!</strong>
+                <?php elseif ($this->messageType == "info"): ?>
+                    <strong>Heads up!</strong>
+                <?php elseif ($this->messageType == "warning"): ?>
+                    <strong>Warning!</strong>
+                <?php endif; ?>
+                <?php echo $this->message; ?>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>
+<div class="clear"></div>
+
+<div class="content" style="background:transparent">
+    <div class="wrap" style="background: transparent; padding: 10px;">
+
+
+
+
+        <div class="half-left"  style="padding:20px;">
+            <h3>REGISTER AS A SINGLE USER</h3>
+
+            <form id="contactform" method="post">
+                <table>
+                    <tr>
+                        <td><input type="text" id="name" name="user_fname" class="wid260" placeholder="User First Name" /></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" id="name" name="user_lname" class="wid260" placeholder="User Last Name" /></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" id="email" name="user_email" class="wid260" placeholder="Email" /></td>
+                    </tr>
+                    <tr>
+                        <td><input type="password" id="email" name="hashed_password" class="wid260" placeholder="Password" /></td>
+                    </tr>
+                    <tr>
+                        <td><input type="password" id="email" name="cpassword" class="wid260" placeholder="Confirm password" /></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" id="email" name="user_number" class="wid260" placeholder="Number" /></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" id="email" name="user_address" class="wid260" placeholder="Address" /></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" id="email" name="user_locality" class="wid260" placeholder="Locality" /></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" id="email" name="user_landmark" class="wid260" placeholder="Landmark" /></td>
+                    </tr>
+                    <tr>
+                        <td><select class="select" name="user_city">
+                                <option value="Noida">Noida</option>
+                                <option value="Delhi">Delhi</option>
+                            </select></td>
+                    </tr>
+                    <tr>
+                        <td><select class="select wid260" name="user_state">
+                                <option value="Uttar Pradesh">Uttar Pradesh</option>
+                                <option value="Delhi">Delhi</option>
+                            </select></td>
+                    </tr>
+                    <tr>
+                        <td><select class="select wid260" name="user_country">
+                                <option value="India">India</option>
+                            </select></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="hidden" name="referred_by" value="<?php echo $this->user_id;?>">
+                            <input type="hidden" name="request_type" value="register">
+                            <input type="submit" value="Register Now" id="send" class="button" />
+
+                        </td>
+                    </tr>
+                </table>
+
+            </form>
+
+            <div class="clear"></div>
+        </div>
+
+        <div class="half-right" style="padding-left:0px;padding:20px;">
+            <h3>REGISTER AS A COMPANY</h3>
+            <form id="contactform" method="post">
+                <table>
+                    <tr>
+                        <td><input type="text" id="name" class="wid260" name="name" placeholder="Name" /></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" id="email" class="wid260" name="email" placeholder="Email" /></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" id="email" class="wid260" name="email" placeholder="Password" /></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" id="email" class="wid260" name="email" placeholder="Re-Enter password" /></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" id="email" class="wid260" name="email" placeholder="Address" /></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" id="email" class="wid260" name="email" placeholder="City" /></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" id="email" class="wid260" name="email" placeholder="Mobile Number" /></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" id="email" class="wid260" name="email" placeholder="Organization" /></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select class="select wid260">
+                                <option>industry</option>
+                                <option>industry</option>
+                                <option>industry</option>
+                                <option>industry</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="submit" value="Register Now" id="send" class="button" />
+
+                        </td>
+                    </tr>
+                </table>
+
+            </form>
+
+        </div>
+
+        <div class="clear"></div>
+        <div class=""><a href="<?php echo $this->baseUrl();?>/index/login">Already a member login here</a></div>
+
+    </div>
+</div>
+
+<div class="blue-bar">
+
+</div> 
