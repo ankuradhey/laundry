@@ -6,6 +6,7 @@ class Application_Model_Packages {
     private $package_name;
     private $package_price;
     private $package_icon;
+	private $package_icon_hover;
     private $no_of_clothes;
     private $saving_percent;
     private $validity;
@@ -20,6 +21,7 @@ class Application_Model_Packages {
             $this->package_name = $package_row->package_name;
             $this->package_price = $package_row->package_price;
             $this->package_icon = $package_row->package_icon;
+			$this->package_icon_hover = $package_row->package_icon_hover;
             $this->no_of_clothes = $package_row->no_of_clothes;
             $this->saving_percent = $package_row->saving_percent;
             $this->validity = $package_row->validity;

@@ -13,15 +13,27 @@ class Application_Model_PackagesMapper {
             "package_name" => $package->__get("package_name"),
             "package_price" => $package->__get("package_price"),
             "package_icon" => $package->__get("package_icon"),
+			"package_icon_hover" => $package->__get("package_icon_hover"),
             "no_of_clothes" => $package->__get("no_of_clothes"),
             "saving_percent" => $package->__get("saving_percent"),
             "validity" => $package->__get("validity"),
             "no_of_pickups" => $package->__get("no_of_pickups"),
             "package_service_type" => $package->__get("package_service_type")
         );
+		
+		try{			
+								
+			$insertedId = $this->_db_table->insert($data); 
 
-        $result = $this->_db_table->insert($data);
-        return($result);
+ 			return (object)array("success"=>true,"error"=>false,"message"=>"Record Successfully Inserted","inserted_id"=>$insertedId) ;						
+						
+ 		}
+		catch(Zend_Exception  $e) {/* Handle Exception Here  */
+					
+			return (object)array("success"=>false,"error"=>true,"message"=>$e->getMessage(),"exception"=>true,"exception_code"=>$e->getCode()) ;
+			
+ 		}
+		        
     }
 
     public function getAllPackages() {
@@ -57,6 +69,7 @@ class Application_Model_PackagesMapper {
             "package_name" => $package->__get("package_name"),
             "package_price" => $package->__get("package_price"),
             "package_icon" => $package->__get("package_icon"),
+			"package_icon_hover" => $package->__get("package_icon_hover"),
             "no_of_clothes" => $package->__get("no_of_clothes"),
             "saving_percent" => $package->__get("saving_percent"),
             "validity" => $package->__get("validity"),

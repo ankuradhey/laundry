@@ -37,7 +37,7 @@ class Admin_ItemsController extends Zend_Controller_Action {
 
                         $fileName = $this->_imageUpload($input_name, $file_prefix);
 
-                        if ($item_form->isValid($params)) {
+                        if ($item_form->isValid($params)){
                             foreach ($params as $param => $value) {
 
                                 $items->__set($param, $value);

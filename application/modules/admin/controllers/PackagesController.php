@@ -15,6 +15,7 @@ class Admin_PackagesController extends Zend_Controller_Action{
         try{
             $packagesMapper = new Application_Model_PackagesMapper();
             $packages = $packagesMapper->getAllPackages();
+			
             $this->view->packages = $packages;
         } catch (Exception $ex) {
             $this->authorised = false;
@@ -32,6 +33,7 @@ class Admin_PackagesController extends Zend_Controller_Action{
         try {
             //$admins = new Application_Model_Admins;
             $packagesMapper = new Application_Model_PackagesMapper;
+			$package = new Application_Model_Packages();			
 			
             $request = $this->getRequest();
 
@@ -40,52 +42,44 @@ class Admin_PackagesController extends Zend_Controller_Action{
             $this->view->form = $package_form;
 
             $elements = $package_form->getElements();                                    
-            
+                        			
             if($request->isPost()) {
 				
                 $request_type = $request->getParam("request_type", false);
 				
-                $params = $request->getParams();
 				$params = $this->getRequest()->getPost(); 			  			
-				
-				
-                if($package_form->isValid($params)) {																					
-							prd($params);
-							$input_name = "item_image";
-							$file_prefix = "file";
-	
-							$fileName = $this->_imageUpload($input_name, $file_prefix);
 								
+                if($package_form->isValid($params)) {
 							
+							$packageIconName = $this->_imageUpload('package_icon', 'file');
+							
+							$packageIconHoverName = $this->_imageUpload('package_icon_hover', 'file');
+															
                             foreach ($params as $param => $value) {
 
                                 $package->__set($param, $value);
 								
                             }
-							prd($package);
-							$isUpdated = $packagesMapper->updatePackage($package);
+							$package->__set("package_icon", $packageIconName);
+							$package->__set("package_icon_hover", $packageIconHoverName);
+														
+							$isInserted = $packagesMapper->addNewPackage($package);
 							
-                            if (is_object($isUpdated) && $isUpdated->success) {
-                                
-								if($isUpdated->row_affected>0)
-									$this->view->message = "Package Updated successfully";
-								else
-									$this->view->message = "No Data Updated";
-								
+                            if (is_object($isInserted) && $isInserted->success) {
+
+								$this->view->message = "Package added successfully";
                                 $this->view->hasMessage = true;
                                 $this->view->messageType = "success";								
-								
+
                             } else {
-								
+
                                 $this->view->message = "Error occured while updating. Please try again";
                                 $this->view->hasMessage = true;
                                 $this->view->messageType = "danger";
-								
+
                             }
                         } 
-				else {
-					
-					prd($package_form->getErrors());
+				else {										
 					
 					$this->view->message = "Error occured while adding package. Please fill form correctly";
 					$this->view->hasMessage = true;
@@ -129,19 +123,26 @@ class Admin_PackagesController extends Zend_Controller_Action{
             }
 
             if($request->isPost()) {
-				
-                $request_type = $request->getParam("request_type", false);
-                if ($request_type) {
-                    if ($request_type == "edit"){
+				                
                         $params = $request->getParams();
 
                         if ($package_form->isValid($params)) {
+							
+							
+							$packageIconName = $this->_imageUpload('package_icon', 'file');
+							$packageIconHoverName = $this->_imageUpload('package_icon_hover', 'file');
+																						
                             foreach ($params as $param => $value) {
 
                                 $package->__set($param, $value);
 								
                             }
 							
+							if(!empty($packageIconName))
+							$package->__set("package_icon", $packageIconName);
+							if(!empty($packageIconHoverName))
+							$package->__set("package_icon_hover", $packageIconHoverName);
+														
 							$isUpdated = $packagesMapper->updatePackage($package);
 							
                             if (is_object($isUpdated) && $isUpdated->success) {
@@ -166,8 +167,7 @@ class Admin_PackagesController extends Zend_Controller_Action{
                             $this->view->hasMessage = true;
                             $this->view->messageType = "danger";
                         }
-                    }
-                }
+                    
             }
 			
             $this->authorised = true;
@@ -189,10 +189,8 @@ class Admin_PackagesController extends Zend_Controller_Action{
 
         defined('PUBLIC_PATH') || define('PUBLIC_PATH', realpath(dirname(dirname(dirname(dirname(dirname(__FILE__)))))));
         $files = $adapter->getFileInfo();
-        //echo "<pre>";
-        //print_r($adapter);
-        //echo "</pre>";
-        $uniqId = time();
+        
+        $uniqId = strtotime(date("Y-m-d H:i:s")).'-'.uniqid();
 
         foreach ($files as $file => $info) {
 
@@ -204,9 +202,11 @@ class Admin_PackagesController extends Zend_Controller_Action{
                 $newFilename = $file_prefix . '-' . $uniqId . '.' . $originalFilename['extension'];
                 $adapter->addFilter('Rename', $newFilename, $file);
                 $adapter->receive($file);                
+				
+				return $newFilename;
             }
 
-            return $newFilename;
+            
         }
     }
 	

@@ -3,7 +3,7 @@
         <span class="mws-i-24 i-speech-bubble-2"> <?php echo $this->pageHeading?> </span>
     </div>
     <div class="mws-panel-body">
-        <form class="mws-form" method="post" >
+        <form class="mws-form" method="post" enctype="multipart/form-data">
             <?php if ($this->hasMessage): ?>
                 <div class="mws-form-message <?php echo $this->messageType == 'danger' ? 'error' : $this->messageType; ?> fade in">
                     <?php if ($this->messageType == "danger"): ?>

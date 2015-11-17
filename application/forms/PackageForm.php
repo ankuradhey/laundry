@@ -17,6 +17,12 @@ class Application_Form_PackageForm extends Zend_Form {
 		
         /* Form Elements & Other Definitions Here ... */
         $this->setMethod('post');
+		$this->setAttribs(array( 			
+ 			'novalidate'=>'novalidate',
+			"role"=>"form",
+			'enctype'=>'multipart/form-data'
+		));
+		
         $this->setElementDecorators($this->elementDecorators);
 
         $this->addElement('text', 'package_name', array(
@@ -139,7 +145,7 @@ class Application_Form_PackageForm extends Zend_Form {
 		
 			
 		$this->addElement('file', 'package_icon_hover', array(
- 							"accept"=>"image/*",							
+ 							"accept"=>"image/*",
 							"ignore"=>true,
 							"class" => " form-control",
 							"label"=>"Package Icon (view on hover)",
