@@ -1,6 +1,6 @@
 <div class="mws-panel grid_8">
     <div class="mws-panel-header">
-        <span class="mws-i-24 i-speech-bubble-2"> Edit Package </span>
+        <span class="mws-i-24 i-speech-bubble-2"> <?php echo $this->pageHeading?> </span>
     </div>
     <div class="mws-panel-body">
         <form class="mws-form" method="post" >
@@ -19,8 +19,10 @@
                 </div>
             <?php endif; ?>
 			
-            
+            	
+                
                 <?php
+				
                 $elements = $this->form->getElements();
                 foreach ($elements as $element):
                     ?>
@@ -28,9 +30,8 @@
                     <?php
                 endforeach;
                 ?>
-                <div class="mws-button-row">
-                    <input type="hidden" name="request_type" value="edit">
-                    <button type="submit" class="mws-button green" > Edit </button>
+                <div class="mws-button-row">                
+                    <button type="submit" class="mws-button green" > <?php echo $this->buttonTitle?> </button>
                 </div>            
         </form>
     </div>

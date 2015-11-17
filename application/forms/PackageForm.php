@@ -33,7 +33,7 @@ class Application_Form_PackageForm extends Zend_Form {
 		$activeServices = array();
 		foreach($allServices as $service){
 			$activeServices[$service->service_id] = $service->service_name;
-		}		
+		}
         $this->addElement('select', 'package_service_type', array(
             'label' => 'Package Service',
             'required' => true,
@@ -60,6 +60,12 @@ class Application_Form_PackageForm extends Zend_Form {
             'filters' => array('StringTrim'),
             'placeholder' => "Enter Package Price",
             'class' => 'mws-textinput',
+			"validators" => array(
+								array("Float",true,array("messages"=>" Please enter a valid price ")),
+								array("NotEmpty",true,array("messages"=>" Price is required ")),
+								array("GreaterThan",true,array('min' => 1 ,'inclusive' => true,"messages"=>" Percentage should be greater than 1 ")),
+								array("LessThan",true,array('max' => 100000 ,'inclusive' => true,"messages"=>" Percentage should be less than 100000 "))
+							),
         ));
 		
 		$this->addElement('text', 'no_of_clothes', array(
@@ -94,13 +100,68 @@ class Application_Form_PackageForm extends Zend_Form {
 		
 		$this->addElement('text', 'no_of_pickups', array(
             'label' => 'No. of pickups',
-            'required' => true,
-            'filters' => array('StringTrim'),
+            'required' => true,            
             'placeholder' => "Enter No. of Pickups",
             'class' => 'mws-textinput',
+			"filters"    => array("StringTrim","StripTags","HtmlEntities","StringToLower"),
+			"validators" => array(
+								array("Float",false,array("messages"=>" Please enter a valid number of pickups ")),
+								array("NotEmpty",true,array("messages"=>" Number of pickups is required ")),
+								array("GreaterThan",true,array('min' => 1 ,'inclusive' => true,"messages"=>" Number of pickups should be greater than 1 ")),
+								array("LessThan",true,array('max' => 22 ,'inclusive' => true,"messages"=>" Number of pickups should be less than 22 "))
+							),
+			
         ));
-				
+
+		$this->addElement('file', 'package_icon', array (
+ 							"accept"=>"image/*",
+							"ignore"=>true,
+							"class" => " form-control",
+							"label"=>"Package Icon",
+										
+						));
+
+		$this->package_icon->setDestination(WEBSITE_PATH.'/public/img/packages/')
+			->addValidator('Extension', false,"jpg,jpeg,png,gif")
+			->addValidator('Size', false, "1MB")
+			->setDecorators(
+				array(
+					'File',
+					'Errors',
+					array('Description', array('tag' => 'p', 'class' => 'description')),
+					array(array('row' => 'HtmlTag'), array('tag' => 'div', 'class' => 'mws-form-item large')),
+					array('Label', array('class' => 'control-label', 'requiredSuffix' => ' *')),
+					array('Errors', array('class' => 'zend-error'))
+				)
+			);
+			
 		
-        
+		
+			
+		$this->addElement('file', 'package_icon_hover', array(
+ 							"accept"=>"image/*",							
+							"ignore"=>true,
+							"class" => " form-control",
+							"label"=>"Package Icon (view on hover)",
+							
+						));
+
+		$this->package_icon_hover->setDestination(WEBSITE_PATH.'/public/img/packages/')
+			->addValidator('Extension', false,"jpg,jpeg,png,gif")
+			->addValidator('Size', false, "1MB")
+			->setDecorators(
+				array(
+					'File',
+					'Errors',
+					array('Description', array('tag' => 'p', 'class' => 'description')),
+					array(array('row' => 'HtmlTag'), array('tag' => 'div', 'class' => 'mws-form-item large')),
+					array('Label', array('class' => 'control-label', 'requiredSuffix' => ' *')),
+					array('Errors', array('class' => 'zend-error'))
+				)
+			);
+		
+		
+		
+		
     }
  }
