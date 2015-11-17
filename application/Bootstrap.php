@@ -100,4 +100,19 @@ function prd($array){
 	pr($array);die;
 }
 
+function gcm($var){
+        if (is_object($var))
+            $var = get_class($var);
+        echo '<pre>';
+        prn(get_class_methods($var));
+        echo '</pre>';
+    }
+function gcmd($var){
+        if (is_object($var))
+            $var = get_class($var);
+        echo '<pre>';
+        pr(get_class_methods($var));
+        echo '</pre>';
+		die;
+    }
 //End Class

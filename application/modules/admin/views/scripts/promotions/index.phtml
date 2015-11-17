@@ -3,6 +3,11 @@
         <span class="mws-i-24 i-table-1">All Promotions</span>
     </div>
     <div class="mws-panel-body">
+    	<div class="mws-panel-toolbar top clearfix ">
+            <ul>
+                <li><a class="mws-ic-16 ic-accept" href="<?php echo $this->baseUrl(); ?>/admin/promotions/add" title="Add">Add</a></li>                
+            </ul>
+        </div>
         <table class="mws-datatable-fn mws-table">
             <thead>
                 <tr>
@@ -20,7 +25,7 @@
                             <td><?php echo $promotion->__get("offer_name"); ?></td>
                             <td><?php echo $promotion->__get("offer_amount"); ?></td>
                             <td>
-                                <a href="<?php echo $this->baseUrl(); ?>/admin/categories/edit/id/<?php echo $id;?>"><button class="btn btn-warning btn-mini"><i class="icon-wrench  bigger-110 icon-only"></i></button></a>
+                                <a href="<?php echo $this->baseUrl(); ?>/admin/promotions/edit/id/<?php echo $promotion->__get("offer_id");?>"><button class="btn btn-warning btn-mini"><i class="icon-wrench  bigger-110 icon-only"></i></button></a>
                                 <a href="#" data-id="<?php echo $promotion->__get("offer_id"); ?>"  class="delete"><button class="btn btn-grey btn-mini"><i class="icon-trash  icon-only"></i></button></a>
                             </td>
                         </tr>
