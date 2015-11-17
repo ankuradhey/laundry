@@ -10,7 +10,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
     }
 
 //End Function
-
+    
     protected function _initLoaderResource() {
         error_reporting(-1);
         $resourceLoader = new Zend_Loader_Autoloader_Resource(array(

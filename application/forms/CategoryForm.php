@@ -42,5 +42,4 @@ class Application_Form_CategoryForm extends Zend_Form {
             'class' => 'mws-textinput',
         ));
     }
-
-}
+ }

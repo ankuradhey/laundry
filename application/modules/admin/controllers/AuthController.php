@@ -1,4 +1,4 @@
-<?php 
+    <?php 
 
 class Admin_AuthController extends Zend_Controller_Action {
 

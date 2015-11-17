@@ -786,3 +786,13 @@ div.mws-dualbox button:active
 	-khtml-box-shadow:inset 0 0 6px rgba(0, 0, 0, 0.2) !important;
 	box-shadow:inset 0 0 6px rgba(0, 0, 0, 0.2) !important;
 }
+
+
+.mws-form-inline .zend-error li {
+    padding: 7px 5px 5px 5px;
+    margin: 0px;
+    background: #c83139;
+    color: #fff;
+    border-radius: 0px 0px 5px 5px;
+    margin-top: -3px;
+}

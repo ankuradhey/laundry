@@ -38,7 +38,7 @@ class Application_Model_PackagesMapper {
         return $packages_arr;
     }
 
-    public function getPackageById($id) {
+    public function getPackageById($id){
         $where = array(
             "package_id = ?" => $id
         );
@@ -65,8 +65,21 @@ class Application_Model_PackagesMapper {
         $where = array(
             "package_id = ?" => $package->__get("package_id")
         );
-        $result = $this->_db_table->update($data, $where);
-        return $result;
+		
+		
+		try{			
+			
+			$updated_records = $this->_db_table->update($data, $where);	
+			
+			return (object)array("success"=>true,"error"=>false,"message"=>"Record Successfully Updated","row_affected"=>$updated_records) ;			
+						
+ 		}
+		catch(Zend_Exception  $e) {/* Handle Exception Here  */
+					
+			return (object)array("success"=>false,"error"=>true,"message"=>$e->getMessage(),"exception"=>true,"exception_code"=>$e->getCode()) ;
+			
+ 		}
+		        				       
     }
 
     public function deletePackageById($id) {
