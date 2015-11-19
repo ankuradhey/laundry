@@ -1,0 +1,57 @@
+<?php
+require(WEBSITE_PATH.'/private/html2pdf/html2fpdf.php');
+$pdf=new HTML2FPDF();
+$pdf->AddPage();
+
+$strContent = '<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Nations and Flags</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+</head>
+<div style="width:700px;margin:auto">
+<table width="100%" cellspacing="0" cellpadding="2">
+<tr>
+	<td width="200"><img src="'.$this->baseUrl().'/public/img/lw_logo_trans.png" width="200"></td>
+	<td>
+		<div>
+    	<h1 style="text-align:center">Fabric Solutions Pvt Ltd.</h1><br>
+        <p style="text-align:center">A-1090, Sec-60 Noida </p><br>
+        <p>A-1090, Sec-60 Noida </p><br>
+        <p>A-1090, Sec-60 Noida </p><br>
+		</div>
+    </td>
+    <td>Australia</td>    
+</tr>
+</table>
+
+<div>Customer Information:</div>
+<br>
+
+<div style="border:1px solid #000;">Billing Address:</div>
+
+<table width="100%" cellspacing="0" cellpadding="2" border="1">
+<tr>
+	<td width="200">Address</td>
+	<td></td>
+</tr>
+<tr>
+	<td width="200">City/State/Zip</td>
+	<td></td>
+</tr>
+<tr>
+	<td width="200">Contact No.</td>
+	<td></td>
+</tr>
+</table>
+</div>
+<body>
+</body>
+</html>';
+
+$pdf->WriteHTML($strContent);
+$pdf->Output("sample.pdf","D");
+
+echo "PDF file is generated successfully!";
+?>

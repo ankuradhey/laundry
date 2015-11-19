@@ -3,8 +3,10 @@ class Application_Model_OrdersMapper {
 
     protected $_db_table;
 
-    public function __construct() {
+    public function __construct(){
+		
         $this->_db_table = new Application_Model_DbTable_Orders();
+		
     }
 
     public function addNewOrder(Application_Model_Orders $order) {
@@ -60,16 +62,28 @@ class Application_Model_OrdersMapper {
     }
 
     public function getAllOrders() {
-        $result = $this->_db_table->fetchAll(null, array('order_id ASC'));
+		
+		$stmt = $this->_db_table->getAdapter()
+						->select()->from("orders")
+						->join("delivery_types_master","delivery_type_id = order_delivery_type")
+						->order('order_id ASC');
+
+        $result = $stmt->query()->fetchAll();
+
         if (count($result) == 0) {
             return false;
         }
+		
+		
         $order_object_arr = array();
         foreach ($result as $row) {
-            $order_object = new Application_Model_Orders($row);
+			//$row['order_delivery_type'] = $row['delivery_type_name'];
+            $order_object = new Application_Model_Orders((object)$row);
             array_push($order_object_arr, $order_object);
         }
+
         return $order_object_arr;
+		
     }
 
     public function getOrdersByStatus() {
@@ -186,6 +200,7 @@ class Application_Model_OrdersMapper {
     }
 
     public function filter($user_email, $del_type, $service_id, $del_date, $pickup_date) {
+		
         //echo $date; exit;
         $query = "SELECT * FROM `orders` WHERE ";
 
@@ -197,20 +212,20 @@ class Application_Model_OrdersMapper {
         //}
 
         if (!empty($user_email)) {
-            $query .= " `user_email` = '" . $user_email . "' AND";
+            $query .= " `user_email` = '" . $user_email . "' AND ";
         }
 
         if (!empty($del_type)) {
-            $query .= "`delivery_type` = '" . $del_type . "' AND";
+            $query .= "`order_delivery_type` = " . $del_type . " AND ";
         }
         if (!empty($service_id)) {
-            $query .= "`service` = '" . $service_id . "' AND";
+            $query .= "`service` = '" . $service_id . "' AND ";
         }
         if (!empty($del_date)) {
-            $query .= "`delivery_date` = '" . $del_date . "' AND";
+            $query .= "`order_delivery` = '" . date("Y-m-d",strtotime($del_date)) . " 00:00:00' AND ";
         }
         if (!empty($pickup_date)) {
-            $query .= "`pickup_date` = '" . $pickup_date . "' AND";
+            $query .= "`order_pickup` = '" . date("Y-m-d",strtotime($pickup_date)) . " 00:00:00' AND ";
         }
 
         $query = substr($query, 0, -4);
@@ -220,10 +235,11 @@ class Application_Model_OrdersMapper {
 
         $stmt = $this->_db_table->getAdapter()->query($query);
         $result = $stmt->fetchAll();
-        if (count($result) == 0) {
+		
+        /*if (count($result) == 0) {
             $orders = new Application_Model_Orders();
             return false;
-        }
+        }*/
         $order_arr_obj = array();
         foreach ($result as $row) {
             $orders = new Application_Model_Orders();
@@ -232,6 +248,7 @@ class Application_Model_OrdersMapper {
             }
             $order_arr_obj[] = $orders;
         }
+		
         return $order_arr_obj;
     }
 

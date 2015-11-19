@@ -49,8 +49,9 @@
                             $types = $deliveryTypeMasterMapper->getAllDeliveryTypeMaster();
                             if ($types):
                                 foreach ($types as $type):
+								$deliverTypes[$type->__get("delivery_type_id")] = $type->__get("delivery_type_name");
                                     ?>
-                                    <option value="<?php echo $type->__get("delivery_type_name"); ?>" <?php if ($this->del_type == $type->__get("delivery_type_name")): ?> selected="selected" <?php endif; ?>><?php echo $type->__get("delivery_type_name"); ?></option>
+                                    <option value="<?php echo $type->__get("delivery_type_id");?>" <?php if ($this->del_type == $type->__get("delivery_type_id")): ?> selected="selected" <?php endif; ?>><?php echo $type->__get("delivery_type_name"); ?></option>
                                     <?php
                                 endforeach;
                             endif;
@@ -59,10 +60,10 @@
                     </div>
                 </div>
                 <div class="mws-form-row">
-                    <input type="text" class="datepicker mws-textinput" name="delivery_date" placeholder="Enter Delivery Date">
+                    <input type="text" class="mws-datepicker mws-textinput" name="delivery_date" placeholder="Enter Delivery Date" value="<?php echo isset($this->del_date)?$this->del_date:""?>">
                 </div>
                 <div class="mws-form-row">
-                    <input type="text" class="datepicker mws-textinput" name="pickup_date" placeholder="Enter PickupDate">
+                    <input type="text" class="mws-datepicker mws-textinput" name="pickup_date" placeholder="Enter PickupDate" value="<?php echo isset($this->pickup_date)?$this->pickup_date:""?>">
                 </div>
                 <div class="mws-button-row">
                     <input type="hidden" name="request_type" value="filter">
@@ -96,7 +97,7 @@
                     <th>Order Id</th>
                     <th>User Name</th>
                     <th>User Email</th>
-                    <th>User Number</th>
+                    <!--<th>User Number</th>-->
                     <th>User Address</th>
                     <th>Payment Method</th>
                     <th>Payment Status</th>
@@ -120,12 +121,12 @@
                             <td><?php echo $order->__get("order_id"); ?></td>
                             <td><?php echo $order->__get("order_first_name") . " " . $order->__get("order_last_name"); ?></td>
                             <td><?php echo $order->__get("order_user_email"); ?></td>
-                            <td><?php echo $order->__get("order_phone"); ?></td>
+                            <!--<td><?php echo $order->__get("order_phone"); ?></td>-->
                             <td><?php echo $order->__get("order_address") . "," . $order->__get("order_city") . "," . $order->__get("order_pincode"); ?></td>
                             <td><?php echo $order->__get("order_payment_type"); ?></td>
                             <td><?php echo $order->__get("order_payment_status"); ?></td>
                             <td><?php echo $order->__get("order_amount"); ?></td>
-                            <td><?php echo $order->__get("order_delivery_type"); ?></td>
+                            <td><?php echo isset($deliverTypes[$order->__get("order_delivery_type")])?$deliverTypes[$order->__get("order_delivery_type")]:"Not specified"?></td>
 <!--                            <td><?php
                                 $serviceMasterMapper = new Application_Model_ServiceMasterMapper();
                                 $service_id = $order->__get("service");
@@ -143,9 +144,11 @@
                                 $timestamp = $order->__get("order_added_time");
                                 echo $date = new Zend_Date($timestamp, "dd-MMM-yyyy");
                                 ?></td>-->
-                            <td>
+                            <td style="white-space:nowrap">
+                                <a href="<?php echo $this->baseUrl()?>/admin/orders/printreceipt/id/<?php echo $order->__get("order_id")?>" title="print-bill" class="print-order-bill"><button class="btn btn-grey btn-mini"><i class="icon-print  icon-only"></i></button></a>
                                 <a href="<?php echo $this->baseUrl(); ?>/admin/orders/edit/id/<?php echo $order->__get("order_id"); ?>"><button class="btn btn-warning btn-mini"><i class="icon-wrench  bigger-110 icon-only"></i></button></a>
                                 <a href="#" data-id="<?php echo $order->__get("order_id"); ?>"  class="delete"><button class="btn btn-grey btn-mini"><i class="icon-trash  icon-only"></i></button></a>
+                                
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -176,3 +179,24 @@
         </div><!-- modal-content -->
     </div><!-- modal-dialog -->
 </div>
+
+<script type="text/javascript">
+$(".mws-datepicker").datepicker({
+		showOtherMonths:true,
+		//maxDate: '0'
+	});
+
+$(".print-order-bill").click(function(){
+	
+	$.ajax({
+            url: '<?php echo $this->baseUrl(); ?>/order/printreceipt',
+            dataType: 'json',
+            sync: true,
+            data: {'order': orderId },
+            success: function(response) {
+                
+            }
+        });
+	
+})	
+</script>

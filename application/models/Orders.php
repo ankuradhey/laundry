@@ -61,6 +61,7 @@ class Application_Model_Orders {
             $this->order_delivery_boy = $order_row->order_delivery_boy;
             $this->order_added_time = $order_row->order_added_time;
             $this->order_modified_time = $order_row->order_modified_time;
+			
         }
     }
 

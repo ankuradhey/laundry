@@ -52,6 +52,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
     }
 
     protected function _initDoctype() {
+		
         $this->bootstrap('view');
         $view = $this->getResource('view');
         $view->doctype('XHTML1_STRICT');
@@ -81,9 +82,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 //End Function
 
     protected function _initConstants() {
+		
         date_default_timezone_set("Asia/Kolkata"); 
         $registry = Zend_Registry::getInstance();
         $registry->constants = new Zend_Config($this->getApplication()->getOption('constants'));
+		
     }
 	
 	
@@ -116,3 +119,5 @@ function gcmd($var){
 		die;
     }
 //End Class
+
+
