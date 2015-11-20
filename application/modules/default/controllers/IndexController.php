@@ -406,6 +406,7 @@ class IndexController extends Zend_Controller_Action {
             $this->view->user_fname = $namespace->user_fname;
             $this->view->user_lname = $namespace->user_lname;
             $this->view->user_img = $namespace->user_img;
+            $this->view->orderType = $laundryCart->orderType;
         }else{
             $this->_redirect("");
         }
