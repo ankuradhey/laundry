@@ -113,7 +113,7 @@ echo $this->partial('index/headerstrip.phtml', array('headlineText' => $this->he
             <!-- items section -->
             <div class="col-md-9">
                 <div class="table-responsive item-list">
-                    <table class="table itemListTable" id="itemListTable-<?php echo $selectedService . '-' . $selectedCategory . '-' . $this->deliveryType; ?>">
+                    <table class="table itemListTable <?php echo $this->deliveryType; ?>-table" id="itemListTable-<?php echo $selectedService . '-' . $selectedCategory . '-' . $this->deliveryType; ?>">
                         <thead>
                             <tr>
                                 <td><strong>ITEM</strong></td>
@@ -199,7 +199,7 @@ echo $this->partial('index/headerstrip.phtml', array('headlineText' => $this->he
         </div>-->
     <input type="hidden" name="step" value="items">
 </form>
-<?php echo $this->getHelper('CartSteps')->getSteps(1); ?>
+<?php echo $this->getHelper('CartSteps')->getSteps(1, $this->orderType); ?>
 <script type="text/javascript">
 
     //clear session storage on load
@@ -312,7 +312,7 @@ echo $this->partial('index/headerstrip.phtml', array('headlineText' => $this->he
 
             //delivery type
             var deliveryType = getDeliveryType();
-
+            
             //change service id in tbody data attribute
             $('#itemListTable tbody').data('service', serviceId);
             $('#selectedService').val(serviceId);
@@ -345,7 +345,28 @@ echo $this->partial('index/headerstrip.phtml', array('headlineText' => $this->he
         var serviceId = $('#selectedService').val();
         var deliveryType = getDeliveryType();
         var categoryId = $('#categorySelected').val();
-
+        
+        console.log('delivery type - '+deliveryType+' selected');
+        //remove non selected delivery types
+        if($this.find('input').val() == 'Regular'){
+            $('#delivery-type-express').prop('checked',false);
+            $('.Express-table').remove();
+            deliveryType = 'Regular';
+        }else{
+            $('#delivery-type-regular').prop('checked',false);
+            $('.Regular-table').remove();
+            deliveryType = 'Express';
+        }
+        
+        //remove items from cart
+        $('#itemselected').val(0);
+        $('#itemprice').val(0);
+        $('#item-count-txt').empty().text(0);
+        //total value price
+        var totalPrice = 0;
+        $('#item-price-txt').empty().text(totalPrice);
+        
+        
         //check if table is there - it means ajax is already done - data is fetched
         var tableName = 'itemListTable-' + serviceId + '-' + categoryId + '-' + deliveryType;
         if (!$('#' + tableName).length)
@@ -368,7 +389,7 @@ echo $this->partial('index/headerstrip.phtml', array('headlineText' => $this->he
         //if no table is there then create it
         var tableName = 'itemListTable-' + serviceId + '-' + categoryId + '-' + deliveryType;
         //if table already exists
-        var tableHtml = '<table class="table itemListTable" id = "' + tableName + '" data-service = "' + serviceId + '" data-category ="' + categoryId + '" data-delivery= "' + deliveryType + '" >';
+        var tableHtml = '<table class="table itemListTable '+deliveryType+'-table" id = "' + tableName + '" data-service = "' + serviceId + '" data-category ="' + categoryId + '" data-delivery= "' + deliveryType + '" >';
         tableHtml += $('#itemListTemplate').html();
         tableHtml += finalHtml;
         tableHtml += '</table>';
@@ -429,7 +450,6 @@ echo $this->partial('index/headerstrip.phtml', array('headlineText' => $this->he
         else {
             return 'Fixed Slot';
         }
-
     }
 
     function selectDeliveryType($this) {
