@@ -1,4 +1,5 @@
 <?php
+
 $thumb = $this->baseUrl() . "/public/thumbs/thumb.php";
 $userInfo = array('userName' => $this->user_fname . ' ' . $this->user_lname, 'phone' => '7062232497', 'profileImage' => $this->user_img);
 echo $this->partial('index/headerstrip.phtml', array('headlineText' => $this->headlineText, 'userInfo' => $userInfo));
@@ -41,7 +42,7 @@ if ($currentTime < $fixedSlotTime) {
     $fixedSlotDate = date('d-m-Y', strtotime((date('d-m-Y'))));
 }
 ?>
-<form action='<?php echo $this->baseUrl(); ?>/index/processcart' method='post'>
+<form action='<?php echo $this->baseUrl()?>/index/processcart' id="pickup-frm" method="post" >
     <div class='container-fluid'>
         <div class="row grey-label-instruction" style="padding:20px 0">
             <div class="container service-list-cart" >
@@ -52,7 +53,7 @@ if ($currentTime < $fixedSlotTime) {
                     <h4 class='text-center headline'>We will collect from this address and deliver back here too</h4>
                 </div>
                 <div class="col-md-2 pull-right">
-                    <button type="submit" class="btn btn-success btn-block" id="buttonclick">Schedule Order</button>
+                    <button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#mobileVerificationModal">Schedule Order</button>
                 </div>
             </div>
         </div>
@@ -356,8 +357,59 @@ if ($currentTime < $fixedSlotTime) {
             </div>
         </div>
     </div>
+    
+    <div class="modal fade" id="mobileVerificationModal" tabindex="-1" role="dialog" aria-labelledby="mobileVerificationModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Mobile number verification</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="mobile-number" class="control-label">Mobile number :</label>
+          <input type="text"  onkeyup="this.value=this.value.replace(/[^0-9]/g,'');" class="form-control" id="mobile-number" placeholder="Enter mobile number">
+		  <input type="hidden" name="moblie-key" />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="sendotp">Send OTP</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+	<div class="modal fade" id="otpVerificationModal" tabindex="-1" role="dialog" aria-labelledby="otpVerificationModal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Please enter OTP you received</h4>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <input type="text"  onkeyup="this.value=this.value.replace(/[^0-9]/g,'');" class="form-control" id="otp-number" maxlength="4" placeholder="Enter OTP">
+    
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="verifyotp-btn">Verify</button>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
     <input type='hidden' name='step' value='schedule'>
 </form>
+
+
+<!-- Modal -->
+
+
 <?php echo $this->getHelper('CartSteps')->getSteps(3);
 ?>
 <script type='text/javascript'>
@@ -487,4 +539,105 @@ if ($this->deliveryType != 'Fixed Slot') {
                                                     n = n + '';
                                                     return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
                                                 }
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(e) {
+	
+	var mobilenumber = "";
+	var otp = "";
+	
+    $("#sendotp").click(function(){
+		
+		mobilenumber = $("#mobile-number").val();
+		
+		$.ajax({
+
+				url: baseUrl+"/index/sendorderotp",
+				type:"get",
+				dataType:'json',
+				async:true,
+				data : {mobile_no:mobilenumber},
+				beforeSend: function(){
+					 					 					
+					 if(isNaN(parseInt(mobilenumber)) || mobilenumber.length!=10){
+						 
+						 alert('Please enter valid mobile number');
+						 $("#mobile-number").focus();
+						 return false;
+						 						 
+					 }					 					 
+					 					
+				},
+				success: function(responseData) {
+					
+ 					if(responseData.success){
+						
+						$("[name='moblie-key']").val(responseData.key);
+						$('#mobileVerificationModal').modal('hide');
+						$('#otpVerificationModal').modal('show');												
+						
+					}else{
+						alert(responseData.message);
+					}
+					
+				},
+				error : function(responseData) {
+					console.log(responseData);
+				}
+		
+			});
+					
+	})
+	
+	$("#verifyotp-btn").click(function(){
+		
+		otp = $("#otp-number").val();
+		mobileKey = $("[name='moblie-key']").val();
+		
+		$.ajax({
+
+				url: baseUrl+"/index/verifyorderotp",
+				type:"get",
+				dataType:'json',
+				async:true,
+				data : {otp_number:otp,mobile_key:mobileKey},
+				beforeSend: function(){
+					
+					 if(mobileKey==""){
+						 alert("Something not ok");
+						 window.location = window.location;
+					 }
+
+					 if(isNaN(parseInt(otp)) || otp.length!=4){
+						 
+						 alert('Please enter valid otp number you received');
+						 $("#otp").focus();
+						 return false;
+
+					 }					 					 
+					 					
+				},
+				success: function(responseData) {
+					
+ 					if(responseData.success){
+						
+						$("#pickup-frm").submit();
+						
+					}else{
+						
+						alert(responseData.message);
+					}
+					
+				},
+				error : function(responseData) {
+					console.log(responseData);
+				}
+		
+			});
+					
+	})
+	
+	
+});
 </script>

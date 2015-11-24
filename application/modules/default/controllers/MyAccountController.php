@@ -4,7 +4,7 @@ class MyAccountController extends Zend_Controller_Action {
 
     protected $_auth;
 
-    public function init() {
+    public function init(){
         $this->_auth = $auth = TBS\Auth::getInstance();
     }
 
@@ -140,7 +140,8 @@ class MyAccountController extends Zend_Controller_Action {
             $this->view->country = $user_country;
             $this->view->landmark = $user_landmark;
             $this->view->number = $user_number;
-        } catch (Exception $ex) {
+        } 
+		catch (Exception $ex) {
             
         }
 
@@ -158,8 +159,18 @@ class MyAccountController extends Zend_Controller_Action {
             exit("invalid package");
         }
     }
-    
+   	
+	public function orderssummaryAction() {
+		
+		
+		$this->view->file_render = "account_orderssummary";
+		$this->render("index");
+        
+		
+    }
+	 
     public function orderpackageAction(){
+		
         if($this->getRequest()->isPost()){
             $post = $this->getRequest()->getPost();
             $userTrackId = $post['trackId'];
@@ -231,7 +242,7 @@ class MyAccountController extends Zend_Controller_Action {
         $this->view->packages = $packages?:array();
     }
 
-    public function ordersAction() {
+    public function ordersAction(){
 
         $request = $this->getRequest();
         $user_email = $request->getParam("email");

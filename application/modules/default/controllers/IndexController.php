@@ -551,12 +551,14 @@ class IndexController extends Zend_Controller_Action {
     }
 
     public function orderlistAction(){
+		
         $namespace = new Zend_Session_Namespace('userInfo');
         $this->view->user_fname = $namespace->user_fname;
         $this->view->user_lname = $namespace->user_lname;
         $this->view->user_img = $namespace->user_img;
         $this->view->user_number = $namespace->user_number;
         if(isset($namespace->user_id)){
+			
             $orderModel = new Application_Model_OrdersMapper();
             $packageModel = new Application_Model_PackagesMapper();
             $serviceModel = new Application_Model_ServiceMasterMapper();
@@ -598,6 +600,7 @@ class IndexController extends Zend_Controller_Action {
             $this->view->orders = $ordersArr;
             $this->view->headlineText = 'My Orders';
             $this->view->noFooter = 'true';
+			
         }else{
             $this->_redirect();
         }
@@ -1153,7 +1156,72 @@ class IndexController extends Zend_Controller_Action {
         $url = "http://login.smsgatewayhub.com/smsapi/pushsms.aspx?user=laundrywala&pwd=cleanlaundry&to=91" . $number . "&sid=LAWALA&msg=" . $sms . "&fl=0&gwid=2";
         $text = file_get_contents($url);
         return $text;
+		
     }
+
+	public function sendorderotpAction(){
+		
+		$orderSession = new Zend_Session_Namespace('orderSession');
+		$this->_helper->viewRenderer->setNoRender(true);
+        $this->_helper->layout->disableLayout();
+		
+		$response = array(
+						"success"=>false,
+						"message"=>"",
+						"otp"=>"",
+						"key"=>strtotime(date("Y-m-d H:i:s"))
+					);
+		
+		$number = $this->_getParam("mobile_no");
+		
+		if(strlen($number)==10 && is_numeric($number)){
+			
+			$otp = rand(1000,5000);
+			$orderSession->$response['key'] = $otp;
+			$message = urlencode("Use ".$otp." to verify your number");
+			
+			//$url = "http://login.smsgatewayhub.com/smsapi/pushsms.aspx?user=laundrywala&pwd=cleanlaundry&to=91" . $number . "&sid=LAWALA&msg=" . $message . "&fl=0&gwid=2";
+			//$text = file_get_contents($url);
+			$response['otp'] = $otp;
+			$response['success'] = true;
+			$response['message'] = "OTP sent successfully";
+			
+		}else{
+			
+			$response['message'] = "Mobile number is not valid";	
+			
+		}
+		
+        echo Zend_Json::Encode($response);
+		die;
+	}
+	
+	public function verifyorderotpAction(){
+		
+		$orderSession = new Zend_Session_Namespace('orderSession');
+		$this->_helper->viewRenderer->setNoRender(true);
+        $this->_helper->layout->disableLayout();
+		
+		$response = array(
+						"success"=>false,
+						"message"=>"",						
+					);
+		
+		$otp = $this->_getParam("otp_number");
+		$key = $this->_getParam("mobile_key");				
+		
+		if(isset($orderSession->$key) && $orderSession->$key == $otp){
+			
+			$response['success'] = true;	
+			$response['message'] = "verified";	
+			
+		}else{
+			$response['message'] = "OTP is not valid";	
+		}
+        		
+        echo Zend_Json::Encode($response);
+		die;
+	}
 
 	public function ratelistAction(){
 		

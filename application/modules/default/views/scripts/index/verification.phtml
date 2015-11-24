@@ -100,10 +100,13 @@ echo $this->partial('index/headerstrip.phtml', array('headlineText' => $this->he
 						else {
                             foreach ($this->services as $service){
                                 ?>
+                                <div class="row">
+                                    <div class="col-sm-4"><span><?php echo $service['name'] ?></span></div>
+                                    <div class="col-sm-4"><span><?php echo $quantity; ?></span></div>
+                                    <div class="col-sm-4"><span>Rs.<?php echo $price;?></span></div>
+                                </div>
                                 <li>
-                                    <div class="img-circle pull-left service-without-items" style="">
-                                        <img class="img-circle responsive" src="<?php echo $this->baseUrl(); ?>/public/img/services/<?php echo $service['image']; ?>" width="50" height="50">
-                                    </div>
+                                    
                                     <span class="name pull-left"><?php echo $service['name'] ?></span>
                                 </li>
                                 <input type="hidden" name="order_amount" value="0">

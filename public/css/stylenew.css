@@ -344,3 +344,93 @@ div.awesomplete > ul{
 }
 
 /* }Order Summary Page Css Ends*/
+
+
+.bhoechie-tab-menu .list-group{
+	min-height:300px;
+}
+
+.order-tracksummary-block {
+    
+	display:inline-block;
+	width:100%;
+	
+
+	border:2px solid #DADCDB;
+	
+	border-right-color:transparent;
+	border-left-color:transparent;
+	
+	font-size:1.3em;
+}
+
+.order-tracksummary-block.active{
+	border:2px solid #DADCDB;	
+	background: #fff;
+}
+
+.order-tracksummary-block.active .-tabhead {
+	color:#2692FC;	
+    background: #DADCDB;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.order-tracksummary-block .-tabhead {
+	color:#000;	
+
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+
+.order-tracksummary-block .-body {
+    padding-top: 20px;
+    padding-bottom: 20px;
+	display:none;
+}
+
+
+
+.order-tracksummary-block .-body ul{
+	padding:0;
+	margin:20px 0 0 0;
+}
+.order-tracksummary-block .-body li{
+	list-style:none;
+	padding:8px 0; 
+}
+
+
+.order-tracksummary-block .-body li .-pay-type
+{
+	color:#2692FC;	
+}
+
+.order-tracksummary-block .-tabhead:after{
+	font: normal normal normal 14px/1 FontAwesome;
+    font-size: 25px;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    content: "\f054";
+    position: absolute;
+    right: 10px;
+    transform: scale(1,1.3);
+}
+
+.order-tracksummary-block.active .-tabhead:after{
+	content: "\f078";
+	transform: scale(1.3,1);
+}
+
+.track-flow-dia{
+	white-space:nowrap;
+}
+.track-flow-dia li{
+	display:inline-block;
+	width:33.3333%;
+}
+
+.track-flow-dia li.track-process:after{
+	
+}
