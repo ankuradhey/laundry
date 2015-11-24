@@ -17,11 +17,11 @@ echo $this->partial('index/headerstrip.phtml', array('headlineText' => $this->he
                     <div class="col-md-5">
                         <h4 class="col-md-6 text-center" >CHOOSE DELIVERY TYPE</h4>
                         <div class="col-md-6">
-                            <div class="btn-group btn-block" data-toggle="buttons">
-                                <label class='btn btn-primary active col-md-6' onclick='selectDeliveryType(this);'>
+                            <div class="btn-group btn-block deliver-type-opt" data-toggle="buttons">
+                                <label class='btn active col-md-6' onclick='selectDeliveryType(this);'>
                                     <input type='radio' name='delivery-type' id="delivery-type-regular" value='Regular' checked='checked'>Regular
                                 </label>
-                                <label class='btn btn-primary col-md-6' onclick='selectDeliveryType(this);'>
+                                <label class='btn col-md-6' onclick='selectDeliveryType(this);'>
                                     <input type='radio' name='delivery-type' id="delivery-type-express" value='Express' >Express
                                 </label>
                             </div>
@@ -38,7 +38,7 @@ echo $this->partial('index/headerstrip.phtml', array('headlineText' => $this->he
                 <div class="col-md-6 pull-right">
                     <h4 class="col-md-4 total-item-text"><span id="item-count-txt"><?php echo $this->selectedItemsCount? : 0; ?></span> Item for Rs. <span id="item-price-txt"><?php echo $this->selectedItemsPrice? : 0; ?></span></h4>
                     <!--<p id="itemdetail" style="font-size:12px;">Minimum order value Rs. 200</p>-->
-                    <div class="col-md-4 pull-right">
+                    <div class="col-md-4 pull-right skiptoaddress-btn">
                         <a class="btn btn-success btn-block" href="<?php echo $this->baseUrl(); ?>/index/address">SKIP</a>
                     </div>
                     <div class="col-md-4 pull-right">
@@ -206,6 +206,7 @@ echo $this->partial('index/headerstrip.phtml', array('headlineText' => $this->he
     window.sessionStorage.clear();
 
     function quantityDecrement(_this) {
+		
         $this = $(_this);
         var target = $this.data('target');
         var count = $(target).val();
@@ -231,10 +232,14 @@ echo $this->partial('index/headerstrip.phtml', array('headlineText' => $this->he
             //save in datastorage
             //                                var storageKey = 'itemlist_' + $('#itemListTable tbody').data('service') + '_' + $('#itemListTable tbody').data('category') + '_' + $('#itemListTable tbody').data('delivery');
             //                                window.sessionStorage.setItem(storageKey, $('#itemListTable tbody').html());
+			
+			if(totalCount <= 0){$(".skiptoaddress-btn").css("visibility","visible");}
+			
         }
     }
 
     function quantityIncrement(_this) {
+		
         $this = $(_this);
         var target = $this.data('target');
         var singleItemPrice = $this.data('price');
@@ -268,7 +273,9 @@ echo $this->partial('index/headerstrip.phtml', array('headlineText' => $this->he
         //save in datastorage
         //                            var storageKey = 'itemlist_' + $('#itemListTable tbody').data('service') + '_' + $('#itemListTable tbody').data('category') + '_' + $('#itemListTable tbody').data('delivery');
         //                            window.sessionStorage.setItem(storageKey, $('#itemListTable tbody').html());
-
+	
+		$(".skiptoaddress-btn").css("visibility","hidden");
+		
     }
 
     function changeCategory(categoryId, _this) {

@@ -118,6 +118,20 @@ function gcmd($var){
         echo '</pre>';
 		die;
     }
+
+function setPriceFormat($amount,$currency = '<i class="fa fa-inr"></i>',$for = 'view'){
+	
+	$amount = (float)$amount;
+	
+	if($for==='view'){
+		
+		$amount = $currency.' '.number_format($amount,2);
+		
+	}
+	return $amount;
+ }
+ 
+ 
 //End Class
 
 

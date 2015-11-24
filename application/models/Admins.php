@@ -15,7 +15,9 @@ class Application_Model_Admins {
      
 
     public function __construct($admin_row = NULL) {
-        if (!is_null($admin_row)) {
+		
+        if (!is_null($admin_row)){
+			
             $this->admin_id = $admin_row->admin_id;
             $this->admin_fname = $admin_row->admin_fname;
             $this->admin_lname = $admin_row->admin_lname;
@@ -27,6 +29,7 @@ class Application_Model_Admins {
             $this->reset_code = $admin_row->reset_code;
            
             $this->last_login_ip = $admin_row->last_login_ip;
+			
         }
     }
 

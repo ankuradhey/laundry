@@ -19,12 +19,15 @@ class IndexController extends Zend_Controller_Action {
     }
 
     public function indexAction() {
+		
         $model = new Users_Model_User();
-//        $namespace = new Zend_Session_Namespace('userInfo');
-//        $namespace->user_id = 17;
-//        $namespace->user_fname = 'Ankit';
-//        $namespace->user_lname = 'Sharma';
-//        $namespace->user_img = $img;
+
+        $namespace = new Zend_Session_Namespace('userInfo');
+        $namespace->user_id = 17;
+        $namespace->user_fname = 'Ankit';
+        $namespace->user_lname = 'Sharma';
+        $namespace->user_img = $img;
+
         if (!isset($_SESSION))
             {
             $auth = TBS\Auth::getInstance();
@@ -33,12 +36,13 @@ class IndexController extends Zend_Controller_Action {
 
             // Here the response of the providers are registered
             if ($this->_hasParam('provider')) {
+				
                 $provider = $this->_getParam('provider');
 
                 switch ($provider) {
                     case "facebook":
                         if ($this->_hasParam('code')) {
-							
+														
                             $adapter = new TBS\Auth\Adapter\Facebook($this->_getParam('code'));
                             $result = $auth->authenticate($adapter);
 														
@@ -287,6 +291,7 @@ class IndexController extends Zend_Controller_Action {
     }
     
     public function connectAction() {
+		
         $model = $this->layoutfunction();
         $auth = TBS\Auth::getInstance();
         if (!$auth->hasIdentity()) {
@@ -298,7 +303,7 @@ class IndexController extends Zend_Controller_Action {
         //   $checkuser = $model->checkuserByProviderId($data['provider_id']);
         //    if(count($checkuser)<1){
         
-        foreach ($auth->getIdentity() as $provider) {
+        foreach($auth->getIdentity() as $provider) {
 			
             $data['provider_name'] = $provider->getName();
             $data['provider_id'] = $provider->getId();
@@ -357,6 +362,13 @@ class IndexController extends Zend_Controller_Action {
         $this->_redirect('index/orderview');
         $this->view->providers = $auth->getIdentity();
     }
+
+	public function developerloginAction(){
+		
+		$auth = TBS\Auth::getInstance();		
+		$result = $auth->authenticate($adapter);
+		
+	}
 
     public function itemsAction() {
         $model = new Application_Model_ServiceMasterMapper();
@@ -490,6 +502,7 @@ class IndexController extends Zend_Controller_Action {
     }
 
     public function verificationAction() {
+		
         $cartSession = new Zend_Session_Namespace('laundryCart');
         
         $serviceArr = $packages = array();
@@ -518,6 +531,7 @@ class IndexController extends Zend_Controller_Action {
             $this->view->packages = $packageArr;
             $this->view->orderType = 'package';
         }
+		
         //get products selected if any
         $fullAddress = $cartSession->address[0] . ",<br>" . $cartSession->address[1] . ",<br> " . $cartSession->address[2] ;
         $this->view->address = $fullAddress;
@@ -709,6 +723,7 @@ class IndexController extends Zend_Controller_Action {
     }
 
     public function loginAction() {
+		
         $request = $this->getRequest();
         $request_type = $request->getParam("request_type", FALSE);
         if ($request_type) {
@@ -725,10 +740,12 @@ class IndexController extends Zend_Controller_Action {
                     $errors[] = "Password Should not be empty";
                 }
                 if (count($errors) == 0) {
+					
                     if ($this->_process($request->getParams())) {
-
+		
                         $user_id = $this->_auth->getIdentity()->user_id;
                         $this->_helper->redirector('index', 'index');
+						
                     } else {
                         $this->view->hasMessage = true;
                         $this->view->messageType = "danger";

@@ -409,6 +409,28 @@ class Admin_OrdersController extends Zend_Controller_Action {
         }
     }
 	
+	public function receiptAction(){
+		
+		$this->_helper->layout->disableLayout();
+		error_reporting(0);		
+		$orderId = $this->_getParam("id");
+		$ordersMapper = new Application_Model_OrdersMapper();
+		
+		$orderDetail = $ordersMapper->getOrderById($orderId);
+		
+		$orderItemsMapper = new Application_Model_OrderItemsMapper();
+		$orderItems = $orderItemsMapper->getOrderItemByOrderId($orderId);
+		
+		if(empty($orderDetail)){
+			echo "Order Not Found";die;
+		}
+		
+		$this->view->orderDetail = $orderDetail;
+		$this->view->orderItems = $orderItems;
+		
+		
+	}
+	
 	public function printreceiptAction(){
 		
 		$this->_helper->layout->disableLayout();

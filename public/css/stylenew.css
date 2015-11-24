@@ -1,4 +1,8 @@
-
+.img-responsive-h{
+	max-height:100%;
+	max-width:100%;
+	display:block;
+}
 
 .align-center {
     margin: auto;
@@ -203,3 +207,140 @@ div.awesomplete > ul{
     position: relative;
     top: -25px;
 }
+
+#rate-filters-frm{
+	padding-top:20px;
+}
+
+.deliver-type-opt .btn{
+	background:#eae7de;
+	border:1px solid #204d74
+}
+
+.deliver-type-opt .btn.active{
+	background:#286090;
+	color:#FFF;
+}
+
+@media (min-width: 768px){
+#loginModal .modal-dialog {
+    width: 480px;   
+}
+
+#loginModal .modal-dialog #social-icons-conatainer .btn{
+	border-radius:0px;
+}
+
+}
+
+
+/* Order Summary Page Css Starts{*/
+
+.ordersummary-cover .-title{
+	margin-bottom:10px;
+}
+
+.ordersummary-cover .-title h3 {
+    color: #56D7FA;
+    font-size: 2em;
+    font-weight: 300;
+    position: relative;
+    display: inline-block;
+    padding: 5px 0px 10px 0px;
+    margin: 0 0 0px 0;
+}
+
+.ordersummary-cover .-title h3:after {
+    content: "";
+    width: 70%;
+    display: block;
+    color: #ccc;
+    text-align: center;
+    border-top: 2px solid #ccc;
+    margin: auto;
+    max-width: 80px;
+    bottom: -10px;
+    position: relative;
+}
+
+.odelivery-data-block{
+	font-size:1.2em;
+	
+}
+
+.ordersummary-cover .green-title{
+	color:#87bf39;
+}
+
+.ordersummary-cover .-os-left {
+    border-right: 2px solid #ccc;
+}
+.ordersummary-cover .-os-right {
+    border-left: 2px solid #ccc;
+	left:-2px; 
+}
+
+.-os-right .order-summary-title{
+	border-bottom:1px solid #ccc;
+	margin-bottom:0px;
+}
+
+
+
+
+.order-items-summary span{
+	padding:10px 0;
+	display:inline-block;
+}
+
+.order-items-summary .-ois-title span{
+	font-weight:bold;
+	padding:20px 0 0 0;
+	display:inline-block;
+}
+
+
+.ordersummary-cover .-os-right .-os-right-left{
+    border-right: 2px solid #ccc;	
+}
+
+.ordersummary-cover .-os-right .-os-right-right{
+    border-left: 2px solid #ccc;
+	left:-2px; 
+	
+}
+
+.order-receipt-pre-block{
+	background:#FFF;
+	margin:20px 0 0 0;
+	display:inline-block;
+	width:100%;
+	padding:0 0 10px 0;
+}
+
+.order-receipt-pre-block .apply-coupon-btn{
+    padding: 7px;
+    display: block;
+    border: 2px solid #000;
+    width: 85%;
+    margin: 20px auto 5px auto;
+    text-align: center;
+}
+
+.order-receipt-pre-block .place-order-btn {
+    background: #000;
+    color: #fff;
+    padding: 10px;
+    display: block;
+    text-align: center;
+    margin: 0 0 10px 0;
+}
+
+.order-receipt-pre-block td{
+	padding:5px;
+}
+.order-receipt-pre-block tfoot td{
+	border-top:1px solid #ccc !important;
+}
+
+/* }Order Summary Page Css Ends*/

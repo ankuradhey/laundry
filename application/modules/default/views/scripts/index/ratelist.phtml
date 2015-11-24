@@ -1,5 +1,5 @@
 <div class="ratelist-header">
-  	<img src="<?php echo $this->baseUrl()?>/public/img/ratelist-header-img.jpeg" class="img-responsive align-center" />
+  	<img src="<?php echo $this->baseUrl()?>/public/img/ratelist-header-img.jpeg" class="img-responsive-h align-center" />
 </div>
 
 <div class="container">
@@ -7,28 +7,27 @@
     <div class="col-sm-10 col-sm-offset-1">
 	<div class="ratelist-body">
     <div class="row">
-    	<div class="col-sm-6 col-sm-offset-3">
+    	<div class="col-sm-12">
+        
         	<form id="rate-filters-frm" action="" method="post">
-            <br />
-            <br />
-            <br />
-			<div class="select-cover">
+            
+			<div class="select-cover col-sm-4">
         	<select name="city">
             	<?php foreach($this->cities as $city){?>
             	<option value="1"><?php echo $city?></option>          
                 <?php }?>      
             </select>
             </div>
-            <br />
-            <div class="select-cover">
+
+            <div class="select-cover col-sm-4">
         	<select name="service">
             	<?php foreach($this->services as $service){?>
             	<option <?php echo $service->service_id==$this->selectedService?"selected='selected'":""?> value="<?php echo $service->service_id?>"><?php echo $service->service_name?></option>          
                 <?php }?>
             </select>
             </div>
-            <br />
-            <div class="select-cover">
+
+            <div class="select-cover col-sm-4">
         	<select name="category">
             	<?php foreach($this->categories as $category){?>
             	<option <?php echo $category->category_id==$this->selectedCategory?"selected='selected'":""?> value="<?php echo $category->category_id?>"><?php echo $category->category_name?></option>          

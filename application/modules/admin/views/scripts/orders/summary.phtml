@@ -145,7 +145,7 @@
                                 echo $date = new Zend_Date($timestamp, "dd-MMM-yyyy");
                                 ?></td>-->
                             <td style="white-space:nowrap">
-                                <a href="<?php echo $this->baseUrl()?>/admin/orders/printreceipt/id/<?php echo $order->__get("order_id")?>" title="print-bill" class="print-order-bill"><button class="btn btn-grey btn-mini"><i class="icon-print  icon-only"></i></button></a>
+                                <a href="<?php echo $this->baseUrl()?>/admin/orders/receipt/id/<?php echo $order->__get("order_id")?>" title="print-bill" class="print-order-bill"><button class="btn btn-grey btn-mini"><i class="icon-print  icon-only"></i></button></a>
                                 <a href="<?php echo $this->baseUrl(); ?>/admin/orders/edit/id/<?php echo $order->__get("order_id"); ?>"><button class="btn btn-warning btn-mini"><i class="icon-wrench  bigger-110 icon-only"></i></button></a>
                                 <a href="#" data-id="<?php echo $order->__get("order_id"); ?>"  class="delete"><button class="btn btn-grey btn-mini"><i class="icon-trash  icon-only"></i></button></a>
                                 
