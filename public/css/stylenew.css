@@ -325,7 +325,18 @@ div.awesomplete > ul{
     width: 85%;
     margin: 20px auto 5px auto;
     text-align: center;
+	cursor:pointer;
 }
+.form-group.couponcode {
+    padding: 15px 7% 0 7%;
+}
+
+.order-receipt-pre-block .apply-coupon-btn:hover{
+	background-color:#000;
+	color:#fff;
+}
+
+
 
 .order-receipt-pre-block .place-order-btn {
     background: #000;
@@ -434,3 +445,4 @@ div.awesomplete > ul{
 .track-flow-dia li.track-process:after{
 	
 }
+.place-order-btn{cursor:pointer}

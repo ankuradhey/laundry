@@ -3,7 +3,7 @@
         <span class="mws-i-24 i-speech-bubble-2"> Add Coupon </span>
     </div>
     <div class="mws-panel-body">
-        <form class="mws-form" method="post" >
+        <form class="mws-form" method="post" enctype="multipart/form-data">
             <?php if ($this->hasMessage): ?>
                 <div class="mws-form-message <?php echo $this->messageType == 'danger' ? 'error' : $this->messageType; ?> fade in">
                     <?php if ($this->messageType == "danger"): ?>
@@ -19,14 +19,13 @@
                 </div>
             <?php endif; ?>
 
-            <div class="mws-form-block">
-                <?php
+            <?php
                 $elements = $this->form->getElements();
+				
                 foreach ($elements as $element):
                     ?>
-                    <div class="mws-form-row">
-                        <?php echo $element; ?>
-                    </div>
+                <div class="mws-form-inline"><div class="mws-form-row"><?php echo $element; ?></div></div>    
+                    
                     <?php
                 endforeach;
                 ?>
@@ -34,7 +33,6 @@
                     <input type="hidden" name="request_type" value="add">
                     <button type="submit" class="mws-button red" >Add</button>
                 </div>
-            </div>
         </form>
     </div>
 </div>
@@ -97,3 +95,93 @@
         </div><!-- modal-content -->
     </div><!-- modal-dialog -->
 </div>
+
+<script type="text/javascript">
+$(".mws-datepicker").datepicker({
+	showOtherMonths:true,
+	minDate: '0'
+});
+
+  $(".mws-form").validate({
+	  
+	  rules:{
+		  coupon_type:{
+			  	required:true,
+		  },
+		  coupon_code:{
+			  	required:true,
+			  	minlength:4,
+				maxlength:10,				
+		  },
+		  coupon_value:{
+			  	number:true,
+			  	required:true,			  	
+				min:1,
+				
+				max:{
+					param: 99,
+					depends: function(element) {
+					  return $("#coupon_type").val()=="percentage";
+					}
+				},
+		  },
+		  coupon_last_date:{			  	
+			  	required:true,			  					
+		  },
+		  coupon_occourence:{
+			  	digits:true,
+			  	required:true,			  	
+				min:1,
+				max:100,
+		  },
+		  coupon_min_billing:{
+			  	digits:true,
+				min:1,
+				max:100000,
+		  },
+		  coupon_max_discount:{
+			  	digits:true,			  	
+				min:1,
+				max:100000,
+		  },
+		  
+		  
+	  },
+	  messages:{
+		  coupon_type:"Please select coupon type",
+		  coupon_code:{
+			  	required:"Enter coupon code",
+			  	minlength:"Code shoud be between 4 to 10 caharacter",
+				maxlength:"Code shoud be between 4 to 10 caharacter",
+		  },
+		  coupon_value:{
+			  	number:"Enter valid coupon value",
+			  	required:"Enter Coupon Value",
+				min:"Value should be more than or equal to 1",				
+				max:"Coupon discount percentage should be less than 99",
+		  },		  
+		  coupon_last_date:{			  	
+			  	required:"select coupon valid last date",
+		  },
+		  coupon_occourence:{
+			  	digits:"Enter valid occurence",
+			  	required:"Enter occurence Value",
+				min:"Value should be more than or equal to 1",
+				max:"Value should be less than 100",
+		  },
+		  coupon_min_billing:{
+			  	digits:"Enter valid min billing value",			  	
+				min:"Value should be greater than or equal to 1",
+				max:"Value should be less than 100000",
+		  },
+		  coupon_max_discount:{
+			  	digits:"Enter valid max discount value",			  	
+				min:"Value should be greater than or equal to 1",
+				max:"Value should be less than 100000",
+		  },
+		  
+	  }
+	  
+  });
+
+</script>

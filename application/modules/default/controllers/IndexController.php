@@ -22,11 +22,11 @@ class IndexController extends Zend_Controller_Action {
 		
         $model = new Users_Model_User();
 
-//        $namespace = new Zend_Session_Namespace('userInfo');
-//        $namespace->user_id = 17;
-//        $namespace->user_fname = 'Ankit';
-//        $namespace->user_lname = 'Sharma';
-//        $namespace->user_img = $img;
+        $namespace = new Zend_Session_Namespace('userInfo');
+        $namespace->user_id = 17;
+        $namespace->user_fname = 'Ankit';
+        $namespace->user_lname = 'Sharma';
+        $namespace->user_img = $img;
 
         if (!isset($_SESSION))
             {
@@ -244,6 +244,7 @@ class IndexController extends Zend_Controller_Action {
                         $cartSession->pickup_date = $post['pickupDate'];
                         $cartSession->delivery = $post['deliveryTimeSlot'];
                         $cartSession->delivery_date = $post['deliveryDate'];
+						$cartSession->mobile_number = $post['mobileNumber'];
                         
                         $this->_redirect('index/verification');
                         break;
@@ -540,6 +541,7 @@ class IndexController extends Zend_Controller_Action {
         $this->view->delivery = $cartSession->delivery;
         $this->view->pickupDate = $cartSession->pickup_date;
         $this->view->deliveryDate = $cartSession->delivery_date;
+		$this->view->mobileNumber = $cartSession->mobile_number;
         $this->view->headlineText = 'Order Summary';
         
         $namespace = new Zend_Session_Namespace('userInfo');
@@ -655,7 +657,45 @@ class IndexController extends Zend_Controller_Action {
             $orders->__set('order_payment_status', 'unpaid');
             $orders->__set('order_service_type', implode(',', $laundryCart->service));
             $orders->__set('order_type', 'service');
-            
+			$orders->__set('order_mobile_number', $post['order_mobile_number']);
+			
+			/*Apply coupon code */
+			if($post['couponcode']!=""){
+				
+				$couponCode = $post['couponcode'];
+				$CouponsMapperModel = new Application_Model_CouponsMapper();
+				$couponData = $CouponsMapperModel->getCouponByCouponCode($couponCode);
+				$namespace = new Zend_Session_Namespace('userInfo');        
+						
+				if(!empty($couponData)){
+					
+					$isAllowedResult = $this->isCouponAllowedToUse($namespace->user_id,$couponData->__get("coupon_id"));
+					
+					if($isAllowedResult->allowed===true){
+						
+						if($post['order_amount']>=$couponData->__get("coupon_min_billing")){
+							
+							$discountAmount = $couponData->__get("coupon_value");
+							
+							if($couponData->__get("coupon_type")=="percentage"){
+								$discountAmount = $post['order_amount'] * $couponData->__get("coupon_value") / 100;
+							}
+							
+							if($discountAmount > $couponData->__get("coupon_max_discount") && $couponData->__get("coupon_max_discount")>0){
+								$discountAmount = $couponData->__get("coupon_max_discount");
+							}
+							
+							$orders->__set('order_coupon_id', $couponData->__get("coupon_id"));
+							$orders->__set('order_coupon_dis', $discountAmount);
+							
+						}
+						
+					}
+				}
+			
+			}
+			/*Apply coupon code */
+			            			
             if ($orderId = $model->addNewOrder($orders)) {
                 //add products now
                 if(isset($laundryCart->items)){
@@ -1180,9 +1220,9 @@ class IndexController extends Zend_Controller_Action {
 			$orderSession->$response['key'] = $otp;
 			$message = urlencode("Use ".$otp." to verify your number");
 			
-			//$url = "http://login.smsgatewayhub.com/smsapi/pushsms.aspx?user=laundrywala&pwd=cleanlaundry&to=91" . $number . "&sid=LAWALA&msg=" . $message . "&fl=0&gwid=2";
-			//$text = file_get_contents($url);
-			$response['otp'] = $otp;
+			$url = "http://login.smsgatewayhub.com/smsapi/pushsms.aspx?user=laundrywala&pwd=cleanlaundry&to=91" . $number . "&sid=LAWALA&msg=" . $message . "&fl=0&gwid=2";
+			$text = file_get_contents($url);
+			//$response['otp'] = $otp;
 			$response['success'] = true;
 			$response['message'] = "OTP sent successfully";
 			
@@ -1195,7 +1235,7 @@ class IndexController extends Zend_Controller_Action {
         echo Zend_Json::Encode($response);
 		die;
 	}
-	
+			
 	public function verifyorderotpAction(){
 		
 		$orderSession = new Zend_Session_Namespace('orderSession');
@@ -1221,6 +1261,94 @@ class IndexController extends Zend_Controller_Action {
         		
         echo Zend_Json::Encode($response);
 		die;
+	}
+	
+	public function applycouponAction(){
+				
+		$cartSession = new Zend_Session_Namespace('laundryCart');
+		
+		$this->_helper->viewRenderer->setNoRender(true);
+        $this->_helper->layout->disableLayout();
+		
+		$response = array(
+						"success"=>false,
+						"message"=>"Coupon code not valid",						
+					);
+		
+		$couponCode = $this->_getParam("coupon_code");
+		
+		if(!empty($couponCode)){
+						
+			$CouponsMapperModel = new Application_Model_CouponsMapper();
+			$couponData = $CouponsMapperModel->getCouponByCouponCode($couponCode);
+			$namespace = new Zend_Session_Namespace('userInfo');        
+						
+			if(!empty($couponData)){
+				
+				$isAllowedResult = $this->isCouponAllowedToUse($namespace->user_id,$couponData->__get("coupon_id"));
+				if($isAllowedResult->allowed===true){
+										
+					$response['success'] = true;
+					$response['message'] = "coupon is active";
+					$response['coupondata'] = array(
+												"amount"=>$couponData->__get("coupon_value"),
+												"type"=>$couponData->__get("coupon_type"),
+												"minbill"=>$couponData->__get("coupon_min_billing"),
+												"maxdis"=>$couponData->__get("coupon_max_discount"),												
+											  );					
+					
+				}else{
+					
+					$response['message'] = $isAllowedResult->message;
+					
+				}
+			}
+			
+			
+		}
+		
+        echo Zend_Json::Encode($response);
+		die;
+	}
+	
+	
+	private function isCouponAllowedToUse($userId,$couponId){
+				
+		$response = array(
+						"allowed"=>false,						
+						"message"=>"",
+					);
+		
+		$CouponsMapperModel = new Application_Model_CouponsMapper();
+		$couponData = $CouponsMapperModel->getCouponById($couponId);				
+		
+		if(strtotime($couponData->__get("coupon_last_date")) > strtotime(date("Y-m-d")) && $couponData->__get("coupon_status")==1){
+			
+			$orderMapper = new Application_Model_OrdersMapper();
+			$orderCount = $orderMapper->getOrders(array(
+														"user_id"=>$userId,
+														"coupon_id"=>$couponId,
+														"order_count"=>true,
+													));
+													
+			if($orderCount<$couponData->__get("coupon_occourence")){
+				
+				$response['allowed'] = true;
+				
+			}else{
+				
+				$response['message'] = "Coupon max limit exceed";
+				
+			}
+			
+		}else{
+						
+			$response['message'] = "Coupon expired";			
+			
+		}
+		
+		return (object)$response;
+				
 	}
 
 	public function ratelistAction(){

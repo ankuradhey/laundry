@@ -38,11 +38,16 @@ class Application_Model_OrdersMapper {
         'order_delivery_boy' => $order->__get("order_delivery_boy"),
         'order_added_time' => $order->__get("order_added_time"),
         'order_modified_time' => $order->__get("order_modified_time"),
+		
+		'order_mobile_number' => $order->__get("order_mobile_number"),
+		'order_coupon_id' => $order->__get("order_coupon_id"),
+		'order_coupon_dis' => $order->__get("order_coupon_dis"),
+				
         );
         
         if(empty($data['order_added_time']))
             unset($data['order_added_time']);
-            
+        
         $result = $this->_db_table->insert($data);
         if (count($result) == 0) {
             return false;
@@ -275,4 +280,24 @@ class Application_Model_OrdersMapper {
             return true;
         }
     }
+	
+	public function getOrders($params = array()) {
+						
+        $result = $this->_db_table->getAdapter()
+									->select()
+									->from("orders")																		
+									->where("order_user_id = ?",$params['user_id'])
+									->where("order_coupon_id = ?",$params['coupon_id'])
+									->query()
+									->fetchAll();
+				
+		if(isset($params['order_count']) && $params['order_count']){
+			
+			return count($result);
+			
+		}
+						                
+    }
+	
+	
 }
