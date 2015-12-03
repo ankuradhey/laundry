@@ -1,0 +1,75 @@
+<div class="modal-header">
+  <h4 class="modal-title">Add validator for field <strong>{{vm.field.name}}</strong></h4>
+</div>
+<div class="modal-body">
+  <div class="alert alert-danger" role="alert" ng-hide="!vm.alert">
+    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> {{vm.alert}}
+  </div>
+  <label class="control-label">Validator</label>
+  <ui-select
+    ng-model="vm.validator.name"
+    on-select="vm.selectValidator($item, $model)">
+    <ui-select-match placeholder="Select Validator...">{{$select.selected}}</ui-select-match>
+    <ui-select-choices
+      repeat="validator in vm.validatorNames | filter: $select.search">
+      <div ng-bind-html="validator | highlight: $select.search"></div>
+    </ui-select-choices>
+  </ui-select>
+  <br />
+  <div class="form-group">
+    <label for="rest_validator_option" class="col-sm-2 control-label">Option</label>
+    <div class="col-sm-8">
+      <ui-select
+        ng-model="vm.option.name"
+        on-select="vm.selectOption($item, $model)">
+        <ui-select-match placeholder="Select an option...">{{$select.selected}}</ui-select-match>
+        <ui-select-choices repeat="option in vm.optionNames | filter: $select.search">
+          <div ng-bind-html="option | highlight: $select.search"></div>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+    <div class="col-sm-2">
+      <button type="button" class="btn btn-success btn-sm" ng-click="vm.addOption()">Add option</span></button>
+    </div>
+  </div>
+  <br />
+  <div class="form-group">
+    <label class="control-label col-sm-2">Value</label>
+    <div class="col-sm-8">
+      <toggle-switch type="checkbox"
+        class="switch-info switch-small"
+        model="vm.option.value"
+        ng-show="vm.validator.name && vm.validators[vm.validator.name][vm.option.name] == 'bool'"></toggle-switch>
+
+      <input type="text" class="form-control"
+        ng-model="vm.option.value"
+        ng-hide="vm.validator.name && vm.validators[vm.validator.name][vm.option.name] == 'bool'"
+        placeholder="Insert the option value ({{vm.validators[vm.validator.name][vm.option.name]}})">
+    </div>
+  </div>
+  <br /><br />
+  <table class="table table-bordered col-md-12">
+    <thead>
+      <tr>
+        <th class="col-md-5">Option</th>
+        <th class="col-md-5">Value</th>
+        <th class="col-md-2">Action</th>
+      </tr>
+    </thead>
+    <tr ng-repeat="(option, value) in vm.validator.options">
+      <td>{{option}}</td>
+      <td>{{value}}</td>
+      <td><button type="button" ng-click="vm.deleteOption(option)" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i> delete</button></td>
+    </tr>
+    <tr ng-show="vm.validator.options | emptyObject">
+      <td colspan="3">
+        No options have been defined</a>
+      </td>
+    </tr>
+  </table>
+  <br clear="left" />
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-default" ng-click="vm.cancel()">Close</button>
+  <button type="button" class="btn btn-success btn-sm" ng-click="vm.ok()" ladda="vm.loading">Save</span></button>
+</div>

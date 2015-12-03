@@ -1,0 +1,66 @@
+{
+    "name": "zfcampus/zf-rest",
+    "description": "ZF2 Module providing structure for RESTful resources",
+    "type": "library",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "zf2",
+        "zend",
+        "module",
+        "rest"
+    ],
+    "homepage": "http://apigility.org/",
+    "support": {
+        "email": "apigility-users@zend.com",
+        "irc": "irc://irc.freenode.net/apigility",
+        "source": "https://github.com/zfcampus/zf-rest",
+        "issues": "https://github.com/zfcampus/zf-rest/issues"
+    },
+    "repositories": [
+        { "type": "composer", "url": "https://packages.zendframework.com" }
+    ],
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.2-dev",
+            "dev-develop": "1.3-dev"
+        }
+    },
+    "require": {
+        "php": ">=5.5",
+        "zendframework/zend-eventmanager": "^2.4.0",
+        "zendframework/zend-json": "^2.4.0",
+        "zendframework/zend-loader": "^2.4.0",
+        "zendframework/zend-mvc": "^2.4.0",
+        "zendframework/zend-paginator": "^2.4.0",
+        "zendframework/zend-stdlib": "^2.4.0",
+        "zfcampus/zf-api-problem": "~1.0",
+        "zfcampus/zf-content-negotiation": "~1.0",
+        "zfcampus/zf-hal": "~1.1",
+        "zfcampus/zf-mvc-auth": "~1.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.7",
+        "squizlabs/php_codesniffer": "^2.3.1",
+        "zendframework/zend-console": "^2.4.0",
+        "zendframework/zend-escaper": "^2.4.0",
+        "zendframework/zend-http": "^2.4.0",
+        "zendframework/zend-inputfilter": "^2.4.0",
+        "zendframework/zend-servicemanager": "^2.4.0",
+        "zendframework/zend-uri": "^2.4.0",
+        "zendframework/zend-validator": "^2.4.0",
+        "zendframework/zend-view": "^2.4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "ZF\\Rest\\": "src/"
+        },
+        "classmap": [
+            "Module.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ZFTest\\Rest\\": "test/"
+        }
+    }
+}
