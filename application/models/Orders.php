@@ -29,6 +29,11 @@ class Application_Model_Orders {
     private $order_delivery_boy;
     private $order_added_time;
     private $order_modified_time;
+	
+	private $order_coupon_id;
+	private $order_coupon_dis;
+	
+	
     
 
     public function __construct($order_row = NULL) {
@@ -62,6 +67,10 @@ class Application_Model_Orders {
             $this->order_added_time = $order_row->order_added_time;
             $this->order_modified_time = $order_row->order_modified_time;
 			
+			$this->order_mobile_number = $order_row->order_mobile_number;
+			$this->order_coupon_id = $order_row->order_coupon_id;
+			$this->order_coupon_dis = $order_row->order_coupon_dis;
+									
         }
     }
 
