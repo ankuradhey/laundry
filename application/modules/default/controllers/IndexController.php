@@ -22,11 +22,11 @@ class IndexController extends Zend_Controller_Action {
 		
         $model = new Users_Model_User();
 
-        $namespace = new Zend_Session_Namespace('userInfo');
-        $namespace->user_id = 17;
-        $namespace->user_fname = 'Ankit';
-        $namespace->user_lname = 'Sharma';
-        $namespace->user_img = $img;
+//        $namespace = new Zend_Session_Namespace('userInfo');
+//        $namespace->user_id = 17;
+//        $namespace->user_fname = 'Ankit';
+//        $namespace->user_lname = 'Sharma';
+//        $namespace->user_img = $img;
 
         if (!isset($_SESSION))
             {
@@ -541,7 +541,7 @@ class IndexController extends Zend_Controller_Action {
         $this->view->delivery = $cartSession->delivery;
         $this->view->pickupDate = $cartSession->pickup_date;
         $this->view->deliveryDate = $cartSession->delivery_date;
-		$this->view->mobileNumber = $cartSession->mobile_number;
+        $this->view->mobileNumber = $cartSession->mobile_number;
         $this->view->headlineText = 'Order Summary';
         
         $namespace = new Zend_Session_Namespace('userInfo');
@@ -1203,7 +1203,7 @@ class IndexController extends Zend_Controller_Action {
 		
 		$orderSession = new Zend_Session_Namespace('orderSession');
 		$this->_helper->viewRenderer->setNoRender(true);
-        $this->_helper->layout->disableLayout();
+                $this->_helper->layout->disableLayout();
 		
 		$response = array(
 						"success"=>false,
@@ -1215,7 +1215,7 @@ class IndexController extends Zend_Controller_Action {
 		$number = $this->_getParam("mobile_no");
 		
 		if(strlen($number)==10 && is_numeric($number)){
-			
+			$orderSession->mobile_number = $number;
 			$otp = rand(1000,5000);
 			$orderSession->$response['key'] = $otp;
 			$message = urlencode("Use ".$otp." to verify your number");
@@ -1240,7 +1240,7 @@ class IndexController extends Zend_Controller_Action {
 		
 		$orderSession = new Zend_Session_Namespace('orderSession');
 		$this->_helper->viewRenderer->setNoRender(true);
-        $this->_helper->layout->disableLayout();
+                $this->_helper->layout->disableLayout();
 		
 		$response = array(
 						"success"=>false,
@@ -1259,7 +1259,7 @@ class IndexController extends Zend_Controller_Action {
 			$response['message'] = "OTP is not valid";	
 		}
         		
-        echo Zend_Json::Encode($response);
+                echo Zend_Json::Encode($response);
 		die;
 	}
 	
