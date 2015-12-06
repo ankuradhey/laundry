@@ -183,7 +183,7 @@ return array(
         'translation_file_patterns' => array(
             0 => array(
                 'type' => 'gettext',
-                'base_dir' => 'C:\\xampp\\htdocs\\work\\laundrywala\\api\\module\\Application\\config/../language',
+                'base_dir' => __DIR__.'/../language',
                 'pattern' => '%s.mo',
             ),
         ),
@@ -200,13 +200,13 @@ return array(
         'not_found_template' => 'error/404',
         'exception_template' => 'error/index',
         'template_map' => array(
-            'layout/layout' => 'C:\\xampp\\htdocs\\work\\laundrywala\\api\\module\\Application\\config/../view/layout/layout.phtml',
-            'application/index/index' => 'C:\\xampp\\htdocs\\work\\laundrywala\\api\\module\\Application\\config/../view/application/index/index.phtml',
-            'error/404' => 'C:\\xampp\\htdocs\\work\\laundrywala\\api\\module\\Application\\config/../view/error/404.phtml',
-            'error/index' => 'C:\\xampp\\htdocs\\work\\laundrywala\\api\\module\\Application\\config/../view/error/index.phtml',
+            'layout/layout' => __DIR__.'/../view/layout/layout.phtml',
+            'application/index/index' => __DIR__.'/../view/application/index/index.phtml',
+            'error/404' => __DIR__.'/../view/error/404.phtml',
+            'error/index' => __DIR__.'/../view/error/index.phtml',
         ),
         'template_path_stack' => array(
-            0 => 'C:\\xampp\\htdocs\\work\\laundrywala\\api\\module\\Application\\config/../view',
+            0 => __DIR__.'/../view',
         ),
     ),
     'console' => array(
