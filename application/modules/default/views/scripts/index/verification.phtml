@@ -1,6 +1,6 @@
 <?php
 $thumb = $this->baseUrl() . "/public/thumbs/thumb.php";
-$userInfo = array('userName' => $this->user_fname . ' ' . $this->user_lname, 'phone' => '7062232497', 'profileImage' => $this->user_img);
+$userInfo = array('userName' => $this->user_fname . ' ' . $this->user_lname, 'phone' => $this->mobileNumber, 'profileImage' => $this->user_img);
 echo $this->partial('index/headerstrip.phtml', array('headlineText' => $this->headlineText, 'userInfo' => $userInfo));
 
 ?>
