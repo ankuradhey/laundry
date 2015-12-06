@@ -410,6 +410,8 @@ class IndexController extends Zend_Controller_Action {
                     });
             
             $totalPrice = 0;
+            
+            if(isset($laundryCart->itemprice) && $laundryCart->itemprice != "")
             foreach($laundryCart->itemprice as $key=>$prices){
                 $totalPrice += $prices*$selectedItems[$key];
             }
@@ -1202,6 +1204,7 @@ class IndexController extends Zend_Controller_Action {
 	public function sendorderotpAction(){
 		
 		$orderSession = new Zend_Session_Namespace('orderSession');
+                $cartSession = new Zend_Session_Namespace('laundryCart');
 		$this->_helper->viewRenderer->setNoRender(true);
                 $this->_helper->layout->disableLayout();
 		
@@ -1215,7 +1218,7 @@ class IndexController extends Zend_Controller_Action {
 		$number = $this->_getParam("mobile_no");
 		
 		if(strlen($number)==10 && is_numeric($number)){
-			$orderSession->mobile_number = $number;
+			$cartSession->mobile_number = $number;
 			$otp = rand(1000,5000);
 			$orderSession->$response['key'] = $otp;
 			$message = urlencode("Use ".$otp." to verify your number");
