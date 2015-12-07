@@ -512,6 +512,10 @@ class IndexController extends Zend_Controller_Action {
         //service wise products listing
         $itemModel = new Application_Model_ItemPriceMapper();
         $itemsArr = array();
+        $namespace = new Zend_Session_Namespace('userInfo');
+        
+        if(empty($namespace->user_id))
+            $this->_redirect("index");
         
         if($cartSession->orderType == 'service'){
             $model = new Application_Model_ServiceMasterMapper();
@@ -524,7 +528,7 @@ class IndexController extends Zend_Controller_Action {
             $this->view->serviceItems = $cartSession->serviceItems;
             $this->view->services = $serviceArr;
             $this->view->orderType = 'service';
-        }else{
+            }else{
             $model = new Application_Model_PackagesMapper();
             $package = $model->getPackageById((int)$cartSession->package[0]);
             $packageArr['name'] = $package->__get('package_name');
@@ -726,7 +730,7 @@ class IndexController extends Zend_Controller_Action {
                 //session destroy
                 $laundryCart->unsetAll();
                 
-                $this->_redirect('index/orderlist');
+                $this->_redirect('payment/index?order_id='.$orderId.'&transaction_type=Online');
             } else {
                 $this->view->message = "Error occured while adding. Please try again";
                 $this->view->hasMessage = true;
@@ -761,7 +765,7 @@ class IndexController extends Zend_Controller_Action {
             
             //session destroy
             $laundryCart->unsetAll();
-            $this->_redirect('my-account/subscription');
+            $this->_redirect('payment/index?&package_id='.$laundryCart->package[0].'&transaction_type=Package');
         }else{
             exit("error occurred");
         }
