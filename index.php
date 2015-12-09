@@ -5,6 +5,8 @@
 define('T_PREFIX', 'stip_');
 defined('APPLICATION_PATH') || define('APPLICATION_PATH', __DIR__ . '/application');
 
+define("BASE_URL", "http://localhost/work/laundry/");
+
 // Define application environment
 defined('APPLICATION_ENV') || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'development'));
 defined('WEBSITE_PATH')
