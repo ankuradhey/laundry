@@ -68,6 +68,15 @@ echo $this->partial('index/headerstrip.phtml', array('headlineText' => $this->he
                 $filepath = $_SERVER['DOCUMENT_ROOT'] . $image;
                 ?>
                 <div class="col-md-3 text-center single-package" id="maindiv_package_<?php echo $package->__get('package_id'); ?>">
+                    <div class="product-action invisible">
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-success btn-block" onclick="selectpackage('<?php echo $package->__get('package_id'); ?>');">Add</button>
+                            <input type="hidden" class="itemcount-package" id="itemcount-package-<?php echo $package->__get('package_id'); ?>" name="itemcount[package][<?php echo $package->__get('package_id'); ?>]" value="<?php echo in_array($package->__get('package_id'), $this->selectedPackages) ? "1" : ""; ?>" autocomplete="off">
+                        </div>
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-disable btn-block" onclick="removepackage('<?php echo $package->__get('package_id'); ?>')">Remove</button>
+                        </div>
+                    </div>
                     <div class="heading">
                         <img src="<?php echo $image; ?>" width="50" height="50">
                         <h2 class="block-title"> <?php echo $package->__get('package_name'); ?> </h2>
@@ -85,15 +94,6 @@ echo $this->partial('index/headerstrip.phtml', array('headlineText' => $this->he
                               style="<?php echo in_array($package->__get('package_id'), $this->selectedPackages) ? "" : "display:none;" ?>">
                             <i class="glyphicon glyphicon-ok" style="color:#29E529;"></i>
                         </span>
-                    </div>
-                    <div class="product-action invisible">
-                        <div class="col-md-6">
-                            <button type="button" class="btn btn-success btn-block" onclick="selectpackage('<?php echo $package->__get('package_id'); ?>');">Add</button>
-                            <input type="hidden" class="itemcount-package" id="itemcount-package-<?php echo $package->__get('package_id'); ?>" name="itemcount[package][<?php echo $package->__get('package_id'); ?>]" value="<?php echo in_array($package->__get('package_id'), $this->selectedPackages) ? "1" : ""; ?>" autocomplete="off">
-                        </div>
-                        <div class="col-md-6">
-                            <button type="button" class="btn btn-disable btn-block" onclick="removepackage('<?php echo $package->__get('package_id'); ?>')">Remove</button>
-                        </div>
                     </div>
                     <input type="hidden" class="decorate_package" name="decorate_package" id="decorate_package_<?php echo $package->__get('package_id'); ?>" value="<?php echo in_array($package->__get('package_id'), $this->selectedPackages) ? "decorate" : ""; ?>" autocomplete="off">   
                 </div>
