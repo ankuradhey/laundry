@@ -43,6 +43,11 @@ class DeliveryboyMapper {
     public function fetchOrders($id, $orderStatus = NULL){
         $select = new Select('orders');
         $select->where(" order_delivery_boy = '$id' ");
+        $select->join(
+                    array('ut'=>'user_track'), ' ut.usertrack_package_id = orders.order_service_type ',array('clothes_left','pickups_left'),'left'
+                );
+        
+        
         if($orderStatus){
             if($orderStatus == 'pickup')
                 $select->where(" order_status is NULL  ");
