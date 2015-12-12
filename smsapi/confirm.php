@@ -24,6 +24,9 @@ if (isset($data) && $data->isVerified){
         $res = mysql_fetch_array($res);
         if (count($res) && !empty($res)) {
             $retArr['user_id'] = $res['user_id'];
+            $retArr['first_name'] = $res['user_fname'];
+            $retArr['last_name'] = $res['user_lname'];
+            $retArr['city'] = $res['user_city'];
             $retArr['response_id'] = '1';
         } else {
             $res = mysql_query("insert into users(user_number) values('" . mysql_real_escape_string($mobile) . "');  ");
@@ -37,6 +40,9 @@ if (isset($data) && $data->isVerified){
                     $res = mysql_fetch_array($res);
                     if(count($res)){
                         $retArr['user_id'] = $res[0]['user_id'];
+                        $retArr['first_name'] = $res['user_fname'];
+                        $retArr['last_name'] = $res['user_lname'];
+                        $retArr['city'] = $res['user_city'];
                         $retArr['response_id'] = '1';
                     }else{
                         $retArr['error'] = 'user not found';
