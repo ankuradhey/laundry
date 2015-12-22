@@ -18,13 +18,43 @@ class DeliveryboyMapper {
         $this->adapter = $adapter;
     }
     
+    public function updateOrderStatus($orderId, $orderStatus = 'pickup'){
+        $sql = "update orders set order_status = '$orderStatus' WHERE order_id = ? ";
+        $resultset = $this->adapter->query($sql, array($orderId));
+        return $resultSet;
+    }
+            
+    
+    public function updatePackage($orderId, $clothesLeft = null, $pickupsLeft = null){
+        $setSql = ' set ';
+        if($clothesLeft){
+            $setSql = ' clothes_left = clothes_left - '.(int)$clothesLeft;
+        }
+        
+        if($pickupsLeft){
+            $setSql = ' pickups_left = pickups_left - '.(int)$pickupsLeft;
+        }
+        
+        $sql = "update user_track ut
+                    $set
+                    join order o on o.order_service_type = ut.usertrack_package_id and  o.order_user_id = ut.usertrack_user_id and order_delivery_status is NULL and usertrack_expiry_date >= now()  
+                    WHERE o.order_id = ?
+                    limit 1 ";
+        $resultset = $this->adapter->query($sql, array($orderId));
+    }
+    
     public function insert($data){
         $adapter = $this->adapter;
         $sql = new Sql($this->adapter);
         $insert = $sql->insert('order_products');
         $insert->values($data);
         $selectString = $sql->getSqlStringForSqlObject($insert);
-        return $results = $this->adapter->query($selectString, $adapter::QUERY_MODE_EXECUTE);
+        $results = $this->adapter->query($selectString, $adapter::QUERY_MODE_EXECUTE);
+        
+        //if type package is there then reduce number of clothes and days
+        if($results && $data['order_type'] == 'package'){
+            $this->updatePackage($data['order_id'],$data['quantity']);
+        }
     }
     
     public function authenticate($userName, $password){
