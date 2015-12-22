@@ -25,9 +25,23 @@ class OrderproductsResource extends AbstractResourceListener
         
 //        if(!$res)
 //            return new ApiProblem(405, 'Order id not found');
+        $orderId = false;
         foreach($data as $val){
+            $orderId = $val['order_id'];
+            //check for valid orders
+            $res = $this->mapper->checkOrder($val['order_id']);
+            
+            if(!$res)
+                return new ApiProblem(405, 'Order id not found');
+            
             $this->mapper->insert($val);
         }
+        
+        if(!$orderId)
+            return new ApiProblem(405, 'Order id not found');
+        
+        $this->mapper->updatePackage($orderId, null, 1);
+        $this->mapper->updateOrderStatus($orderId);
         return true;
     }
 
