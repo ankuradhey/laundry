@@ -5,6 +5,6 @@ class OrderResourceFactory
 {
     public function __invoke($services)
     {
-        return new OrderResource($services->get('Application\V1\Rest\Order\OrderMapper'));
+        return new OrderResource($services);
     }
 }
