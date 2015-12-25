@@ -6,10 +6,18 @@ use ZF\Rest\AbstractResourceListener;
 
 class OrderResource extends AbstractResourceListener
 {
-    public $mapper;
+    public $mapper, $userMapper, $services;
     
-    public function __construct($mapper) {
-        $this->mapper = $mapper;
+    public function __construct($services) {
+        $this->services = $services;
+        $this->mapper = $services->get('Application\V1\Rest\Order\OrderMapper');
+    }
+    
+    protected function getUserMapper(){
+        if(!isset($this->userMapper)){
+            $this->userMapper = $this->services->get('Application\V1\Rest\User\UserMapper');
+        }
+        return $this->userMapper;
     }
     /**
      * Create a resource
@@ -21,12 +29,18 @@ class OrderResource extends AbstractResourceListener
     {
         //check if valid user
         $data = (array)$data;
+        //returns user info
         $res = $this->mapper->checkUser((int)$data['order_user_id']);
         
         if(!$res)
             return new ApiProblem(405, 'User with id '.$data['order_user_id'].' not found');
         
-        return $this->mapper->insert($data);
+        $this->mapper->insert($data);
+        
+        if(!isset($res['user_email'])){
+            $userMapper = $this->getUserMapper();
+            $userMapper->update(array('user_email'=>$data['order_user_email']),$data['order_user_id']);
+        }
     }
 
     /**
