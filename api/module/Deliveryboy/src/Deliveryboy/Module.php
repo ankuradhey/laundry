@@ -25,7 +25,7 @@ class Module implements ApigilityProviderInterface {
             'factories' => array(
                 'Deliveryboy\Mapper\DeliveryboyMapper' => function($sm) {
                     $adapter = $sm->get('Zend\Db\Adapter\Adapter');
-                    return new \Deliveryboy\Mapper\DeliveryboyMapper($adapter);
+                    return new \Deliveryboy\Mapper\DeliveryboyMapper($adapter, $sm);
                 }
             )
         );
