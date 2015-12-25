@@ -119,7 +119,7 @@ class OrderMapper {
         if (!$data) {
             return false;
         }
-        return true;
+        return $data;
     }
     
     public function fetchServices(){
