@@ -404,6 +404,7 @@ if ($currentTime < $fixedSlotTime) {
     </div>
 
     <input type='hidden' name='step' value='schedule'>
+    <input type="hidden" id="mobile_number" name="mobile_number">
 </form>
 
 
@@ -575,7 +576,8 @@ $(document).ready(function(e) {
 						
 						$("[name='moblie-key']").val(responseData.key);
 						$('#mobileVerificationModal').modal('hide');
-						$('#otpVerificationModal').modal('show');												
+						$('#otpVerificationModal').modal('show');
+                                                $('#mobile_number').val(mobilenumber);
 						
 					}else{
 						alert(responseData.message);
