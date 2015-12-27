@@ -228,7 +228,7 @@ echo $this->partial('index/headerstrip.phtml', array('headlineText' => $this->he
             //current Selected item price
             totalPrice = totalPrice - singleItemPrice;
             $('#item-price-txt').empty().text(totalPrice);
-
+            $('#itemprice').val(totalPrice);
             //save in datastorage
             //                                var storageKey = 'itemlist_' + $('#itemListTable tbody').data('service') + '_' + $('#itemListTable tbody').data('category') + '_' + $('#itemListTable tbody').data('delivery');
             //                                window.sessionStorage.setItem(storageKey, $('#itemListTable tbody').html());
