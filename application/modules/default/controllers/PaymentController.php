@@ -69,8 +69,8 @@ class PaymentController extends Zend_Controller_Action {
             $service_provider = "";
             
             
-            $surl = BASE_URL . "index/orderlist";
-            $furl = BASE_URL . "payment/failure";
+            $surl = BASE_URL . "index/orderlist?SUCC=succ";
+            $furl = BASE_URL . "index/orderlist?SUCC=err";
 
 
 
