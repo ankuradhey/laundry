@@ -3,8 +3,9 @@
 class IndexController extends Zend_Controller_Action {
 
     protected $_auth;
-
+    protected $websiteMode;
     public function init() {
+        $this->websiteMode = 'DEBUG';
 //        $this->_auth = new My_Auth("user");
         $this->db = Zend_Registry::get('db');
 //        $this->_helper->layout()->setLayout('master');
@@ -244,7 +245,7 @@ class IndexController extends Zend_Controller_Action {
                         $cartSession->pickup_date = $post['pickupDate'];
                         $cartSession->delivery = $post['deliveryTimeSlot'];
                         $cartSession->delivery_date = $post['deliveryDate'];
-						$cartSession->mobile_number = $post['mobileNumber'];
+			$cartSession->mobile_number = $post['mobile_number'];
                         
                         $this->_redirect('index/verification');
                         break;
@@ -505,7 +506,6 @@ class IndexController extends Zend_Controller_Action {
     }
 
     public function verificationAction() {
-		
         $cartSession = new Zend_Session_Namespace('laundryCart');
         
         $serviceArr = $packages = array();
@@ -1227,16 +1227,16 @@ class IndexController extends Zend_Controller_Action {
 			$orderSession->$response['key'] = $otp;
 			$message = urlencode("Use ".$otp." to verify your number");
 			
-			$url = "http://login.smsgatewayhub.com/smsapi/pushsms.aspx?user=laundrywala&pwd=cleanlaundry&to=91" . $number . "&sid=LAWALA&msg=" . $message . "&fl=0&gwid=2";
-			$text = file_get_contents($url);
+                        if($this->websiteMode != 'DEBUG'){
+                            $url = "http://login.smsgatewayhub.com/smsapi/pushsms.aspx?user=laundrywala&pwd=cleanlaundry&to=91" . $number . "&sid=LAWALA&msg=" . $message . "&fl=0&gwid=2";
+                            $text = file_get_contents($url);
+                        }
 			//$response['otp'] = $otp;
 			$response['success'] = true;
 			$response['message'] = "OTP sent successfully";
 			
 		}else{
-			
 			$response['message'] = "Mobile number is not valid";	
-			
 		}
 		
         echo Zend_Json::Encode($response);
@@ -1257,7 +1257,7 @@ class IndexController extends Zend_Controller_Action {
 		$otp = $this->_getParam("otp_number");
 		$key = $this->_getParam("mobile_key");				
 		
-		if(isset($orderSession->$key) && $orderSession->$key == $otp){
+		if(isset($orderSession->$key) && $orderSession->$key == $otp || $this->websiteMode == 'DEBUG'){
 			
 			$response['success'] = true;	
 			$response['message'] = "verified";	
