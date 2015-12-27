@@ -1038,3 +1038,6 @@ form label{
   /*margin: 5px 1px 3px 0px;*/
   border: 1px solid #FF8A00;
 }
+.alert{
+    font-size:20px;
+}
