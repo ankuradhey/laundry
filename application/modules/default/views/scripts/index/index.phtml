@@ -474,7 +474,7 @@
                     $('#pincodetxt').popover('show');
                     allowOrder = false;
                 } else {
-                    window.sessionStorage.setItem('locationCity',$('#pincodetxt').val());
+                    window.localStorage.setItem('locationCity',$('#pincodetxt').val());
                     $('#pincodetxt').popover('hide');
                     allowOrder = true;
 
