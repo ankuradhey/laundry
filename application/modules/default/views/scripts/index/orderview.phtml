@@ -265,7 +265,7 @@ echo $this->partial('index/headerstrip.phtml', array('headlineText' => $this->he
         window.location.href=window.location.href.split('#_=_').join('')+'?ordertype=package&id='+packageId;
     }
     
-    if(window.sessionStorage.getItem('locationCity')){
-        $('#city').val((window.sessionStorage.getItem('locationCity')));
+    if(window.localStorage.getItem('locationCity')){
+        $('#city').val(window.localStorage.getItem('locationCity'));
     }
 </script>
