@@ -5,6 +5,27 @@ echo $this->partial('index/headerstrip.phtml', array('headlineText' => $this->he
 $orderItems = new Application_Model_OrderItemsMapper();
 ?>
 <div class="container" style="margin-top:60px;">
+    <?php if ($this->hasMessage): ?>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="alert alert-block alert-<?php echo $this->messageType ?> fade in text-center">
+                <button data-dismiss="alert" class="close close-sm" type="button">
+                    <i class="fa fa-times"></i>
+                </button>
+                <?php if ($this->messageType == "danger"): ?>
+                    <strong>Oh snap!</strong>
+                <?php elseif ($this->messageType == "success"): ?>
+                    <strong>Kudos!</strong>
+                <?php elseif ($this->messageType == "info"): ?>
+                    <strong>Heads up!</strong>
+                <?php elseif ($this->messageType == "warning"): ?>
+                    <strong>Warning!</strong>
+                <?php endif; ?>
+                <?php echo $this->message; ?>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>
     <div class="row-fluid">
         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
             <div class="panel panel-default panel-thead">
