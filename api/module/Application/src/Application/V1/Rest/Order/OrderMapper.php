@@ -73,7 +73,8 @@ class OrderMapper {
                 $serviceIds = explode(',',$resultVal['order_service_type']);
                 if(!empty($serviceIds) && count($serviceIds)){
                     $serviceIds = array_map(function($val) use ($services){
-                       return  $services[$val];
+                        if(isset($services[$val]))
+                            return  $services[$val];
                     }, $serviceIds);
 
                     $result[$resultKey]['order_service_type'] = implode(",",$serviceIds);
