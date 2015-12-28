@@ -39,7 +39,7 @@ class UserMapper {
             die('Error: ' . $e->getMessage());
         }
         if (empty($affectedRows)) {
-            die('Zero rows affected');
+//            die('Zero rows affected');
         }
 
         return $affectedRows;
