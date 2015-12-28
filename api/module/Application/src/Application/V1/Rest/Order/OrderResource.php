@@ -35,12 +35,12 @@ class OrderResource extends AbstractResourceListener
         if(!$res)
             return new ApiProblem(405, 'User with id '.$data['order_user_id'].' not found');
         
-        $this->mapper->insert($data);
-        
-        if(!isset($res['user_email'])){
+        $ret = $this->mapper->insert($data);
+        if(!isset($res[0]['user_email'])){
             $userMapper = $this->getUserMapper();
             $userMapper->update(array('user_email'=>$data['order_user_email']),$data['order_user_id']);
         }
+        return $ret;
     }
 
     /**
