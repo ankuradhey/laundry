@@ -103,14 +103,21 @@ class OrderMapper {
     public function fetchByOrder($orderId) {
         $sql = 'SELECT * FROM orders WHERE order_id = ?';
         $resultset = $this->adapter->query($sql, array($orderId));
+//        $select = new Select('orders');
+//        $select->where(" order_id = '$orderId' ");
+        
         $data = $resultset->toArray();
         if (!$data) {
             return false;
         }
+        
+//        $paginatorAdapter = new DbSelect($select, $this->adapter);
+//        $collection = new OrderCollection($paginatorAdapter);
+//        return $collection;
 
-        $entity = new OrderEntity();
-        $entity->exchangeArray($data[0]);
-        return $entity;
+//        $entity = new OrderEntity();
+//        $entity->exchangeArray($data[0]);
+        return $data[0];
     }
 
     public function checkUser($userId) {
