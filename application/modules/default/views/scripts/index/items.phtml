@@ -126,8 +126,8 @@ echo $this->partial('index/headerstrip.phtml', array('headlineText' => $this->he
                             if (count($this->items)):
                                 foreach ($this->items as $item) {
                                     $itemCount = 0;
-                                    if (isset($this->selectedItems[$item->__get('item_id')])) {
-                                        $itemCount = $this->selectedItems[$item->__get('item_id')];
+                                    if (isset($this->selectedItems[$item->__get('item_price_id')])) {
+                                        $itemCount = $this->selectedItems[$item->__get('item_price_id')];
                                     }
                                     ?>
                                     <tr>
