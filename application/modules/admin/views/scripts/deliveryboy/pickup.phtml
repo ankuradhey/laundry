@@ -1,0 +1,220 @@
+<div class="mws-panel grid_8">
+    <div class="mws-panel-header">
+        <span class="mws-i-24 i-table-1">Pickup Boys</span>
+    </div>
+    <div class="mws-panel-body">
+        <div class="mws-panel-toolbar top clearfix ">
+        </div>
+        <table class="mws-datatable-fn mws-table">
+            <thead>
+                <tr>
+                    <th>Delivery Boy</th>
+                    <?php
+                    foreach ($this->timeSlot as $time) {
+                        ?>
+                        <th><?php echo $time; ?></th>
+                        <?php
+                    }
+                    ?>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                if (count($this->deliveryBoys)) {
+                    $count = 0;
+                    foreach ($this->deliveryBoys as $delboyId => $boys):
+                        ?>
+                        <tr>
+                            <td class="center">
+                                <?php
+                                echo $boys['info']['name'];
+                                ?>
+                            </td>
+                            <?php
+                            foreach ($this->timeSlot as $time) {
+                                ?>
+                                <td><?php echo isset($boys[$time]) ? count($boys[$time]) : 0; ?></td>
+                                <?php
+                            }
+                            ?>
+                        </tr>
+                        <?php
+                        $count++;
+                    endforeach;
+                    ?>
+                    <?php
+                }
+                ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<div class="mws-panel grid_8">
+    <div class="mws-panel-header">
+        <span class="mws-i-24 i-table-1">Orders for pickup</span>
+    </div>
+    <div class="mws-panel-body">
+        <div class="mws-panel-toolbar top clearfix">
+            <ul>
+                <li>
+                    <a class="mws-ic-16 ic-accept" rel="prettyPhoto" href="#inlineorderdelmultiple" title="Accept">Allot</a>
+                </li>
+            </ul>
+        </div>
+        <table class="mws-datatable-fns mws-table">
+            <thead>
+                <tr>
+                    <th width="3%"><input type="checkbox" name="deletebcchk" id="deletebcchk" onclick="return checkall(this)" /></th>
+                    <th>Customer Address</th>
+                    <th>Pickup Time</th>
+                    <th>Status</th>
+                    <th>Allot</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if ($this->orders): ?>
+                    <?php foreach ($this->orders as $order): ?>
+                        <tr>
+                            <td>
+                                <input class="orderIds" type="checkbox" class="orderIds" value="<?php echo $order->__get("order_id"); ?>">
+                            </td>
+                            <td class="center">
+                                <?php echo $order->__get("order_address"); ?>
+                            </td>
+                            <td><?php echo $order->__get("order_pickup_time"); ?></td>
+                            <td><?php echo $order->__get("order_status")?:'--N.A--'; ?></td>
+                            <td>
+                                <a href="#inlineorderpick" rel="prettyPhoto" id="mws-form-dialog-mdl-btn">
+                                    <i class="icol-application-edit"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    <?php endforeach;
+                    ?>
+                <?php endif; ?>
+
+            </tbody>
+        </table>
+    </div>
+</div>
+<div id="inlineorderpick" style="display:none;">
+    <table class="mws-table">
+        <thead>
+            <tr>
+                <td>Select</td>
+                <td>Pickup Boy Names</td>
+                <td>Number of Orders</td>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            foreach ($this->deliveryBoys as $delboyId => $boys):
+                ?>
+                <tr>
+                    <td>
+                        <input  type="checkbox" value="<?php echo $boys['info']['id']; ?>" onclick="allotorder('<?php echo $order->__get("order_id"); ?>', this.value)">
+                    </td>
+                    <td class="center">
+                        <?php
+                        echo $boys['info']['name'];
+                        ?>
+                    </td>
+                    <td class="center">
+                        <?php
+                        echo $boys['info']['orderscount'];
+                        ?>
+                    </td>
+                </tr>
+                <?php
+                $count++;
+            endforeach;
+            ?>
+        </tbody>
+    </table>
+</div>
+<div id="inlineorderdelmultiple" style="display:none;">
+    <table class="mws-table">
+        <thead>
+            <tr>
+                <td>Select</td>
+                <td>Pickup Boy Names</td>
+                <td>Number of Orders</td>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            foreach ($this->deliveryBoys as $delboyId => $boys):
+                ?>
+                <tr>
+                    <td>
+                        <input type="checkbox" value="<?php echo $boys['info']['id']; ?>" onclick="allotMultipleOrder(this.value)">
+                    </td>
+                    <td class="center">
+                        <?php
+                        echo $boys['info']['name'];
+                        ?>
+                    </td>
+                    <td class="center">
+                        <?php
+                        echo $boys['info']['orderscount'];
+                        ?>
+                    </td>
+                </tr>
+                <?php
+                $count++;
+            endforeach;
+            ?>
+        </tbody>
+    </table>
+</div>
+<script type="text/javascript">
+                        function allotorder(orderId, delboyId) {
+                            $.ajax({
+                                url: '<?php echo $this->baseUrl("admin/deliveryboy/ajaxallotorder") ?>',
+                                dataType: 'json',
+                                data: {'allot_type': 'pickup', 'delboy_id': delboyId, 'orders': orderId, 'isSingle': true},
+                                success: function(data) {
+                                    if (data.success) {
+                                        window.location.href = '<?php echo $this->baseUrl("admin/deliveryboy/pickup") ?>';
+                                    } else {
+                                        alert(data.message);
+                                    }
+                                }
+                            })
+                        }
+
+                        function allotMultipleOrder(delboyId) {
+                            //check all multiple orders selected or not
+                            var len = $('.orderIds:checked').length;
+                            if (!len)
+                            {
+                                alert('Please choose one order');
+                                return;
+                            }
+                            var orders = $('.orderIds:checked'),
+                                    orderIds = [];
+
+                            $.each(orders, function(index, $elm) {
+                                orderIds.push($elm.value);
+
+                            });
+
+                            orderIds.join('|');
+
+                            $.ajax({
+                                url: '<?php echo $this->baseUrl("admin/deliveryboy/ajaxallotorder") ?>',
+                                dataType: 'json',
+                                data: {'allot_type': 'pickup', 'delboy_id': delboyId, 'orders': orderIds, 'isSingle': false},
+                                success: function(data) {
+                                    if (data.success) {
+                                        window.location.href = '<?php echo $this->baseUrl("admin/deliveryboy/pickup") ?>';
+                                    } else {
+                                        alert(data.message);
+                                    }
+                                }
+                            })
+
+                        }
+</script>
