@@ -27,6 +27,7 @@ class Application_Model_Orders {
     private $order_payment_status;
     private $order_status;
     private $order_delivery_boy;
+    private $order_pickup_boy;
     private $order_added_time;
     private $order_modified_time;
 	
@@ -64,6 +65,7 @@ class Application_Model_Orders {
             $this->order_payment_status = $order_row->order_payment_status;
             $this->order_status = $order_row->order_status;
             $this->order_delivery_boy = $order_row->order_delivery_boy;
+            $this->order_pickup_boy = $order_row->order_pickup_boy;
             $this->order_added_time = $order_row->order_added_time;
             $this->order_modified_time = $order_row->order_modified_time;
 			
