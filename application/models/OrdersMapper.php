@@ -2,11 +2,12 @@
 class Application_Model_OrdersMapper {
 
     protected $_db_table;
-
+    protected $timeSlot;
+    
     public function __construct(){
 		
         $this->_db_table = new Application_Model_DbTable_Orders();
-		
+        $this->timeSlot = array('9:00AM-11:00AM','11:00AM-1:00PM','1:00PM-3:00PM','3:00PM-5:00PM','5:00PM-7:00PM','7:00PM-9:00PM','9:00PM-11:00PM');
     }
 
     public function addNewOrder(Application_Model_Orders $order) {
@@ -220,23 +221,29 @@ class Application_Model_OrdersMapper {
             $query .= " `user_email` = '" . $user_email . "' AND ";
         }
 
-        if (!empty($del_type)) {
-            $query .= "`order_delivery_type` = " . $del_type . " AND ";
-        }
+//        if (!empty($del_type)) {
+//            $query .= "`order_delivery_type` = " . $del_type . " AND ";
+//        }
         if (!empty($service_id)) {
             $query .= "`service` = '" . $service_id . "' AND ";
         }
         if (!empty($del_date)) {
-            $query .= "`order_delivery` = '" . date("Y-m-d",strtotime($del_date)) . " 00:00:00' AND ";
+//            $query .= "`order_delivery` = '" . date("Y-m-d",strtotime($del_date)) . " 00:00:00' AND ";
         }
-        if (!empty($pickup_date)) {
-            $query .= "`order_pickup` = '" . date("Y-m-d",strtotime($pickup_date)) . " 00:00:00' AND ";
+        
+        if (!empty($del_type)) {
+            if($del_type == 'not_picked')
+                $query .= " (`order_status` is NULL or `order_status` = 'alloted' ) AND ";
+            elseif($del_type == 'not_delivered')
+                $query .= " (`order_status` is NULL or `order_status` = 'picked' ) AND ";
         }
+        
+//        $query .= " `order_delivery` = '" . date("Y-m-d",strtotime($del_date)) . " 00:00:00' AND ";
 
         $query = substr($query, 0, -4);
         $query .= " ORDER BY order_id DESC";
-        // echo $query;
-        //exit;
+//         echo $query;
+//        exit;
 
         $stmt = $this->_db_table->getAdapter()->query($query);
         $result = $stmt->fetchAll();
@@ -267,11 +274,18 @@ class Application_Model_OrdersMapper {
         }
     }
     
-    public function allotOrder(Application_Model_Orders $order) {
+    public function allotOrder(Application_Model_Orders $order, $orderType = 'pickup') {
         $data = array(
             'order_status' => $order->__get("order_status"),
-            'order_delivery_boy' => $order->__get("order_delivery_boy"),
+            
         );
+        
+        if($orderType == 'pickup'){
+            $data['order_pickup_boy'] =  $order->__get("order_pickup_boy");
+        }else{
+            $data['order_delivery_boy'] =  $order->__get("order_delivery_boy");
+        }
+        
         $where = "order_id = " . $order->__get("order_id");
         $result = $this->_db_table->update($data, $where);
         if (count($result) == 0) {
@@ -284,20 +298,64 @@ class Application_Model_OrdersMapper {
 	public function getOrders($params = array()) {
 						
         $result = $this->_db_table->getAdapter()
-									->select()
-									->from("orders")																		
-									->where("order_user_id = ?",$params['user_id'])
-									->where("order_coupon_id = ?",$params['coupon_id'])
-									->query()
-									->fetchAll();
+                ->select()
+                ->from("orders")																		
+                ->where("order_user_id = ?",$params['user_id'])
+                ->where("order_coupon_id = ?",$params['coupon_id'])
+                ->query()
+                ->fetchAll();
 				
 		if(isset($params['order_count']) && $params['order_count']){
 			
 			return count($result);
 			
 		}
-						                
     }
-	
+    
+    public function getOrderByDeliveryBoy($orderDelivery = null, $orderPickup = null, $type = 'delivery'){
+        $result = $this->_db_table->getAdapter()
+                ->select()
+                ->from("orders");
+        
+        
+                
+        
+        if($orderPickup){
+            //TO DO COmmented temporary
+//            $result->where(" order_status is NULL and order_pickup = '".$orderPickup." 00:00:00' ");
+            $result->join("delivery_boy"," delivery_boy.delboy_id = orders.order_pickup_boy ");
+//            $result->where(" order_status is NULL and order_pickup = '".$orderPickup." 00:00:00' ");
+            $result->order("order_pickup_time asc");
+        }
+        elseif($orderDelivery){
+            //TO DO COmmented temporary
+            $result->join("delivery_boy"," delivery_boy.delboy_id = orders.order_delivery_boy ");
+//            $result->where(" order_status = 'picked' and order_delivery = '".$orderDelivery." 00:00:00' ");
+//            $result->where(" order_status = 'picked' and order_delivery = '".$orderDelivery." 00:00:00' ");
+            $result->order("order_delivery_time asc");
+        }
+        
+        $result = $result->query()->fetchAll();
+        $resultArr = array();
+        $count = array();
+        foreach($result as $key=>$val){
+            if($orderPickup){
+                $resultArr[$val['delboy_id']][$val['order_pickup_time']][] = $val;
+                $resultArr[$val['delboy_id']]['info']['orderscount'] = count($resultArr[$val['delboy_id']][$val['order_pickup_time']]);
+            }elseif($orderDelivery){
+                $resultArr[$val['delboy_id']][$val['order_delivery_time']][] = $val;
+                $resultArr[$val['delboy_id']]['info']['orderscount'] = count($resultArr[$val['delboy_id']][$val['order_delivery_time']]);
+            }
+            $resultArr[$val['delboy_id']]['info']['name'] = $val['delboy_fname'].' '.$val['delboy_lname'];
+            $resultArr[$val['delboy_id']]['info']['id'] = $val['delboy_id'];
+            
+        }
+        return $resultArr;
+        
+    }
+    
+    public function getTimeSlot(){
+        return $this->timeSlot;
+    }
 	
 }
