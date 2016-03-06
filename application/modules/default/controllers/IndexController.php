@@ -613,6 +613,7 @@ class IndexController extends Zend_Controller_Action {
                 $ordersArr[$key]['order_amount'] = $item->__get('order_amount');
                 $ordersArr[$key]['service_tax'] = $item->__get('service_tax')?:0;
                 $ordersArr[$key]['order_type'] = $item->__get('order_type')?:'service';
+                $ordersArr[$key]['order_mobile_number'] = $item->__get('order_mobile_number')?:$namespace->user_number;
             }
             $this->view->orders = $ordersArr;
             $this->view->headlineText = 'My Orders';
@@ -682,7 +683,6 @@ class IndexController extends Zend_Controller_Action {
             $orders->__set('order_service_type', implode(',', $laundryCart->service));
             $orders->__set('order_type', 'service');
             $orders->__set('order_mobile_number', $post['order_mobile_number']);
-            
             //TO DO - delivery boy allotted
             $orders->__set('order_pickup_boy', '1');
             $orders->__set('order_delivery_boy', '1');
