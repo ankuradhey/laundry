@@ -316,7 +316,7 @@ return array(
             'collection_query_whitelist' => array(
                 0 => 'user_id',
             ),
-            'page_size' => 25,
+            'page_size' => '100',
             'page_size_param' => null,
             'entity_class' => 'Application\\V1\\Rest\\Order\\OrderEntity',
             'collection_class' => 'Application\\V1\\Rest\\Order\\OrderCollection',
