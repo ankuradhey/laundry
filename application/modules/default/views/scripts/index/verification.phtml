@@ -20,100 +20,96 @@ echo $this->partial('index/headerstrip.phtml', array('headlineText' => $this->he
             </div>
         </div>
     </div>
-    
+
     <div class="container main-container ordersummary-cover" style="margin-bottom:100px;">
         <div class="row">
             <div class="col-sm-4 -os-left">
-            	<div class="odelivery-data-block">
-	 	            <div class="-title"><h3>Time</h3></div>
+                <div class="odelivery-data-block">
+                    <div class="-title"><h3>Time</h3></div>
                     <div class="row">
-                    	<div class="col-sm-6">
-                        	<p class="green-title">Collection</p> 
-							<p><?php echo $this->pickupDate?></p>
-                            <p><?php echo $this->pickup;?></p>
+                        <div class="col-sm-6">
+                            <p class="green-title">Collection</p> 
+                            <p><?php echo $this->pickupDate ?></p>
+                            <p><?php echo $this->pickup; ?></p>
                         </div>
                         <div class="col-sm-6">
-                        	<p class="green-title">Delivery</p> 
-							<p><?php echo $this->deliveryDate?></p>
-                            <p><?php echo $this->delivery?></p>
+                            <p class="green-title">Delivery</p> 
+                            <p><?php echo $this->deliveryDate ?></p>
+                            <p><?php echo $this->delivery ?></p>
                         </div>
                     </div>                    
                 </div>
-                
+
                 <div class="odelivery-data-block">
-	 	            <div class="-title"><h3>Address</h3></div>
-                    <address class="address_line"><?php echo $this->address?></address>
+                    <div class="-title"><h3>Address</h3></div>
+                    <address class="address_line"><?php echo $this->address ?></address>
                 </div>
-                
+
                 <div class="odelivery-data-block">
-	 	            <div class="-title"><h3>Contact</h3></div>
+                    <div class="-title"><h3>Contact</h3></div>
                     <p>Name: <?php echo $this->user_fname . " " . $this->user_lname; ?></p>
                     <p>Phone: <?php echo $this->mobileNumber; ?> </p>
                     <input name="order_mobile_number" type="hidden" value="<?php echo $this->mobileNumber; ?>" />
-                    
+
                 </div>
-                
-                
-                
+
+
+
             </div>
             <div class="col-sm-8 -os-right">
-            	<div class="row">
+                <div class="row">
                     <div class="col-sm-12 text-center">
-                    	<div class="-title order-summary-title row"><h3>Order Summary</h3></div>
+                        <div class="-title order-summary-title row"><h3>Order Summary</h3></div>
                     </div>
                 </div>
-            	<div class="row">
+                <div class="row">
                     <div class="col-sm-7 -os-right-left">
-                    	<div class="order-items-summary">
+                        <div class="order-items-summary">
                             <div class="row -ois-title">
                                 <div class="col-sm-4"><span>ITEMS</span></div>
                                 <div class="col-sm-4"><span>QTY</span></div>
                                 <div class="col-sm-4"><span>PRICE</span></div>
                             </div>
-                            
+
                             <?php
-                        $totalPrice = 0;
-                        if($this->orderType == 'service'){
-                        if (isset($this->serviceItems['service'])){
-							
-                            foreach ($this->serviceItems['service'] as $serviceKey => $service) {
-							    $price = $quantity = 0;
-                                foreach ($service['category'] as $category){
-                                    foreach ($category['items'] as $items){
-                                        $quantity += $items['quantity'];
-                                        $price += $items['unitprice'] * $items['quantity'];
-										
+                            $totalPrice = 0;
+                            if ($this->orderType == 'service') {
+                                if (isset($this->serviceItems['service'])) {
+
+                                    foreach ($this->serviceItems['service'] as $serviceKey => $service) {
+                                        $price = $quantity = 0;
+                                        foreach ($service['category'] as $category) {
+                                            foreach ($category['items'] as $items) {
+                                                $quantity += $items['quantity'];
+                                                $price += $items['unitprice'] * $items['quantity'];
+                                            }
+                                        }
+                                        $totalPrice+=$price;
+                                        ?>
+                                        <div class="row">
+                                            <div class="col-sm-4"><span><?php echo $service['name'] ?></span></div>
+                                            <div class="col-sm-4"><span><?php echo $quantity; ?></span></div>
+                                            <div class="col-sm-4"><span>Rs.<?php echo $price; ?></span></div>
+                                        </div>
+
+                                        <?php
+                                    }
+                                } else {
+                                    foreach ($this->services as $service) {
+                                        ?>
+                                        <div class="row">
+                                            <div class="col-sm-4"><span><?php echo $service['name'] ?></span></div>
+                                            <div class="col-sm-4"><span>0</span></div>
+                                            <div class="col-sm-4"><span>Rs.0</span></div>
+                                        </div>
+                                        <input type="hidden" name="order_amount" value="0">
+                                        <input type="hidden" name="delivery_charge" value="0">
+                                        <input type="hidden" name="service_tax" value="0">
+                                        <?php
                                     }
                                 }
-								$totalPrice+=$price;
+                            } else {
                                 ?>
-                                <div class="row">
-                                    <div class="col-sm-4"><span><?php echo $service['name'] ?></span></div>
-                                    <div class="col-sm-4"><span><?php echo $quantity; ?></span></div>
-                                    <div class="col-sm-4"><span>Rs.<?php echo $price;?></span></div>
-                                </div>
-                                                                                                                                
-                                <?php
-																								
-                            }
-                        }
-						else {
-                            foreach ($this->services as $service){
-                                ?>
-                                <div class="row">
-                                    <div class="col-sm-4"><span><?php echo $service['name'] ?></span></div>
-                                    <div class="col-sm-4"><span>0</span></div>
-                                    <div class="col-sm-4"><span>Rs.0</span></div>
-                                </div>
-                                <input type="hidden" name="order_amount" value="0">
-                                <input type="hidden" name="delivery_charge" value="0">
-                                <input type="hidden" name="service_tax" value="0">
-                                <?php
-                            }
-                        }
-						
-                        }else{
-                        ?>
                                 <li>
                                     <div class="img-circle pull-left package-without-items" style="">
                                         <img class="img-circle" src="<?php echo $this->baseUrl(); ?>/public/img/packages/<?php echo $this->packages['image']; ?>" width="30" height="30" style="width:30px;"> 
@@ -130,7 +126,7 @@ echo $this->partial('index/headerstrip.phtml', array('headlineText' => $this->he
                                     <span class="name pull-left">Delivery Charge</span> 
                                     <span class="price pull-right">
                                         <?php
-                                        if ($totalPrice < 200) {
+                                        if ($totalPrice < 200 && $totalPrice != 0) {
                                             $totalPrice += 50;
                                             $deliveryCharge = 50;
                                             echo 50;
@@ -145,8 +141,12 @@ echo $this->partial('index/headerstrip.phtml', array('headlineText' => $this->he
                                     <span class="name pull-left">Service Tax(14%)</span> 
                                     <span class="price pull-right">
                                         <?php
-                                        echo $serviceTax = $totalPrice * 14 / 100;
-                                        $totalPrice += $totalPrice * 14 / 100;
+                                        if($totalPrice != 0){
+                                            echo $serviceTax = $totalPrice * 14 / 100;
+                                            $totalPrice += $totalPrice * 14 / 100;
+                                        }else{
+                                            $serviceTax = 0;
+                                        }
                                         ?>
                                     </span>
                                 </li>
@@ -159,53 +159,64 @@ echo $this->partial('index/headerstrip.phtml', array('headlineText' => $this->he
                                     <input type="hidden" name="order_amount" value="<?php echo $totalPrice; ?>">
                                 </li>
                                 <?php
-                        }
-                                ?>                                                        
-                            
+                            }
+                            ?>                                                        
+
                         </div>
                     </div>
                     <div class="col-sm-5 -os-right-right">
-                    	<div class="order-receipt-pre-block">
-                        	<div class="row">
-                            	<div class="col-sm-12">
-                                	<div class="form-group couponcode">
-                                      
-                                      <input type="text" name="couponcode" id="couponcode-text" class="form-control" placeholder="Enter " />
-                                      
+                        <div class="order-receipt-pre-block">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group couponcode">
+
+                                        <input type="text" name="couponcode" id="couponcode-text" class="form-control" placeholder="Enter " />
+
                                     </div>
-                                    
-                                	<span class="apply-coupon-btn">APPLY COUPONS</span>
-                                    
-                                    
+
+                                    <span class="apply-coupon-btn">APPLY COUPONS</span>
+
+
                                 </div>
                             </div>
                             <div class="row">
-                            	<div class="col-sm-12"><hr /></div>
+                                <div class="col-sm-12"><hr /></div>
                             </div>
-                            
+                            <div class="row text-center">
+                                <div class="btn-group" data-toggle="buttons">
+                                    <label class="btn btn-primary <?php echo $totalPrice != 0?'active':''; ?>">
+                                        <input type="radio" name="onlinepayment" id="option1" autocomplete="off" <?php echo $totalPrice != 0?'checked':''; ?> value="true"> Online Payment
+                                    </label>
+                                    <label class="btn btn-primary <?php echo $totalPrice != 0?'':'active'; ?>">
+                                        <input type="radio" name="onlinepayment" id="option2" <?php echo $totalPrice != 0?'':'checked'; ?> autocomplete="off" value="false"> Cash on delivery
+                                    </label>
+                                </div>
+                            </div>
+
                             <?php
-							
-							$netPrice = $totalPrice;
-							
-							if ($totalPrice < 200){
-								
-								$totalPrice += 50;
-								$deliveryCharge = 50;
-								
-							} else {
-								
-								$deliveryCharge = 'Free';
-							}
-							
-							$serviceTax = $totalPrice * 14 / 100;
-							$totalPrice += $totalPrice * 14 / 100;
-							
-							?>
+                            $netPrice = $totalPrice;
+
+                            if ($totalPrice < 200 && $totalPrice != 0) {
+
+                                $totalPrice += 50;
+                                $deliveryCharge = 50;
+                            } else {
+
+                                $deliveryCharge = 'Free';
+                            }
                             
+                            if($totalPrice != 0){
+                                $serviceTax = $totalPrice * 14 / 100;
+                                $totalPrice += $totalPrice * 14 / 100;
+                            }else{
+                                $serviceTax = 0;
+                            }
+                            ?>
+
                             <div class="col-sm-12">
                                 <div class="row">
                                     <div class="col-sm-4"><h3>TOTAL</h3></div>
-                                    <div class="col-sm-8 text-right"><h3 class="total-price-txt"><?php echo setPriceFormat($totalPrice)?></h3></div>
+                                    <div class="col-sm-8 text-right"><h3 class="total-price-txt"><?php echo setPriceFormat($totalPrice) ?></h3></div>
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-12">
@@ -214,241 +225,239 @@ echo $this->partial('index/headerstrip.phtml', array('headlineText' => $this->he
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-12">
-                                    	<h4>ORDER SUMMARY</h4>
-                                                                                
+                                        <h4>ORDER SUMMARY</h4>
                                         <table width="100%" id="order-price-des-tab">
-                                          <tbody>
-                                              <tr>
-                                                <td>Price</td>
-                                                <td><?php echo setPriceFormat($netPrice)?></td>
-                                              </tr>
-                                              <tr>
-                                                <td>Handling Charges</td>
-                                                <td><?php echo $deliveryCharge?></td>
-                                              </tr>
-                                              <tr>
-                                                <td>Taxes</td>
-                                                <td><?php echo setPriceFormat($serviceTax)?></td>
-                                              </tr>                                                                                        
-										  </tbody>
-                                          <tfoot>
-                                          	<tr>
-                                            	<td>Total</td>
-                                                <td class="total-price-txt"><?php echo setPriceFormat($totalPrice)?></td>
-                                            </tr>
-                                          </tfoot>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Price</td>
+                                                    <td><?php echo setPriceFormat($netPrice) ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Handling Charges</td>
+                                                    <td><?php echo $deliveryCharge ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Taxes</td>
+                                                    <td><?php echo setPriceFormat($serviceTax) ?></td>
+                                                </tr>                                                                                        
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td>Total</td>
+                                                    <td class="total-price-txt"><?php echo setPriceFormat($totalPrice) ?></td>
+                                                </tr>
+                                            </tfoot>
                                         </table>
-                                        
+
                                         <input type="hidden" name="delivery_charge" value="<?php echo $deliveryCharge; ?>">
                                         <input type="hidden" name="service_tax" value="<?php echo $serviceTax; ?>">
                                         <input type="hidden" name="order_amount" value="<?php echo $totalPrice; ?>">
-
+                                        
                                     </div>
-                                    
-                            	</div>
-                            
+
+                                </div>
+
                             </div>
-                            
-                            
+
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-        
+
     <!--Old code {-->
-    <?php /*?><div class="container main-container" style="margin-bottom:100px;">
-        <div class="row">
-            <div class="col-md-6">
-                <?php
-                    if($this->orderType == 'service'){
-                ?>
-                <div class="col-md-12">
-                    <h3 class="form_head">Times</h3>
-                    <p data-datetime="2015-10-30 16:00:00" class="collection_summary">
-                        <span class="collection_color">Collection</span> <?php echo $this->pickupDate . ' ' . $this->pickup; ?>
-                    </p>
-                    <p data-datetime="2015-11-01 21:00:00" class="delivery_summary">
-                        <span class="delivery_color">Delivery</span> <?php echo $this->deliveryDate . ' ' . $this->delivery; ?>
-                    </p>
-                </div>
-                <?php
-                    }
-                ?>
-                <div class="col-md-12">
-                    <h3 class="form_head">Contact </h3>
-                    <div class="row">
-                        <div class="col-md-8 span_blocks">
-                            <p class="">
-                                <span>Name</span> <br class="clear">
-                                <?php echo $this->user_fname . " " . $this->user_lname; ?>
-                            </p>
-    <!--                        <p class="">
-                                <span>E-mail</span> <br class="clear">
-                                anku_radhey@rediff.com
-                            </p>-->
-                        </div>
-                        <div class="col-md-4 span_blocks">
-                            <p>
-                                <span>Phone</span> <br class="clear">
-                                --
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="col-md-12">
-                    <h3 class="form_head">Address</h3>
-                    <address class="address_line">
-                        <?php echo $this->address; ?>
-                    </address>
-                </div>
-                <div class="col-md-12">
-                    <h3 class="form_head">Order Summary</h3>
-                    <ul class="cart-summary">
-                        <?php
-                        $totalPrice = 0;
-                        if($this->orderType == 'service'){
-                        if (isset($this->serviceItems['service'])) {
-                            foreach ($this->serviceItems['service'] as $serviceKey => $service) {
-                                $price = $quantity = 0;
-                                foreach ($service['category'] as $category) {
-                                    foreach ($category['items'] as $items) {
-                                        $quantity += $items['quantity'];
-                                        $totalPrice = $price += $items['unitprice'] * $items['quantity'];
-                                    }
-                                }
-                                ?>
-                                <li>
-                                    <div class="img-circle pull-left service-without-items" style="">
-                                        <img class="img-circle" src="<?php echo $this->baseUrl(); ?>/public/img/services/<?php echo $this->services[$serviceKey]['image']; ?>" width="50" height="50"> 
-                                    </div>
-                                    <span class="name pull-left"><?php echo $service['name'] ?></span>
-                                    <!--<span data-id="49" class="remove webicon pull-right cart_remove cp">Z</span>-->
-                                    <span class="price pull-right">
-                                        Rs. 
-                                        <?php
-                                        echo $price;
-                                        ?>
-                                    </span>
-                                    <span class="badge qty pull-right"><?php echo $quantity; ?></span>
-                                </li>
-                                <li>
-                                    <span class="name pull-left">Delivery Charge</span> 
-                                    <span class="price pull-right">
-                                        <?php
-                                        if ($totalPrice < 200) {
-                                            $totalPrice += 50;
-                                            $deliveryCharge = 50;
-                                            echo 50;
-                                        } else {
-                                            echo 0;
-                                            $deliveryCharge = 0;
-                                        }
-                                        ?>
-                                    </span>
-                                </li>
-                                <li>
-                                    <span class="name pull-left">Service Tax(14%)</span> 
-                                    <span class="price pull-right">
-                                        <?php
-                                        echo $serviceTax = $totalPrice * 14 / 100;
-                                        $totalPrice += $totalPrice * 14 / 100;
-                                        ?>
-                                    </span>
-                                </li>
-                                <li>
-                                    <span class="name pull-left">Total Price</span> 
-                                    <span class="price pull-right"><?php echo $totalPrice; ?></span>
+    <?php /* ?><div class="container main-container" style="margin-bottom:100px;">
+      <div class="row">
+      <div class="col-md-6">
+      <?php
+      if($this->orderType == 'service'){
+      ?>
+      <div class="col-md-12">
+      <h3 class="form_head">Times</h3>
+      <p data-datetime="2015-10-30 16:00:00" class="collection_summary">
+      <span class="collection_color">Collection</span> <?php echo $this->pickupDate . ' ' . $this->pickup; ?>
+      </p>
+      <p data-datetime="2015-11-01 21:00:00" class="delivery_summary">
+      <span class="delivery_color">Delivery</span> <?php echo $this->deliveryDate . ' ' . $this->delivery; ?>
+      </p>
+      </div>
+      <?php
+      }
+      ?>
+      <div class="col-md-12">
+      <h3 class="form_head">Contact </h3>
+      <div class="row">
+      <div class="col-md-8 span_blocks">
+      <p class="">
+      <span>Name</span> <br class="clear">
+      <?php echo $this->user_fname . " " . $this->user_lname; ?>
+      </p>
+      <!--                        <p class="">
+      <span>E-mail</span> <br class="clear">
+      anku_radhey@rediff.com
+      </p>-->
+      </div>
+      <div class="col-md-4 span_blocks">
+      <p>
+      <span>Phone</span> <br class="clear">
+      --
+      </p>
+      </div>
+      </div>
+      </div>
+      </div>
+      <div class="col-md-6">
+      <div class="col-md-12">
+      <h3 class="form_head">Address</h3>
+      <address class="address_line">
+      <?php echo $this->address; ?>
+      </address>
+      </div>
+      <div class="col-md-12">
+      <h3 class="form_head">Order Summary</h3>
+      <ul class="cart-summary">
+      <?php
+      $totalPrice = 0;
+      if($this->orderType == 'service'){
+      if (isset($this->serviceItems['service'])) {
+      foreach ($this->serviceItems['service'] as $serviceKey => $service) {
+      $price = $quantity = 0;
+      foreach ($service['category'] as $category) {
+      foreach ($category['items'] as $items) {
+      $quantity += $items['quantity'];
+      $totalPrice = $price += $items['unitprice'] * $items['quantity'];
+      }
+      }
+      ?>
+      <li>
+      <div class="img-circle pull-left service-without-items" style="">
+      <img class="img-circle" src="<?php echo $this->baseUrl(); ?>/public/img/services/<?php echo $this->services[$serviceKey]['image']; ?>" width="50" height="50">
+      </div>
+      <span class="name pull-left"><?php echo $service['name'] ?></span>
+      <!--<span data-id="49" class="remove webicon pull-right cart_remove cp">Z</span>-->
+      <span class="price pull-right">
+      Rs.
+      <?php
+      echo $price;
+      ?>
+      </span>
+      <span class="badge qty pull-right"><?php echo $quantity; ?></span>
+      </li>
+      <li>
+      <span class="name pull-left">Delivery Charge</span>
+      <span class="price pull-right">
+      <?php
+      if ($totalPrice < 200) {
+      $totalPrice += 50;
+      $deliveryCharge = 50;
+      echo 50;
+      } else {
+      echo 0;
+      $deliveryCharge = 0;
+      }
+      ?>
+      </span>
+      </li>
+      <li>
+      <span class="name pull-left">Service Tax(14%)</span>
+      <span class="price pull-right">
+      <?php
+      echo $serviceTax = $totalPrice * 14 / 100;
+      $totalPrice += $totalPrice * 14 / 100;
+      ?>
+      </span>
+      </li>
+      <li>
+      <span class="name pull-left">Total Price</span>
+      <span class="price pull-right"><?php echo $totalPrice; ?></span>
 
-                                    <input type="hidden" name="delivery_charge" value="<?php echo $deliveryCharge; ?>">
-                                    <input type="hidden" name="service_tax" value="<?php echo $serviceTax; ?>">
-                                    <input type="hidden" name="order_amount" value="<?php echo $totalPrice; ?>">
-                                </li>
-                                <?php
-                            }
-                        } else {
-                            foreach ($this->services as $service) {
-                                ?>
-                                <li>
-                                    <div class="img-circle pull-left service-without-items" style="">
-                                        <img class="img-circle responsive" src="<?php echo $this->baseUrl(); ?>/public/img/services/<?php echo $service['image']; ?>" width="50" height="50">
-                                    </div>
-                                    <span class="name pull-left"><?php echo $service['name'] ?></span>
-                                </li>
-                                <input type="hidden" name="order_amount" value="0">
-                                <input type="hidden" name="delivery_charge" value="0">
-                                <input type="hidden" name="service_tax" value="0">
-                                <?php
-                            }
-                        }
-                        }else{
-                        ?>
-                                <li>
-                                    <div class="img-circle pull-left package-without-items" style="">
-                                        <img class="img-circle" src="<?php echo $this->baseUrl(); ?>/public/img/packages/<?php echo $this->packages['image']; ?>" width="30" height="30" style="width:30px;"> 
-                                    </div>
-                                    <span class="name pull-left"><?php echo $this->packages['name'] ?></span>
-                                    <span class="price pull-right">
-                                        Rs.<?php
-                                        echo $totalPrice = $this->packages['price'];
-                                        ?>
-                                    </span>
-                                    <span class="badge qty pull-right">1</span>
-                                </li>
-                                <li>
-                                    <span class="name pull-left">Delivery Charge</span> 
-                                    <span class="price pull-right">
-                                        <?php
-                                        if ($totalPrice < 200) {
-                                            $totalPrice += 50;
-                                            $deliveryCharge = 50;
-                                            echo 50;
-                                        } else {
-                                            echo 0;
-                                            $deliveryCharge = 0;
-                                        }
-                                        ?>
-                                    </span>
-                                </li>
-                                <li>
-                                    <span class="name pull-left">Service Tax(14%)</span> 
-                                    <span class="price pull-right">
-                                        <?php
-                                        echo $serviceTax = $totalPrice * 14 / 100;
-                                        $totalPrice += $totalPrice * 14 / 100;
-                                        ?>
-                                    </span>
-                                </li>
-                                <li>
-                                    <span class="name pull-left">Total Price</span> 
-                                    <span class="price pull-right"><?php echo $totalPrice; ?></span>
+      <input type="hidden" name="delivery_charge" value="<?php echo $deliveryCharge; ?>">
+      <input type="hidden" name="service_tax" value="<?php echo $serviceTax; ?>">
+      <input type="hidden" name="order_amount" value="<?php echo $totalPrice; ?>">
+      </li>
+      <?php
+      }
+      } else {
+      foreach ($this->services as $service) {
+      ?>
+      <li>
+      <div class="img-circle pull-left service-without-items" style="">
+      <img class="img-circle responsive" src="<?php echo $this->baseUrl(); ?>/public/img/services/<?php echo $service['image']; ?>" width="50" height="50">
+      </div>
+      <span class="name pull-left"><?php echo $service['name'] ?></span>
+      </li>
+      <input type="hidden" name="order_amount" value="0">
+      <input type="hidden" name="delivery_charge" value="0">
+      <input type="hidden" name="service_tax" value="0">
+      <?php
+      }
+      }
+      }else{
+      ?>
+      <li>
+      <div class="img-circle pull-left package-without-items" style="">
+      <img class="img-circle" src="<?php echo $this->baseUrl(); ?>/public/img/packages/<?php echo $this->packages['image']; ?>" width="30" height="30" style="width:30px;">
+      </div>
+      <span class="name pull-left"><?php echo $this->packages['name'] ?></span>
+      <span class="price pull-right">
+      Rs.<?php
+      echo $totalPrice = $this->packages['price'];
+      ?>
+      </span>
+      <span class="badge qty pull-right">1</span>
+      </li>
+      <li>
+      <span class="name pull-left">Delivery Charge</span>
+      <span class="price pull-right">
+      <?php
+      if ($totalPrice < 200) {
+      $totalPrice += 50;
+      $deliveryCharge = 50;
+      echo 50;
+      } else {
+      echo 0;
+      $deliveryCharge = 0;
+      }
+      ?>
+      </span>
+      </li>
+      <li>
+      <span class="name pull-left">Service Tax(14%)</span>
+      <span class="price pull-right">
+      <?php
+      echo $serviceTax = $totalPrice * 14 / 100;
+      $totalPrice += $totalPrice * 14 / 100;
+      ?>
+      </span>
+      </li>
+      <li>
+      <span class="name pull-left">Total Price</span>
+      <span class="price pull-right"><?php echo $totalPrice; ?></span>
 
-                                    <input type="hidden" name="delivery_charge" value="<?php echo $deliveryCharge; ?>">
-                                    <input type="hidden" name="service_tax" value="<?php echo $serviceTax; ?>">
-                                    <input type="hidden" name="order_amount" value="<?php echo $totalPrice; ?>">
-                                </li>
-                                <?php
-                        }
-                                ?>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div><?php */?>
+      <input type="hidden" name="delivery_charge" value="<?php echo $deliveryCharge; ?>">
+      <input type="hidden" name="service_tax" value="<?php echo $serviceTax; ?>">
+      <input type="hidden" name="order_amount" value="<?php echo $totalPrice; ?>">
+      </li>
+      <?php
+      }
+      ?>
+      </ul>
+      </div>
+      </div>
+      </div>
+      </div><?php */ ?>
     <!-- }Old code -->
-    
+
 </form>
-<?php 
-if($this->orderType == 'package')
+<?php
+if ($this->orderType == 'package')
     $step = 3;
 else
     $step = 4;
 
-echo $this->getHelper('CartSteps')->getSteps($step,$this->orderType); 
-
+echo $this->getHelper('CartSteps')->getSteps($step, $this->orderType);
 ?>
 
 <div id="myModal" class="modal fade" role="dialog">
@@ -501,89 +510,88 @@ echo $this->getHelper('CartSteps')->getSteps($step,$this->orderType);
 </div>
 
 <script type="text/javascript">
-$(document).ready(function(e) {
-	
-	var totalPrice = <?php echo $totalPrice?>;
-	
-    $(".apply-coupon-btn").click(function(){
-		
-		var isVisible = $(".couponcode").is(":visible");
-		
-		if(isVisible){
-												
-			var couponcode = $("[name='couponcode']").val();
-				
-			$.ajax({
-		
-						url: baseUrl+"/index/applycoupon",
-						type:"get",
-						dataType:'json',
-						async:true,
-						data : {coupon_code:couponcode},
-						beforeSend: function(){
-																	
-							 if(couponcode==""){
-								 
-								 alert('Please enter coupon code');
-								 $("#couponcode-text").focus();
-								 return false;
-														 
-							 }					 					 
-												
-						},
-						success: function(responseData) {
-							
-							if(responseData.success){
-								
-								if(totalPrice<responseData.coupondata.minbill){
-									
-									alert(responseData.minbill+" is required to apply this coupon");
-									
-								}else{
-									
-									var discountAmount = responseData.coupondata.amount;
-									if(responseData.coupondata.type=="percentage"){
-										discountAmount = totalPrice * (responseData.coupondata.amount/100);
-									}
-									
-									if(discountAmount>responseData.coupondata.maxdis && responseData.coupondata.maxdis>0){
-										discountAmount = responseData.coupondata.maxdis;
-									}
-									
-									if($("#coupon-dis-tr").length){
-										$("#coupon-dis-tr").remove();
-									}
-									
-									$("<tr id='coupon-dis-tr'><td>Coupon Discount</td><td><i class='fa fa-inr'></i> -"+discountAmount.toFixed(2)+"</td></tr>").insertAfter($("#order-price-des-tab").find("tr").eq(1));
-									
-									$(".total-price-txt").html('<i class="fa fa-inr"></i> '+ ((totalPrice - discountAmount).toFixed(2)));
-									
-								}
-								
-							}else{
-								
-								alert(responseData.message);
-								if($("#coupon-dis-tr").length){
-									$("#coupon-dis-tr").remove();
-								}																
-								
-								$(".total-price-txt").html('<i class="fa fa-inr"></i> '+ (totalPrice.toFixed(2)));
-							}
-							
-						},
-						error : function(responseData) {
-							console.log(responseData);
-						}
-				
-					});
-							
-			
-			
-		}else{
-			$(".couponcode").removeClass("hide");
-			$(".couponcode").find("input").focus();
-		}
-		
-	})
-});
+                                            $(document).ready(function(e) {
+
+                                                var totalPrice = <?php echo $totalPrice ?>;
+
+                                                $(".apply-coupon-btn").click(function() {
+
+                                                    var isVisible = $(".couponcode").is(":visible");
+
+                                                    if (isVisible) {
+
+                                                        var couponcode = $("[name='couponcode']").val();
+
+                                                        $.ajax({
+                                                            url: baseUrl + "/index/applycoupon",
+                                                            type: "get",
+                                                            dataType: 'json',
+                                                            async: true,
+                                                            data: {coupon_code: couponcode},
+                                                            beforeSend: function() {
+
+                                                                if (couponcode == "") {
+
+                                                                    alert('Please enter coupon code');
+                                                                    $("#couponcode-text").focus();
+                                                                    return false;
+
+                                                                }
+
+                                                            },
+                                                            success: function(responseData) {
+
+                                                                if (responseData.success) {
+
+                                                                    if (totalPrice < responseData.coupondata.minbill) {
+
+                                                                        alert(responseData.minbill + " is required to apply this coupon");
+
+                                                                    } else {
+
+                                                                        var discountAmount = responseData.coupondata.amount;
+                                                                        if (responseData.coupondata.type == "percentage") {
+                                                                            discountAmount = totalPrice * (responseData.coupondata.amount / 100);
+                                                                        }
+
+                                                                        if (discountAmount > responseData.coupondata.maxdis && responseData.coupondata.maxdis > 0) {
+                                                                            discountAmount = responseData.coupondata.maxdis;
+                                                                        }
+
+                                                                        if ($("#coupon-dis-tr").length) {
+                                                                            $("#coupon-dis-tr").remove();
+                                                                        }
+
+                                                                        $("<tr id='coupon-dis-tr'><td>Coupon Discount</td><td><i class='fa fa-inr'></i> -" + discountAmount.toFixed(2) + "</td></tr>").insertAfter($("#order-price-des-tab").find("tr").eq(1));
+
+                                                                        $(".total-price-txt").html('<i class="fa fa-inr"></i> ' + ((totalPrice - discountAmount).toFixed(2)));
+
+                                                                    }
+
+                                                                } else {
+
+                                                                    alert(responseData.message);
+                                                                    if ($("#coupon-dis-tr").length) {
+                                                                        $("#coupon-dis-tr").remove();
+                                                                    }
+
+                                                                    $(".total-price-txt").html('<i class="fa fa-inr"></i> ' + (totalPrice.toFixed(2)));
+                                                                }
+
+                                                            },
+                                                            error: function(responseData) {
+                                                                console.log(responseData);
+                                                            }
+
+                                                        });
+
+
+
+                                                    } else {
+                                                        $(".couponcode").removeClass("hide");
+                                                        $(".couponcode").find("input").focus();
+                                                    }
+
+                                                })
+                                            });
 </script>
