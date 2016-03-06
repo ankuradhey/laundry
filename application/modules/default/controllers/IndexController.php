@@ -23,11 +23,11 @@ class IndexController extends Zend_Controller_Action {
 		
         $model = new Users_Model_User();
 
-//        $namespace = new Zend_Session_Namespace('userInfo');
-//        $namespace->user_id = 17;
-//        $namespace->user_fname = 'Ankit';
-//        $namespace->user_lname = 'Sharma';
-//        $namespace->user_img = $img;
+    //        $namespace = new Zend_Session_Namespace('userInfo');
+    //        $namespace->user_id = 17;
+    //        $namespace->user_fname = 'Ankit';
+    //        $namespace->user_lname = 'Sharma';
+    //        $namespace->user_img = $img;
 
         if (!isset($_SESSION))
             {
@@ -491,6 +491,14 @@ class IndexController extends Zend_Controller_Action {
         $this->view->noFooter = 'true';
         $this->view->orderType = $laundryCart->orderType;
         $this->view->city = $laundryCart->city;
+        
+        if($deliveryParam = $this->getRequest()->getParam('del')){
+            if(isset($deliveryParam) && ($deliveryParam == 'Express' || $deliveryParam == 'Regular')){
+                $laundryCart->delivery_type = $deliveryParam;
+            }
+            elseif(!isset($cartSession->delivery_type))
+                $laundryCart->delivery_type = 'Regular';
+        }
     }
 
     public function pickupAction() {
@@ -561,6 +569,7 @@ class IndexController extends Zend_Controller_Action {
     public function orderlistAction(){
 		
         $namespace = new Zend_Session_Namespace('userInfo');
+        $orderSuccess = $this->getRequest()->getParam('SUCC');
         $this->view->user_fname = $namespace->user_fname;
         $this->view->user_lname = $namespace->user_lname;
         $this->view->user_img = $namespace->user_img;
@@ -608,7 +617,16 @@ class IndexController extends Zend_Controller_Action {
             $this->view->orders = $ordersArr;
             $this->view->headlineText = 'My Orders';
             $this->view->noFooter = 'true';
-			
+            
+            if($orderSuccess == 'succ'){
+                $this->view->hasMessage= true;
+                $this->view->messageType =  'success';
+                $this->view->message= 'Your order was successfully placed';
+            }elseif($orderSuccess == 'err'){
+                $this->view->hasMessage= true;
+                $this->view->messageType =  'danger';
+                $this->view->message= 'Some error occurred. Please try again.';
+            }
         }else{
             $this->_redirect();
         }
@@ -663,8 +681,12 @@ class IndexController extends Zend_Controller_Action {
             $orders->__set('order_payment_status', 'unpaid');
             $orders->__set('order_service_type', implode(',', $laundryCart->service));
             $orders->__set('order_type', 'service');
-			$orders->__set('order_mobile_number', $post['order_mobile_number']);
-			
+            $orders->__set('order_mobile_number', $post['order_mobile_number']);
+            
+            //TO DO - delivery boy allotted
+            $orders->__set('order_pickup_boy', '1');
+            $orders->__set('order_delivery_boy', '1');
+            
 			/*Apply coupon code */
 			if($post['couponcode']!=""){
 				
@@ -729,8 +751,11 @@ class IndexController extends Zend_Controller_Action {
                 
                 //session destroy
                 $laundryCart->unsetAll();
+                if(isset($post['onlinepayment']) && $post['onlinepayment'] == 'false')
+                    $this->_redirect('index/orderlist');
+                else
+                    $this->_redirect('payment/index?order_id='.$orderId.'&transaction_type=Online');
                 
-                $this->_redirect('payment/index?order_id='.$orderId.'&transaction_type=Online');
             } else {
                 $this->view->message = "Error occured while adding. Please try again";
                 $this->view->hasMessage = true;
@@ -765,7 +790,12 @@ class IndexController extends Zend_Controller_Action {
             
             //session destroy
             $laundryCart->unsetAll();
-            $this->_redirect('payment/index?&package_id='.$laundryCart->package[0].'&transaction_type=Package');
+            
+            if(isset($post['onlinepayment']) && $post['onlinepayment'] == 'false')
+                $this->_redirect('index/orderlist');
+            else
+                $this->_redirect('payment/index?&package_id='.$laundryCart->package[0].'&transaction_type=Package');
+            
         }else{
             exit("error occurred");
         }
