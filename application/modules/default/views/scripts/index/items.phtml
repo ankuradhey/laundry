@@ -39,7 +39,7 @@ echo $this->partial('index/headerstrip.phtml', array('headlineText' => $this->he
                     <h4 class="col-md-4 total-item-text"><span id="item-count-txt"><?php echo $this->selectedItemsCount? : 0; ?></span> Item for Rs. <span id="item-price-txt"><?php echo $this->selectedItemsPrice? : 0; ?></span></h4>
                     <!--<p id="itemdetail" style="font-size:12px;">Minimum order value Rs. 200</p>-->
                     <div class="col-md-4 pull-right skiptoaddress-btn">
-                        <a class="btn btn-success btn-block" href="<?php echo $this->baseUrl(); ?>/index/address">SKIP</a>
+                        <a class="btn btn-success btn-block" href="<?php echo $this->baseUrl(); ?>/index/address?del=Regular">SKIP</a>
                     </div>
                     <div class="col-md-4 pull-right">
                         <input type="hidden" id="itemselected" name="itemselected" autocomplete="off" value='<?php echo $this->selectedItemsCount; ?>'>
@@ -462,6 +462,15 @@ echo $this->partial('index/headerstrip.phtml', array('headlineText' => $this->he
     function selectDeliveryType($this) {
         $($this).children('input').attr('checked', 'checked');
         changeDeliveryType($this);
+        var deliveryType = $($this).children('input').val();
+        var lnk = $('.skiptoaddress-btn > a').attr('href');
+        
+        if(deliveryType == 'Express')
+            lnk = lnk.replace('?del=Regular','?del=Express');
+        else
+            lnk = lnk.replace('?del=Express','?del=Regular');
+        
+        $('.skiptoaddress-btn > a').attr('href',lnk);
     }
 
     function validateForm() {
