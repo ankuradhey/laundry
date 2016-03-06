@@ -184,7 +184,7 @@ echo $this->partial('index/headerstrip.phtml', array('headlineText' => $this->he
                             </div>
                             <div class="row text-center">
                                 <div class="btn-group" data-toggle="buttons">
-                                    <label class="btn btn-primary <?php echo $totalPrice != 0?'active':''; ?>">
+                                    <label class="btn btn-primary <?php echo $totalPrice != 0?'active':'disabled'; ?>">
                                         <input type="radio" name="onlinepayment" id="option1" autocomplete="off" <?php echo $totalPrice != 0?'checked':''; ?> value="true"> Online Payment
                                     </label>
                                     <label class="btn btn-primary <?php echo $totalPrice != 0?'':'active'; ?>">
