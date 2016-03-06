@@ -18,9 +18,9 @@ resources.db.params.dbname = laundryUser
 return array(
      'db' => array(
          'driver'         => 'Pdo',
-         'dsn'            => 'mysql:dbname=laundry_new;host=localhost',
-         'username'       => 'root',
-         'password'         => '',
+         'dsn'            => 'mysql:dbname=laundryUser;host=166.62.8.8',
+         'username'       => 'laundryUser',
+         'password'         => 'Laundry@123',
          'driver_options' => array(
              PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''
          ),
