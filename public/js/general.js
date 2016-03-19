@@ -27,7 +27,7 @@ var Application = function(){
                        });
                     $('#pincodetxt').focus(); 
                   }else{
-                      window.location = baseUrll
+                      window.location = baseUrl
                   }
               });
           }
