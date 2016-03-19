@@ -20,33 +20,31 @@ class IndexController extends Zend_Controller_Action {
     }
 
     public function indexAction() {
-		
+
         $model = new Users_Model_User();
 
-    //        $namespace = new Zend_Session_Namespace('userInfo');
-    //        $namespace->user_id = 17;
-    //        $namespace->user_fname = 'Ankit';
-    //        $namespace->user_lname = 'Sharma';
-    //        $namespace->user_img = $img;
+//        $namespace = new Zend_Session_Namespace('userInfo');
+//        $namespace->user_id = 17;
+//        $namespace->user_fname = 'Ankit';
+//        $namespace->user_lname = 'Sharma';
+//        $namespace->user_img = $img;
 
-        if (!isset($_SESSION))
-            {
+        if (!isset($_SESSION)) {
             $auth = TBS\Auth::getInstance();
 
             $providers = $auth->getIdentity();
 
             // Here the response of the providers are registered
             if ($this->_hasParam('provider')) {
-				
+
                 $provider = $this->_getParam('provider');
 
                 switch ($provider) {
                     case "facebook":
                         if ($this->_hasParam('code')) {
-														
+
                             $adapter = new TBS\Auth\Adapter\Facebook($this->_getParam('code'));
                             $result = $auth->authenticate($adapter);
-														
                         }
                         if ($this->_hasParam('error')) {
                             throw new Zend_Controller_Action_Exception('Facebook login failed, response is: ' .
@@ -74,14 +72,12 @@ class IndexController extends Zend_Controller_Action {
                 }
                 // What to do when invalid
                 if (isset($result) && !$result->isValid()) {
-					
+
                     $auth->clearIdentity($this->_getParam('provider'));
                     throw new Zend_Controller_Action_Exception('Login failed');
-					
                 } else {
-					
+
                     $this->_redirect('/index/connect');
-					
                 }
             } else { // Normal login page
                 $this->view->googleAuthUrl = TBS\Auth\Adapter\Google::getAuthorizationUrl();
@@ -91,35 +87,34 @@ class IndexController extends Zend_Controller_Action {
                 //  $this->view->twitterAuthUrl = \TBS\Auth\Adapter\Twitter::getAuthorizationUrl();
             }
         }
-		
-		
-		//$locations = file_get_contents("",true);
-		//prd($locations);
-		
-		$locations = 'http://pickfreedeal.com/laundrywala/api/public/locations';
-		$curl = curl_init($locations);
-		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-		$curl_response = curl_exec($curl);
-		if ($curl_response === false) {
-				$info = curl_getinfo($curl);
-				curl_close($curl);
-				//die('error occured during curl exec. Additioanl info: ' . var_export($info));
-		}
-		curl_close($curl);
-		$decoded = json_decode($curl_response);
 
-		$locations = array();
-		foreach($decoded->_embedded->location as $location){
-			$locations[] = $location->city_name." ".$location->local_area_name;
-		}
-		$this->view->locations = $locations;
-		
-		/* Fetch Packages {*/
-		$packageModel = new Application_Model_PackagesMapper();
-		$packages = $packageModel->getAllPackages();
-		$this->view->packages = $packages;
-		/* } Fetch Packages */
-		
+
+        //$locations = file_get_contents("",true);
+        //prd($locations);
+
+        $locations = 'http://pickfreedeal.com/laundrywala/api/public/locations';
+        $curl = curl_init($locations);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        $curl_response = curl_exec($curl);
+        if ($curl_response === false) {
+            $info = curl_getinfo($curl);
+            curl_close($curl);
+            //die('error occured during curl exec. Additioanl info: ' . var_export($info));
+        }
+        curl_close($curl);
+        $decoded = json_decode($curl_response);
+
+        $locations = array();
+        foreach ($decoded->_embedded->location as $location) {
+            $locations[] = $location->city_name . " " . $location->local_area_name;
+        }
+        $this->view->locations = $locations;
+
+        /* Fetch Packages { */
+        $packageModel = new Application_Model_PackagesMapper();
+        $packages = $packageModel->getAllPackages();
+        $this->view->packages = $packages;
+        /* } Fetch Packages */
     }
 
     public function processcartAction() {
@@ -144,22 +139,22 @@ class IndexController extends Zend_Controller_Action {
                         $noServiceArr = array();
                         $packageArr = array();
                         $noPackageArr = array();
-                        
+
                         foreach ($post['itemcount']['service'] as $serviceId => $value) {
                             if ($value == 1)
                                 $serviceArr[] = $serviceId;
                             else
                                 $noServiceArr[] = $serviceId;
                         }
-                        
-                        foreach($post['itemcount']['package'] as $packageId=>$value){
-                            if($value == 1)
+
+                        foreach ($post['itemcount']['package'] as $packageId => $value) {
+                            if ($value == 1)
                                 $packageArr[] = $packageId;
                             else
                                 $noPackageArr[] = $packageId;
                         }
                         //order type can be either package or service
-                        $cartSession->orderType = count($serviceArr)?'service':'package';
+                        $cartSession->orderType = count($serviceArr) ? 'service' : 'package';
                         $cartSession->city = $post['city'];
                         //remove all session products which fall under one service which have been removed from session
                         if (count($cartSession->items) && is_array($cartSession->items)) {
@@ -182,11 +177,11 @@ class IndexController extends Zend_Controller_Action {
 
                         $cartSession->service = $serviceArr;
                         $cartSession->package = $packageArr;
-                        if($cartSession->orderType == 'service')
+                        if ($cartSession->orderType == 'service')
                             $this->_redirect('index/items');
                         else
                             $this->_redirect('index/address');
-                            
+
                         break;
                     case 'items':
                         $cartSession->step = '2';
@@ -194,34 +189,34 @@ class IndexController extends Zend_Controller_Action {
                                     return $value > 0 ? true : false;
                                 });
                         //session cart values
-                        foreach($post['itemcart']['service'] as $cartKey=>$cart){
+                        foreach ($post['itemcart']['service'] as $cartKey => $cart) {
                             //get category
-                            foreach($cart['category'] as $categoryKey=>$category){
+                            foreach ($cart['category'] as $categoryKey => $category) {
                                 //get items
-                                foreach($category['items'] as $itemsKey=>$items){
-                                    if(!$items['quantity'])
+                                foreach ($category['items'] as $itemsKey => $items) {
+                                    if (!$items['quantity'])
                                         unset($post['itemcart']['service'][$cartKey]['category'][$categoryKey]['items'][$itemsKey]);
                                 }
-                                if(count($post['itemcart']['service'][$cartKey]['category'][$categoryKey]['items']) == 0)
+                                if (count($post['itemcart']['service'][$cartKey]['category'][$categoryKey]['items']) == 0)
                                     unset($post['itemcart']['service'][$cartKey]['category'][$categoryKey]);
                             }
-                            if(count($post['itemcart']['service'][$cartKey]['category'][$categoryKey]['items']) == 0)
-                                    unset($post['itemcart']['service'][$cartKey]['category'][$categoryKey]);
+                            if (count($post['itemcart']['service'][$cartKey]['category'][$categoryKey]['items']) == 0)
+                                unset($post['itemcart']['service'][$cartKey]['category'][$categoryKey]);
                         }
-                                
+
                         //filter price values 
-                        foreach($post['itemprice'] as $key=>$value){
-                            if(!isset($post['item'][$key]))
+                        foreach ($post['itemprice'] as $key => $value) {
+                            if (!isset($post['item'][$key]))
                                 unset($post['itemprice'][$key]);
-                            
-                            if(!isset($post['item'][$key])){
+
+                            if (!isset($post['item'][$key])) {
                                 unset($post['itemservice'][$key]);
                                 unset($post['itemcategory'][$key]);
                             }
                         }
-                        if(isset($cartSession->delivery_type))
+                        if (isset($cartSession->delivery_type))
                             $post['delivery-type'] = $cartSession->delivery_type;
-                        
+
                         $cartSession->delivery_type = $post['delivery-type']? : 'Regular';
                         $cartSession->items = $post['item']? : array();
                         $cartSession->itemprice = $post['itemprice']? : 0;
@@ -232,9 +227,9 @@ class IndexController extends Zend_Controller_Action {
                         break;
                     case 'address':
                         $cartSession->step = '3';
-                        $cartSession->address = array($post['order_address_flat'],$post['order_address_locality'],$post['order_city'],$post['order_delivery_note']);
+                        $cartSession->address = array($post['order_address_flat'], $post['order_address_locality'], $post['order_city'], $post['order_delivery_note']);
                         $cartSession->city = $post['order_city'];
-                        if($cartSession->orderType == 'service')
+                        if ($cartSession->orderType == 'service')
                             $this->_redirect('index/pickup');
                         else
                             $this->_redirect('index/verification');
@@ -245,8 +240,8 @@ class IndexController extends Zend_Controller_Action {
                         $cartSession->pickup_date = $post['pickupDate'];
                         $cartSession->delivery = $post['deliveryTimeSlot'];
                         $cartSession->delivery_date = $post['deliveryDate'];
-			$cartSession->mobile_number = $post['mobile_number'];
-                        
+                        $cartSession->mobile_number = $post['mobile_number'];
+
                         $this->_redirect('index/verification');
                         break;
                 }
@@ -279,21 +274,21 @@ class IndexController extends Zend_Controller_Action {
         }
         return $result;
     }
-    
-    public function faqAction(){
+
+    public function faqAction() {
         $this->view->headlineText = 'Frequently Asked Questions';
     }
-    
-    public function aboutusAction(){
-        $this->view->headlineText= 'Our Story';
+
+    public function aboutusAction() {
+        $this->view->headlineText = 'Our Story';
     }
-    
-    public function contactusAction(){
-        $this->view->headlineText= 'Contact Us';
+
+    public function contactusAction() {
+        $this->view->headlineText = 'Contact Us';
     }
-    
+
     public function connectAction() {
-		
+
         $model = $this->layoutfunction();
         $auth = TBS\Auth::getInstance();
         if (!$auth->hasIdentity()) {
@@ -304,24 +299,24 @@ class IndexController extends Zend_Controller_Action {
         //  $data['provider_id']='111327682559075';
         //   $checkuser = $model->checkuserByProviderId($data['provider_id']);
         //    if(count($checkuser)<1){
-        
-        foreach($auth->getIdentity() as $provider) {
-			
+
+        foreach ($auth->getIdentity() as $provider) {
+
             $data['provider_name'] = $provider->getName();
             $data['provider_id'] = $provider->getId();
             $id = $provider->getApi()->getId();
             $profile = $provider->getApi()->getProfile($id);
-            
-            if($data['provider_name'] == 'facebook')
+
+            if ($data['provider_name'] == 'facebook')
                 $img = $provider->getApi()->getPicture(true);
             else
-                $img = $this->view->baseUrl().'/public/img/icons/s.png';
-            
+                $img = $this->view->baseUrl() . '/public/img/icons/s.png';
+
 //            $data['provider_id']=111327682559075;
             $checkuser = $model->checkuserByProviderId($data['provider_id']);
 
             if (count($checkuser) < 1) {
-				
+
                 $detail = $this->displayvalue($profile);
 
                 $name = explode(" ", $detail['name']);
@@ -339,20 +334,19 @@ class IndexController extends Zend_Controller_Action {
                     $data1['provider_id'] = $data["provider_id"];
                     $data1['provider_name'] = $data["provider_name"];
                     $model->insertanywhere('user_provider', $data1);
-                    
+
                     $namespace->user_id = $id;
                     $namespace->user_fname = $array['user_fname'];
                     $namespace->user_lname = $array['user_lname'];
                     $namespace->user_img = $img;
                 }
-                
-            }else{
+            } else {
                 //    $detailall = $model->getuserById($id);
                 // echo "<pre />"; print_r($detailall);exit;
-				
+
                 $checkuser = $checkuser[0];
                 $data['user_img'] = $img;
-                
+
                 $namespace->user_id = $checkuser->user_id;
                 $namespace->user_fname = $checkuser->user_fname;
                 $namespace->user_lname = $checkuser->user_lname;
@@ -365,12 +359,11 @@ class IndexController extends Zend_Controller_Action {
         $this->view->providers = $auth->getIdentity();
     }
 
-	public function developerloginAction(){
-		
-		$auth = TBS\Auth::getInstance();		
-		$result = $auth->authenticate($adapter);
-		
-	}
+    public function developerloginAction() {
+
+        $auth = TBS\Auth::getInstance();
+        $result = $auth->authenticate($adapter);
+    }
 
     public function itemsAction() {
         $model = new Application_Model_ServiceMasterMapper();
@@ -380,10 +373,10 @@ class IndexController extends Zend_Controller_Action {
 
         $namespace = new Zend_Session_Namespace('userInfo');
         $laundryCart = new Zend_Session_Namespace('laundryCart');
-        
-		$this->view->noFooter = true;
-		
-        if(isset($namespace->user_id)){
+
+        $this->view->noFooter = true;
+
+        if (isset($namespace->user_id)) {
             //check if items are there in session - if not then remove all 
             if (empty($laundryCart->items) || empty($laundryCart->itemprice)) {
                 $laundryCart->items = array();
@@ -409,13 +402,13 @@ class IndexController extends Zend_Controller_Action {
                         $carry += $item;
                         return $carry;
                     });
-            
+
             $totalPrice = 0;
-            
-            if(isset($laundryCart->itemprice) && $laundryCart->itemprice != "")
-            foreach($laundryCart->itemprice as $key=>$prices){
-                $totalPrice += $prices*$selectedItems[$key];
-            }
+
+            if (isset($laundryCart->itemprice) && $laundryCart->itemprice != "")
+                foreach ($laundryCart->itemprice as $key => $prices) {
+                    $totalPrice += $prices * $selectedItems[$key];
+                }
             $this->view->selectedItemsPrice = $totalPrice;
             $this->view->headlineText = 'Select Your Items';
 
@@ -423,56 +416,55 @@ class IndexController extends Zend_Controller_Action {
             $this->view->user_lname = $namespace->user_lname;
             $this->view->user_img = $namespace->user_img;
             $this->view->orderType = $laundryCart->orderType;
-        }else{
+        } else {
             $this->_redirect("");
         }
     }
-    
-    public function viewordersAction(){
+
+    public function viewordersAction() {
         
     }
-    
+
     public function orderviewAction() {
-        
+
         $params = $this->getRequest()->getParams();
         $auth = TBS\Auth::getInstance();
         $model = new Application_Model_ServiceMasterMapper();
         $packageModel = new Application_Model_PackagesMapper();
         $namespace = new Zend_Session_Namespace('userInfo');
 //        if(isset($namespace->user_id)){
-            $laundryCart = new Zend_Session_Namespace('laundryCart');
-            
-            if(isset($params['ordertype'])){
-                
-                if($params['ordertype']=='package'){
-                    $laundryCart->service = array();
-                    $laundryCart->package = array($params['id']);
-                }
-                $orderType = $params['ordertype'];
-                $laundryCart->orderType = $orderType;
-                $this->view->orderType = 'package';
+        $laundryCart = new Zend_Session_Namespace('laundryCart');
+
+        if (isset($params['ordertype'])) {
+
+            if ($params['ordertype'] == 'package') {
+                $laundryCart->service = array();
+                $laundryCart->package = array($params['id']);
             }
-            elseif(isset($laundryCart->orderType)){
-                $orderType = $laundryCart->orderType;
-                $this->view->orderType = $orderType;
-            }
-            
-            $users = $namespace->data;
-            $uid = $users['user_id'];
-            $username = $users['fnmae'];
-            $category = $model->getAllServiceMasters();
-            $packages = $packageModel->getAllPackages();
-            $this->view->category = $category;
-            $this->view->packages = $packages;
-            $this->view->selectedServices = $laundryCart->service? : array();
-            $this->view->selectedPackages = $laundryCart->package?:array();
-            $this->view->headlineText = 'Select services you want';
-            $this->view->user_fname = $namespace->user_fname;
-            $this->view->user_lname = $namespace->user_lname;
-            $this->view->user_img = $namespace->user_img;
-            $this->view->orderType = $orderType?:'service';
-            $this->view->noFooter = 'true';
-            $this->view->city = $laundryCart->city?:'';
+            $orderType = $params['ordertype'];
+            $laundryCart->orderType = $orderType;
+            $this->view->orderType = 'package';
+        } elseif (isset($laundryCart->orderType)) {
+            $orderType = $laundryCart->orderType;
+            $this->view->orderType = $orderType;
+        }
+
+        $users = $namespace->data;
+        $uid = $users['user_id'];
+        $username = $users['fnmae'];
+        $category = $model->getAllServiceMasters();
+        $packages = $packageModel->getAllPackages();
+        $this->view->category = $category;
+        $this->view->packages = $packages;
+        $this->view->selectedServices = $laundryCart->service? : array();
+        $this->view->selectedPackages = $laundryCart->package? : array();
+        $this->view->headlineText = 'Select services you want';
+        $this->view->user_fname = $namespace->user_fname;
+        $this->view->user_lname = $namespace->user_lname;
+        $this->view->user_img = $namespace->user_img;
+        $this->view->orderType = $orderType? : 'service';
+        $this->view->noFooter = 'true';
+        $this->view->city = $laundryCart->city? : '';
 //        }else{
 //            $this->_redirect("");
 //        }
@@ -491,12 +483,11 @@ class IndexController extends Zend_Controller_Action {
         $this->view->noFooter = 'true';
         $this->view->orderType = $laundryCart->orderType;
         $this->view->city = $laundryCart->city;
-        
-        if($deliveryParam = $this->getRequest()->getParam('del')){
-            if(isset($deliveryParam) && ($deliveryParam == 'Express' || $deliveryParam == 'Regular')){
+
+        if ($deliveryParam = $this->getRequest()->getParam('del')) {
+            if (isset($deliveryParam) && ($deliveryParam == 'Express' || $deliveryParam == 'Regular')) {
                 $laundryCart->delivery_type = $deliveryParam;
-            }
-            elseif(!isset($cartSession->delivery_type))
+            } elseif (!isset($cartSession->delivery_type))
                 $laundryCart->delivery_type = 'Regular';
         }
     }
@@ -505,27 +496,28 @@ class IndexController extends Zend_Controller_Action {
         $laundryCart = new Zend_Session_Namespace('laundryCart');
         $this->view->deliveryType = $laundryCart->delivery_type;
         $this->view->headlineText = 'Choose Your Collection and Delivery Time';
-        
+
         $namespace = new Zend_Session_Namespace('userInfo');
         $this->view->user_fname = $namespace->user_fname;
         $this->view->user_lname = $namespace->user_lname;
         $this->view->user_img = $namespace->user_img;
+        $this->view->otpVerified = $laundryCart->otpVerified;
         $this->view->noFooter = 'true';
     }
 
     public function verificationAction() {
         $cartSession = new Zend_Session_Namespace('laundryCart');
-        
+
         $serviceArr = $packages = array();
         //service wise products listing
         $itemModel = new Application_Model_ItemPriceMapper();
         $itemsArr = array();
         $namespace = new Zend_Session_Namespace('userInfo');
-        
-        if(empty($namespace->user_id))
+
+        if (empty($namespace->user_id))
             $this->_redirect("index");
-        
-        if($cartSession->orderType == 'service'){
+
+        if ($cartSession->orderType == 'service') {
             $model = new Application_Model_ServiceMasterMapper();
             foreach ($cartSession->service as $value) {
                 $service = $model->getServiceMasterById((int) $value);
@@ -536,9 +528,9 @@ class IndexController extends Zend_Controller_Action {
             $this->view->serviceItems = $cartSession->serviceItems;
             $this->view->services = $serviceArr;
             $this->view->orderType = 'service';
-            }else{
+        } else {
             $model = new Application_Model_PackagesMapper();
-            $package = $model->getPackageById((int)$cartSession->package[0]);
+            $package = $model->getPackageById((int) $cartSession->package[0]);
             $packageArr['name'] = $package->__get('package_name');
             $packageArr['image'] = $package->__get('package_icon');
             $packageArr['id'] = $package->__get('package_id');
@@ -546,18 +538,18 @@ class IndexController extends Zend_Controller_Action {
             $this->view->packages = $packageArr;
             $this->view->orderType = 'package';
         }
-		
+
         //get products selected if any
-        $fullAddress = $cartSession->address[0] . ",<br>" . $cartSession->address[1] . ",<br> " . $cartSession->address[2] ;
+        $fullAddress = $cartSession->address[0] . ",<br>" . $cartSession->address[1] . ",<br> " . $cartSession->address[2];
         $this->view->address = $fullAddress;
-        
+
         $this->view->pickup = $cartSession->pickup;
         $this->view->delivery = $cartSession->delivery;
         $this->view->pickupDate = $cartSession->pickup_date;
         $this->view->deliveryDate = $cartSession->delivery_date;
         $this->view->mobileNumber = $cartSession->mobile_number;
         $this->view->headlineText = 'Order Summary';
-        
+
         $namespace = new Zend_Session_Namespace('userInfo');
         $this->view->user_fname = $namespace->user_fname;
         $this->view->user_lname = $namespace->user_lname;
@@ -566,74 +558,73 @@ class IndexController extends Zend_Controller_Action {
         $this->view->orderType = $cartSession->orderType;
     }
 
-    public function orderlistAction(){
-		
+    public function orderlistAction() {
+
         $namespace = new Zend_Session_Namespace('userInfo');
         $orderSuccess = $this->getRequest()->getParam('SUCC');
         $this->view->user_fname = $namespace->user_fname;
         $this->view->user_lname = $namespace->user_lname;
         $this->view->user_img = $namespace->user_img;
         $this->view->user_number = $namespace->user_number;
-        if(isset($namespace->user_id)){
-			
+        if (isset($namespace->user_id)) {
+
             $orderModel = new Application_Model_OrdersMapper();
             $packageModel = new Application_Model_PackagesMapper();
             $serviceModel = new Application_Model_ServiceMasterMapper();
             $orders = $orderModel->getOrdersByUserId($namespace->user_id);
-            
+
             //get list of services
-            $services  = $serviceModel->getAllServiceMasters();
+            $services = $serviceModel->getAllServiceMasters();
             $servicesArr = array();
-            foreach($services as $serviceKey=>$service){
+            foreach ($services as $serviceKey => $service) {
                 $servicesArr[$service->__get('service_id')]['service_name'] = $service->__get('service_name');
             }
-            
+
             //get list of packages
             $packages = $packageModel->getAllPackages();
             $packagesArr = array();
-            foreach($packages as $packageKey=>$package){
+            foreach ($packages as $packageKey => $package) {
                 $packagesArr[$package->__get('package_id')]['package_name'] = $package->__get('package_name');
             }
-            
+
             $ordersArr = array();
-            foreach($orders as $key=>$item){
+            foreach ($orders as $key => $item) {
                 $ordersArr[$key]['order_id'] = $item->__get('order_id');
                 $ordersArr[$key]['order_pickup'] = $item->__get('order_pickup');
                 $serviceIds = $item->__get('order_service_type');
-                $serviceIds = explode(",",$serviceIds);
+                $serviceIds = explode(",", $serviceIds);
                 $ordersArr[$key]['order_services'] = array_map(function($val) use ($servicesArr) {
-                    return @$servicesArr[$val]['service_name'];
-                }, $serviceIds);
+                            return @$servicesArr[$val]['service_name'];
+                        }, $serviceIds);
                 $ordersArr[$key]['order_packages'] = array_map(function($val) use ($packagesArr) {
-                    return @$packagesArr[$val]['package_name'];
-                }, $serviceIds);
+                            return @$packagesArr[$val]['package_name'];
+                        }, $serviceIds);
                 $ordersArr[$key]['order_delivery'] = $item->__get('order_delivery');
                 $ordersArr[$key]['order_address'] = $item->__get('order_address');
-                $ordersArr[$key]['delivery_charge'] = $item->__get('delivery_charge')?:0;
+                $ordersArr[$key]['delivery_charge'] = $item->__get('delivery_charge')? : 0;
                 $ordersArr[$key]['order_amount'] = $item->__get('order_amount');
-                $ordersArr[$key]['service_tax'] = $item->__get('service_tax')?:0;
-                $ordersArr[$key]['order_type'] = $item->__get('order_type')?:'service';
-                $ordersArr[$key]['order_mobile_number'] = $item->__get('order_mobile_number')?:$namespace->user_number;
+                $ordersArr[$key]['service_tax'] = $item->__get('service_tax')? : 0;
+                $ordersArr[$key]['order_type'] = $item->__get('order_type')? : 'service';
+                $ordersArr[$key]['order_mobile_number'] = $item->__get('order_mobile_number')? : $namespace->user_number;
             }
             $this->view->orders = $ordersArr;
             $this->view->headlineText = 'My Orders';
             $this->view->noFooter = 'true';
-            
-            if($orderSuccess == 'succ'){
-                $this->view->hasMessage= true;
-                $this->view->messageType =  'success';
-                $this->view->message= 'Your order was successfully placed';
-            }elseif($orderSuccess == 'err'){
-                $this->view->hasMessage= true;
-                $this->view->messageType =  'danger';
-                $this->view->message= 'Some error occurred. Please try again.';
+
+            if ($orderSuccess == 'succ') {
+                $this->view->hasMessage = true;
+                $this->view->messageType = 'success';
+                $this->view->message = 'Your order was successfully placed';
+            } elseif ($orderSuccess == 'err') {
+                $this->view->hasMessage = true;
+                $this->view->messageType = 'danger';
+                $this->view->message = 'Some error occurred. Please try again.';
             }
-        }else{
+        } else {
             $this->_redirect();
         }
-        
     }
-    
+
     public function saveorderAction() {
         //check session
         $laundryCart = new Zend_Session_Namespace('laundryCart');
@@ -641,7 +632,7 @@ class IndexController extends Zend_Controller_Action {
         $model = new Application_Model_OrdersMapper();
         $itemModel = new Application_Model_ItemsMapper();
         $itemPrice = new Application_Model_ItemPriceMapper();
-        
+
         $orderItem = new Application_Model_OrderItems();
         $orderItemModel = new Application_Model_OrderItemsMapper();
         $post = $this->getRequest()->getPost();
@@ -650,15 +641,15 @@ class IndexController extends Zend_Controller_Action {
             $deliveryTypeMaster = new Application_Model_DeliveryTypeMasterMapper();
             $deliveryTypes = $deliveryTypeMaster->getAllDeliveryTypeMaster();
             $deliveryArr = array();
-            foreach($deliveryTypes as $del){
+            foreach ($deliveryTypes as $del) {
                 $deliveryArr[$del->__get('delivery_type_name')] = $del->__get('delivery_type_id');
             }
-            if(!isset($laundryCart->delivery_type))
+            if (!isset($laundryCart->delivery_type))
                 $laundryCart->delivery_type = 'Regular';
-            
+
             $totalPrice = 0;
-            foreach($laundryCart->itemprice as $key=>$prices){
-                $totalPrice += $prices*$laundryCart->items[$key];
+            foreach ($laundryCart->itemprice as $key => $prices) {
+                $totalPrice += $prices * $laundryCart->items[$key];
             }
             $orders = new Application_Model_Orders();
 //                && isset($userInfo)){
@@ -666,13 +657,13 @@ class IndexController extends Zend_Controller_Action {
             $orders->__set('order_first_name', $userInfo->user_fname);
             $orders->__set('order_last_name', $userInfo->user_lname);
 //            $orders->__set('order_user_email', 'anki.sharma@gmail.com');
-            $orders->__set('order_address', implode(",",$laundryCart->address));
+            $orders->__set('order_address', implode(",", $laundryCart->address));
 //            $orders->__set('order_phone', '123456455');
             $orders->__set('order_city', $laundryCart->city);
 //            $orders->__set('order_pincode', '123456');
             $orders->__set('order_delivery_type', $deliveryArr[$laundryCart->delivery_type]);
-            $orders->__set('order_pickup', date('Y-m-d',strtotime($laundryCart->pickup_date)));
-            $orders->__set('order_delivery', date('Y-m-d',strtotime($laundryCart->delivery_date)));
+            $orders->__set('order_pickup', date('Y-m-d', strtotime($laundryCart->pickup_date)));
+            $orders->__set('order_delivery', date('Y-m-d', strtotime($laundryCart->delivery_date)));
             $orders->__set('order_delivery_time', $laundryCart->delivery);
             $orders->__set('order_pickup_time', $laundryCart->pickup);
             $orders->__set('order_amount', $post['order_amount']);
@@ -686,123 +677,118 @@ class IndexController extends Zend_Controller_Action {
             //TO DO - delivery boy allotted
             $orders->__set('order_pickup_boy', '1');
             $orders->__set('order_delivery_boy', '1');
-            
-			/*Apply coupon code */
-			if($post['couponcode']!=""){
-				
-				$couponCode = $post['couponcode'];
-				$CouponsMapperModel = new Application_Model_CouponsMapper();
-				$couponData = $CouponsMapperModel->getCouponByCouponCode($couponCode);
-				$namespace = new Zend_Session_Namespace('userInfo');        
-						
-				if(!empty($couponData)){
-					
-					$isAllowedResult = $this->isCouponAllowedToUse($namespace->user_id,$couponData->__get("coupon_id"));
-					
-					if($isAllowedResult->allowed===true){
-						
-						if($post['order_amount']>=$couponData->__get("coupon_min_billing")){
-							
-							$discountAmount = $couponData->__get("coupon_value");
-							
-							if($couponData->__get("coupon_type")=="percentage"){
-								$discountAmount = $post['order_amount'] * $couponData->__get("coupon_value") / 100;
-							}
-							
-							if($discountAmount > $couponData->__get("coupon_max_discount") && $couponData->__get("coupon_max_discount")>0){
-								$discountAmount = $couponData->__get("coupon_max_discount");
-							}
-							
-							$orders->__set('order_coupon_id', $couponData->__get("coupon_id"));
-							$orders->__set('order_coupon_dis', $discountAmount);
-							
-						}
-						
-					}
-				}
-			
-			}
-			/*Apply coupon code */
-			            			
+
+            /* Apply coupon code */
+            if ($post['couponcode'] != "") {
+
+                $couponCode = $post['couponcode'];
+                $CouponsMapperModel = new Application_Model_CouponsMapper();
+                $couponData = $CouponsMapperModel->getCouponByCouponCode($couponCode);
+                $namespace = new Zend_Session_Namespace('userInfo');
+
+                if (!empty($couponData)) {
+
+                    $isAllowedResult = $this->isCouponAllowedToUse($namespace->user_id, $couponData->__get("coupon_id"));
+
+                    if ($isAllowedResult->allowed === true) {
+
+                        if ($post['order_amount'] >= $couponData->__get("coupon_min_billing")) {
+
+                            $discountAmount = $couponData->__get("coupon_value");
+
+                            if ($couponData->__get("coupon_type") == "percentage") {
+                                $discountAmount = $post['order_amount'] * $couponData->__get("coupon_value") / 100;
+                            }
+
+                            if ($discountAmount > $couponData->__get("coupon_max_discount") && $couponData->__get("coupon_max_discount") > 0) {
+                                $discountAmount = $couponData->__get("coupon_max_discount");
+                            }
+
+                            $orders->__set('order_coupon_id', $couponData->__get("coupon_id"));
+                            $orders->__set('order_coupon_dis', $discountAmount);
+                        }
+                    }
+                }
+            }
+            /* Apply coupon code */
+
             if ($orderId = $model->addNewOrder($orders)) {
                 //add products now
-                if(isset($laundryCart->items)){
-                    foreach($laundryCart->items as $item=>$quantity){
+                if (isset($laundryCart->items)) {
+                    foreach ($laundryCart->items as $item => $quantity) {
                         //get item details
                         $itemDetails = $itemPrice->getItemPriceById($item);
-                        $itemDetails =  $itemModel->getItemById($itemDetails->__get('item_id'));
+                        $itemDetails = $itemModel->getItemById($itemDetails->__get('item_id'));
                         //save product item
-                        $orderItem->__set('order_id',$orderId);
-                        $orderItem->__set('order_product_name',$itemDetails->__get('item_name'));
-                        $orderItem->__set('order_item_id',$itemDetails->__get('item_id'));
-                        $orderItem->__set('order_type','service');
-                        $orderItem->__set('order_service_name',$laundryCart->itemservice[$item]);
-                        $orderItem->__set('order_category_name',$laundryCart->itemcategory[$item]);
-                        $orderItem->__set('unit_price',$laundryCart->itemprice[$item]);
-                        $orderItem->__set('total_price',$laundryCart->itemprice[$item]*$quantity);
-                        $orderItem->__set('quantity',$quantity);
+                        $orderItem->__set('order_id', $orderId);
+                        $orderItem->__set('order_product_name', $itemDetails->__get('item_name'));
+                        $orderItem->__set('order_item_id', $itemDetails->__get('item_id'));
+                        $orderItem->__set('order_type', 'service');
+                        $orderItem->__set('order_service_name', $laundryCart->itemservice[$item]);
+                        $orderItem->__set('order_category_name', $laundryCart->itemcategory[$item]);
+                        $orderItem->__set('unit_price', $laundryCart->itemprice[$item]);
+                        $orderItem->__set('total_price', $laundryCart->itemprice[$item] * $quantity);
+                        $orderItem->__set('quantity', $quantity);
                         $orderItemModel->addNewOrderItem($orderItem);
                     }
                 }
-                
+
                 $this->view->message = "Order successfully completed";
                 $this->view->hasMessage = true;
                 $this->view->messageType = "success";
-                
+
                 //session destroy
                 $laundryCart->unsetAll();
-                if(isset($post['onlinepayment']) && $post['onlinepayment'] == 'false')
+                if (isset($post['onlinepayment']) && $post['onlinepayment'] == 'false')
                     $this->_redirect('index/orderlist');
                 else
-                    $this->_redirect('payment/index?order_id='.$orderId.'&transaction_type=Online');
-                
+                    $this->_redirect('payment/index?order_id=' . $orderId . '&transaction_type=Online');
             } else {
                 $this->view->message = "Error occured while adding. Please try again";
                 $this->view->hasMessage = true;
                 $this->view->messageType = "danger";
             }
-        } elseif($laundryCart->orderType == 'package' && $this->getRequest()->isPost()){
-            
+        } elseif ($laundryCart->orderType == 'package' && $this->getRequest()->isPost()) {
+
             //get package details
             $packageDetails = new Application_Model_PackagesMapper();
             $packageDetails = $packageDetails->getPackageById($laundryCart->package[0]);
             $validity = $packageDetails->__get('validity');
             $userTrack = new Application_Model_UserTrack();
             $userTrackMapper = new Application_Model_UserTrackMapper();
-            $userTrack->__set('usertrack_user_id',$userInfo->user_id);
-            $userTrack->__set('track_type','package');
-            $userTrack->__set('usertrack_package_id',$laundryCart->package[0]);
-            $userTrack->__set('clothes_left',$packageDetails->__get('no_of_clothes'));
-            $userTrack->__set('clothes_availed',$packageDetails->__get('no_of_clothes'));
-            $userTrack->__set('pickups_left',$packageDetails->__get('no_of_pickups'));
-            $userTrack->__set('pickups_availed',$packageDetails->__get('no_of_pickups'));
-            $userTrack->__set('usertrack_start_date',date('Y-m-d'));
-            $userTrack->__set('usertrack_expiry_date',date('Y-m-d',strtotime("+$validity Month ".date('Y-m-d') )));
-            $userTrack->__set('usertrack_house',$laundryCart->address[0]);
-            $userTrack->__set('usertrack_locality',$laundryCart->address[1]);
-            $userTrack->__set('usertrack_city',$laundryCart->address[2]);
-            
+            $userTrack->__set('usertrack_user_id', $userInfo->user_id);
+            $userTrack->__set('track_type', 'package');
+            $userTrack->__set('usertrack_package_id', $laundryCart->package[0]);
+            $userTrack->__set('clothes_left', $packageDetails->__get('no_of_clothes'));
+            $userTrack->__set('clothes_availed', $packageDetails->__get('no_of_clothes'));
+            $userTrack->__set('pickups_left', $packageDetails->__get('no_of_pickups'));
+            $userTrack->__set('pickups_availed', $packageDetails->__get('no_of_pickups'));
+            $userTrack->__set('usertrack_start_date', date('Y-m-d'));
+            $userTrack->__set('usertrack_expiry_date', date('Y-m-d', strtotime("+$validity Month " . date('Y-m-d'))));
+            $userTrack->__set('usertrack_house', $laundryCart->address[0]);
+            $userTrack->__set('usertrack_locality', $laundryCart->address[1]);
+            $userTrack->__set('usertrack_city', $laundryCart->address[2]);
+
             $userTrackMapper->addNewTrack($userTrack);
-            
+
             $this->view->message = "Package successfully subscribed";
             $this->view->hasMessage = true;
             $this->view->messageType = "success";
-            
+
             //session destroy
             $laundryCart->unsetAll();
-            
-            if(isset($post['onlinepayment']) && $post['onlinepayment'] == 'false')
+
+            if (isset($post['onlinepayment']) && $post['onlinepayment'] == 'false')
                 $this->_redirect('index/orderlist');
             else
-                $this->_redirect('payment/index?&package_id='.$laundryCart->package[0].'&transaction_type=Package');
-            
-        }else{
+                $this->_redirect('payment/index?&package_id=' . $laundryCart->package[0] . '&transaction_type=Package');
+        }else {
             exit("error occurred");
         }
     }
 
     public function loginAction() {
-		
+
         $request = $this->getRequest();
         $request_type = $request->getParam("request_type", FALSE);
         if ($request_type) {
@@ -819,12 +805,11 @@ class IndexController extends Zend_Controller_Action {
                     $errors[] = "Password Should not be empty";
                 }
                 if (count($errors) == 0) {
-					
+
                     if ($this->_process($request->getParams())) {
-		
+
                         $user_id = $this->_auth->getIdentity()->user_id;
                         $this->_helper->redirector('index', 'index');
-						
                     } else {
                         $this->view->hasMessage = true;
                         $this->view->messageType = "danger";
@@ -1232,184 +1217,182 @@ class IndexController extends Zend_Controller_Action {
         $url = "http://login.smsgatewayhub.com/smsapi/pushsms.aspx?user=laundrywala&pwd=cleanlaundry&to=91" . $number . "&sid=LAWALA&msg=" . $sms . "&fl=0&gwid=2";
         $text = file_get_contents($url);
         return $text;
-		
     }
 
-	public function sendorderotpAction(){
-		
-		$orderSession = new Zend_Session_Namespace('orderSession');
-                $cartSession = new Zend_Session_Namespace('laundryCart');
-		$this->_helper->viewRenderer->setNoRender(true);
-                $this->_helper->layout->disableLayout();
-		
-		$response = array(
-						"success"=>false,
-						"message"=>"",
-						"otp"=>"",
-						"key"=>strtotime(date("Y-m-d H:i:s"))
-					);
-		
-		$number = $this->_getParam("mobile_no");
-		
-		if(strlen($number)==10 && is_numeric($number)){
-			$cartSession->mobile_number = $number;
-			$otp = rand(1000,5000);
-			$orderSession->$response['key'] = $otp;
-			$message = urlencode("Use ".$otp." to verify your number");
-			
-                        if($this->websiteMode != 'DEBUG'){
-                            $url = "http://login.smsgatewayhub.com/smsapi/pushsms.aspx?user=laundrywala&pwd=cleanlaundry&to=91" . $number . "&sid=LAWALA&msg=" . $message . "&fl=0&gwid=2";
-                            $text = file_get_contents($url);
-                        }
-			//$response['otp'] = $otp;
-			$response['success'] = true;
-			$response['message'] = "OTP sent successfully";
-			
-		}else{
-			$response['message'] = "Mobile number is not valid";	
-		}
-		
-        echo Zend_Json::Encode($response);
-		die;
-	}
-			
-	public function verifyorderotpAction(){
-		
-		$orderSession = new Zend_Session_Namespace('orderSession');
-		$this->_helper->viewRenderer->setNoRender(true);
-                $this->_helper->layout->disableLayout();
-		
-		$response = array(
-						"success"=>false,
-						"message"=>"",						
-					);
-		
-		$otp = $this->_getParam("otp_number");
-		$key = $this->_getParam("mobile_key");				
-		
-		if(isset($orderSession->$key) && $orderSession->$key == $otp || $this->websiteMode == 'DEBUG'){
-			
-			$response['success'] = true;	
-			$response['message'] = "verified";	
-			
-		}else{
-			$response['message'] = "OTP is not valid";	
-		}
-        		
-                echo Zend_Json::Encode($response);
-		die;
-	}
-	
-	public function applycouponAction(){
-				
-		$cartSession = new Zend_Session_Namespace('laundryCart');
-		
-		$this->_helper->viewRenderer->setNoRender(true);
-        $this->_helper->layout->disableLayout();
-		
-		$response = array(
-						"success"=>false,
-						"message"=>"Coupon code not valid",						
-					);
-		
-		$couponCode = $this->_getParam("coupon_code");
-		
-		if(!empty($couponCode)){
-						
-			$CouponsMapperModel = new Application_Model_CouponsMapper();
-			$couponData = $CouponsMapperModel->getCouponByCouponCode($couponCode);
-			$namespace = new Zend_Session_Namespace('userInfo');        
-						
-			if(!empty($couponData)){
-				
-				$isAllowedResult = $this->isCouponAllowedToUse($namespace->user_id,$couponData->__get("coupon_id"));
-				if($isAllowedResult->allowed===true){
-										
-					$response['success'] = true;
-					$response['message'] = "coupon is active";
-					$response['coupondata'] = array(
-												"amount"=>$couponData->__get("coupon_value"),
-												"type"=>$couponData->__get("coupon_type"),
-												"minbill"=>$couponData->__get("coupon_min_billing"),
-												"maxdis"=>$couponData->__get("coupon_max_discount"),												
-											  );					
-					
-				}else{
-					
-					$response['message'] = $isAllowedResult->message;
-					
-				}
-			}
-			
-			
-		}
-		
-        echo Zend_Json::Encode($response);
-		die;
-	}
-	
-	
-	private function isCouponAllowedToUse($userId,$couponId){
-				
-		$response = array(
-						"allowed"=>false,						
-						"message"=>"",
-					);
-		
-		$CouponsMapperModel = new Application_Model_CouponsMapper();
-		$couponData = $CouponsMapperModel->getCouponById($couponId);				
-		
-		if(strtotime($couponData->__get("coupon_last_date")) > strtotime(date("Y-m-d")) && $couponData->__get("coupon_status")==1){
-			
-			$orderMapper = new Application_Model_OrdersMapper();
-			$orderCount = $orderMapper->getOrders(array(
-														"user_id"=>$userId,
-														"coupon_id"=>$couponId,
-														"order_count"=>true,
-													));
-													
-			if($orderCount<$couponData->__get("coupon_occourence")){
-				
-				$response['allowed'] = true;
-				
-			}else{
-				
-				$response['message'] = "Coupon max limit exceed";
-				
-			}
-			
-		}else{
-						
-			$response['message'] = "Coupon expired";			
-			
-		}
-		
-		return (object)$response;
-				
-	}
+    public function sendorderotpAction() {
+        $namespace = new Zend_Session_Namespace('userInfo');
+        $userMapper = new Application_Model_UsersMapper;
 
-	public function ratelistAction(){
-		
-		$requestParams = $this->getRequest()->getParams();
-				
-		$ServiceMasterMapper = new Application_Model_ServiceMasterMapper();
-		$allServices = $ServiceMasterMapper->getAllServiceMasters();
-															
-		$CategoriesMapper = new Application_Model_CategoriesMapper();
-		$allCategories = $CategoriesMapper->getAllCategories();
-		
-		
-		$this->view->selectedcity = $this->_getParam("city","1");
-		$this->view->selectedService = $this->_getParam("service",$allServices[0]->service_id);
-		$this->view->selectedCategory = $this->_getParam("category",$allCategories[0]->category_id);
-		
-		$this->view->cities = array('1'=>"Noida");
-		$this->view->services = $allServices;		
-		$this->view->categories = $allCategories;						
-		
-		$model = new Application_Model_ItemPriceMapper();
-		$items = $model->getItemPriceByServiceIdCatIdDelName($this->view->selectedService, "regular", $this->view->selectedCategory);
-		$this->view->items = $items;				
-		
-}
+        $orderSession = new Zend_Session_Namespace('orderSession');
+        $cartSession = new Zend_Session_Namespace('laundryCart');
+        $this->_helper->viewRenderer->setNoRender(true);
+        $this->_helper->layout->disableLayout();
+
+        $response = array(
+            "success" => false,
+            "message" => "",
+            "otp" => "",
+            "key" => strtotime(date("Y-m-d H:i:s"))
+        );
+
+        $number = $this->_getParam("mobile_no");
+
+        if (strlen($number) == 10 && is_numeric($number)) {
+            $cartSession->mobile_number = $number;
+            $otp = rand(1000, 5000);
+            $orderSession->$response['key'] = $otp;
+            $message = urlencode("Use " . $otp . " to verify your number");
+            $cartSession->otpVerified = false;
+            //update users model
+            $users = array();
+            $users['user_otp'] = $otp;
+            $ret = $userMapper->updateOtpUser($users, $namespace->user_id);
+            if ($this->websiteMode != 'DEBUG') {
+                $url = "http://login.smsgatewayhub.com/smsapi/pushsms.aspx?user=laundrywala&pwd=cleanlaundry&to=91" . $number . "&sid=LAWALA&msg=" . $message . "&fl=0&gwid=2";
+                $text = file_get_contents($url);
+            }
+            //$response['otp'] = $otp;
+            $response['success'] = true;
+            $response['message'] = "OTP sent successfully";
+        } else {
+            $response['message'] = "Mobile number is not valid";
+        }
+
+        echo Zend_Json::Encode($response);
+        die;
+    }
+
+    public function verifyorderotpAction() {
+        $namespace = new Zend_Session_Namespace('userInfo');
+        $userMapper = new Application_Model_UsersMapper;
+        $orderSession = new Zend_Session_Namespace('orderSession');
+        $cartSession = new Zend_Session_Namespace('laundryCart');
+        $this->_helper->viewRenderer->setNoRender(true);
+        $this->_helper->layout->disableLayout();
+
+        $response = array(
+            "success" => false,
+            "message" => "",
+        );
+
+        $otp = $this->_getParam("otp_number");
+        $key = $this->_getParam("mobile_key");
+
+        //get otp from user
+        $userOtp = $userMapper->getUserOtp($namespace->user_id);
+        
+        if (isset($orderSession->$key) && $orderSession->$key == $otp && $userOtp == $otp  || $this->websiteMode == 'DEBUG') {
+            $cartSession->otpVerified = true;
+            $response['success'] = true;
+            $response['message'] = "verified";
+        } else {
+            $response['message'] = "OTP is not valid";
+        }
+
+        echo Zend_Json::Encode($response);
+        die;
+    }
+
+    public function applycouponAction() {
+
+        $cartSession = new Zend_Session_Namespace('laundryCart');
+
+        $this->_helper->viewRenderer->setNoRender(true);
+        $this->_helper->layout->disableLayout();
+
+        $response = array(
+            "success" => false,
+            "message" => "Coupon code not valid",
+        );
+
+        $couponCode = $this->_getParam("coupon_code");
+
+        if (!empty($couponCode)) {
+
+            $CouponsMapperModel = new Application_Model_CouponsMapper();
+            $couponData = $CouponsMapperModel->getCouponByCouponCode($couponCode);
+            $namespace = new Zend_Session_Namespace('userInfo');
+
+            if (!empty($couponData)) {
+
+                $isAllowedResult = $this->isCouponAllowedToUse($namespace->user_id, $couponData->__get("coupon_id"));
+                if ($isAllowedResult->allowed === true) {
+
+                    $response['success'] = true;
+                    $response['message'] = "coupon is active";
+                    $response['coupondata'] = array(
+                        "amount" => $couponData->__get("coupon_value"),
+                        "type" => $couponData->__get("coupon_type"),
+                        "minbill" => $couponData->__get("coupon_min_billing"),
+                        "maxdis" => $couponData->__get("coupon_max_discount"),
+                    );
+                } else {
+
+                    $response['message'] = $isAllowedResult->message;
+                }
+            }
+        }
+
+        echo Zend_Json::Encode($response);
+        die;
+    }
+
+    private function isCouponAllowedToUse($userId, $couponId) {
+
+        $response = array(
+            "allowed" => false,
+            "message" => "",
+        );
+
+        $CouponsMapperModel = new Application_Model_CouponsMapper();
+        $couponData = $CouponsMapperModel->getCouponById($couponId);
+
+        if (strtotime($couponData->__get("coupon_last_date")) > strtotime(date("Y-m-d")) && $couponData->__get("coupon_status") == 1) {
+
+            $orderMapper = new Application_Model_OrdersMapper();
+            $orderCount = $orderMapper->getOrders(array(
+                "user_id" => $userId,
+                "coupon_id" => $couponId,
+                "order_count" => true,
+            ));
+
+            if ($orderCount < $couponData->__get("coupon_occourence")) {
+
+                $response['allowed'] = true;
+            } else {
+
+                $response['message'] = "Coupon max limit exceed";
+            }
+        } else {
+
+            $response['message'] = "Coupon expired";
+        }
+
+        return (object) $response;
+    }
+
+    public function ratelistAction() {
+
+        $requestParams = $this->getRequest()->getParams();
+
+        $ServiceMasterMapper = new Application_Model_ServiceMasterMapper();
+        $allServices = $ServiceMasterMapper->getAllServiceMasters();
+
+        $CategoriesMapper = new Application_Model_CategoriesMapper();
+        $allCategories = $CategoriesMapper->getAllCategories();
+
+
+        $this->view->selectedcity = $this->_getParam("city", "1");
+        $this->view->selectedService = $this->_getParam("service", $allServices[0]->service_id);
+        $this->view->selectedCategory = $this->_getParam("category", $allCategories[0]->category_id);
+
+        $this->view->cities = array('1' => "Noida");
+        $this->view->services = $allServices;
+        $this->view->categories = $allCategories;
+
+        $model = new Application_Model_ItemPriceMapper();
+        $items = $model->getItemPriceByServiceIdCatIdDelName($this->view->selectedService, "regular", $this->view->selectedCategory);
+        $this->view->items = $items;
+    }
+
 }
