@@ -16,11 +16,11 @@ $currentTime = strtotime($currentTime);
 //in case of regular there is 2 days gap i.e. 3rd day
 //in case of express there is 1 days gap i.e. 2nd day
 if ($this->deliveryType == 'Express') {
-    $currentTimeDelivery = strtotime("+1 day", $currentTime);
-    $nextDayIndex = 1;
-} else {
     $currentTimeDelivery = strtotime("+2 day", $currentTime);
     $nextDayIndex = 2;
+} else {
+    $currentTimeDelivery = strtotime("+3 day", $currentTime);
+    $nextDayIndex = 3;
 }
 
 if ($this->deliveryType == 'Fixed Slot') {
@@ -208,17 +208,28 @@ if ($currentTime < $fixedSlotTime) {
 
                                                     if ($this->deliveryType == 'Fixed Slot') {
                                                         $currentTimeDelivery = strtotime('+15 hours', $currentTime);
-                                                    }
+                                                    } elseif ($this->deliveryType == 'Express')
+                                                        $currentTimeDelivery = strtotime('+2 day', strtotime($tabDate . $single));
                                                     else
-                                                        $currentTimeDelivery = strtotime('+2 day', $currentTime);
+                                                        $currentTimeDelivery = strtotime('+3 day', strtotime($tabDate . $single));
 
+                                                    //if delivery time falls on tuesday then postpone it to next day
+                                                    if (date('l', $currentTimeDelivery) == 'Tuesday') {
+                                                        $currentTimeDelivery = strtotime('+1 day', $currentTimeDelivery);
+                                                        $nextDayIndex++;
+                                                    }
                                                     $currentSlotCheck = 'active btn-success';
                                                     $flagCurrent = true;
                                                     $selected = true;
-                                                }elseif ($this->deliveryType == 'Fixed Slot') {
+                                                } elseif ($this->deliveryType == 'Fixed Slot') {
                                                     if (!$flagCurrent && $currentTime < strtotime($tabDate . $single)) {
                                                         $currentTimeDelivery = strtotime('+12 hours', strtotime($tabDate . $single));
                                                         $disableSlotCheck = 'active btn-success';
+                                                        //if delivery time falls on tuesday then postpone it to next day
+                                                        if (date('l', $currentTimeDelivery) == 'Tuesday') {
+                                                            $currentTimeDelivery = strtotime('+1 day', $currentTimeDelivery);
+                                                            $nextDayIndex++;
+                                                        }
                                                     } else {
                                                         $disableSlotCheck = $single != ltrim($business_start, 0) ? 'btn-default color-black' : 'btn-primary';
                                                     }
@@ -232,9 +243,26 @@ if ($currentTime < $fixedSlotTime) {
                                                     if (!$flagCurrent && $currentTime < strtotime($tabDate . $single)) {
                                                         if ($this->deliveryType == 'Fixed Slot') {
                                                             $currentTimeDelivery = strtotime('+15 hours', $currentTime);
-                                                        }
-                                                        else
+                                                            //if delivery time falls on tuesday then postpone it to next day
+                                                            if (date('l', $currentTimeDelivery) == 'Tuesday') {
+                                                                $currentTimeDelivery = strtotime('+1 day', $currentTimeDelivery);
+                                                                $nextDayIndex++;
+                                                            }
+                                                        } elseif ($this->deliveryType == 'Express') {
                                                             $currentTimeDelivery = strtotime('+2 day', strtotime($tabDate . $single));
+                                                            //if delivery time falls on tuesday then postpone it to next day
+                                                            if (date('l', $currentTimeDelivery) == 'Tuesday') {
+                                                                $currentTimeDelivery = strtotime('+1 day', $currentTimeDelivery);
+                                                                $nextDayIndex++;
+                                                            }
+                                                        } else {
+                                                            $currentTimeDelivery = strtotime('+3 day', strtotime($tabDate . $single));
+                                                            //if delivery time falls on tuesday then postpone it to next day
+                                                            if (date('l', $currentTimeDelivery) == 'Tuesday') {
+                                                                $currentTimeDelivery = strtotime('+1 day', $currentTimeDelivery);
+                                                                $nextDayIndex++;
+                                                            }
+                                                        }
 
                                                         $currentSlotCheck = 'active btn-success';
                                                         $flagCurrent = true;
@@ -286,7 +314,7 @@ if ($currentTime < $fixedSlotTime) {
                             $tabCurrentDate = date('d', strtotime("+$i day", strtotime(date('l M j'))));
                             $tabDate = date('d-m-Y ', strtotime("+$i day", strtotime(date('l M j'))));
                             ?>
-                            <li role='presentation' class='<?php echo $i == $nextDayIndex + $addI ? 'active' : ''; ?> deliverySlotNav_<?php echo date('Y-n-d', strtotime($tabDate)); ?>'>
+                            <li role='presentation' class='<?php echo $i == $nextDayIndex + $addI ? 'active' : ''; ?> deliverySlotNav_<?php echo date('Y-m-d', strtotime($tabDate)); ?>'>
                                 <a href='#<?php echo $tabCurrentDay . "-" . $tabCurrentDate; ?>2' arial-controls='<?php echo $tabCurrentDay; ?>2' role='tab' data-toggle='tab'>
                                     <?php
                                     echo "<span>" . date('D', strtotime("+$i day", strtotime(date('l M j')))) . "<span>";
@@ -439,9 +467,22 @@ if ($currentTime < $fixedSlotTime) {
                                                         setPickupDateHeadline($this, selectedSlot);
 
                                                         //                                var pickupSlot = selectedSlot.getTime() + parseInt(172800000);
-                                                        var pickupSlot = selectedSlot.getTime() + parseInt(deliveryGap);
+                                                        var pickupSlot = selectedSlot.getTime() + parseInt(deliveryGap),
+                                                                pickupSlottime = selectedSlot.getTime() + parseInt(deliveryGap);
                                                         pickupSlot = new Date(pickupSlot);
-                                                        console.log(pickupSlot);
+                                                        //if tuesday is delivery date thnen postpone to next day
+                                                        console.log(pickupSlot.getDay())
+                                                        if(pickupSlot.getDay() == 2){
+                                                            console.log(pickupSlottime)
+                                                            pickupSlottime += parseInt(86400000);
+                                                            console.log(pickupSlottime)
+                                                            pickupSlot = new Date(pickupSlottime);
+                                                            console.log(pickupSlot);
+                                                        }
+                                                        
+                                                        
+                                                        
+                                                        
                                                         //sets delivery date in headline
                                                         setDeliveryDateHeadline($this, pickupSlot);
 
@@ -568,7 +609,6 @@ if ($this->deliveryType != 'Fixed Slot') {
                 async: true,
                 data: {mobile_no: mobilenumber},
                 beforeSend: function() {
-
                     if (isNaN(parseInt(mobilenumber)) || mobilenumber.length != 10) {
 
                         alert('Please enter valid mobile number');
