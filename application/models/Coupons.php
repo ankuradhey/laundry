@@ -6,8 +6,11 @@ class Application_Model_Coupons {
     private $coupon_code;
     private $coupon_value;
     private $coupon_type;
-    
-     
+    private $coupon_last_date;
+    private $coupon_occourence;
+    private $coupon_min_billing;
+    private $coupon_max_discount;
+    private $coupon_status;
 
     public function __construct($coupon_row = NULL) {
         if (!is_null($coupon_row)) {
