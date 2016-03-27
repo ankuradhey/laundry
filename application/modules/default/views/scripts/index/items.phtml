@@ -18,11 +18,11 @@ echo $this->partial('index/headerstrip.phtml', array('headlineText' => $this->he
                         <h4 class="col-md-6 text-center" >CHOOSE DELIVERY TYPE</h4>
                         <div class="col-md-6">
                             <div class="btn-group btn-block deliver-type-opt" data-toggle="buttons">
-                                <label class='btn active col-md-6' onclick='selectDeliveryType(this);'>
-                                    <input type='radio' name='delivery-type' id="delivery-type-regular" value='Regular' checked='checked'>Regular
+                                <label class='btn <?php echo $this->deliveryType == 'Regular'?'active':''; ?> col-md-6' onclick='selectDeliveryType(this);'>
+                                    <input type='radio' name='delivery-type' id="delivery-type-regular" value='Regular' <?php echo $this->deliveryType == 'Regular'?'checked="checked"':''; ?> checked='checked'>Regular
                                 </label>
-                                <label class='btn col-md-6' onclick='selectDeliveryType(this);'>
-                                    <input type='radio' name='delivery-type' id="delivery-type-express" value='Express' >Express
+                                <label class='btn col-md-6' <?php echo $this->deliveryType == 'Express'?'active':''; ?> onclick='selectDeliveryType(this);'>
+                                    <input type='radio' name='delivery-type' id="delivery-type-express" value='Express' <?php echo $this->deliveryType == 'Express'?'checked="checked"':''; ?>>Express
                                 </label>
                             </div>
                         </div>
