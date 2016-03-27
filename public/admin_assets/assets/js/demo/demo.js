@@ -62,7 +62,8 @@ $(document).ready(function() {
 					$( this ).dialog( "close" );
 				}}]
 	});
-	$("#mws-form-dialog").dialog({
+        //TO DO
+	$(".mws-form-dialog").dialog({
 		autoOpen: false, 
 		title: "jQuery-UI Modal Form", 
 		modal: true, 
@@ -155,8 +156,8 @@ $(document).ready(function() {
 		s3: {prefix : '$', places: 2, step: 0.1}
 	};
 
-	for (var n in opts)
-		$("#" + n).spinner(opts[n]);
+//	for (var n in opts)
+//		$("#" + n).spinner(opts[n]);
 	
 	/* ColorPicker */
 	$(".mws-colorpicker").ColorPicker({
@@ -176,16 +177,16 @@ $(document).ready(function() {
 	
 	/* imgAreaSelect */
 	
-	$(".mws-crop-target").imgAreaSelect({
-		handles: true, 
-		x1: 32, y1: 32, x2: 132, y2: 132, 
-		onSelectChange: function(img, selection) {
-			$("#crop_x1").val(selection.x1);
-			$("#crop_y1").val(selection.y1);
-			$("#crop_x2").val(selection.x2);
-			$("#crop_y2").val(selection.y2);
-		}
-	});
+//	$(".mws-crop-target").imgAreaSelect({
+//		handles: true, 
+//		x1: 32, y1: 32, x2: 132, y2: 132, 
+//		onSelectChange: function(img, selection) {
+//			$("#crop_x1").val(selection.x1);
+//			$("#crop_y1").val(selection.y1);
+//			$("#crop_x2").val(selection.x2);
+//			$("#crop_y2").val(selection.y2);
+//		}
+//	});
 	
 	/* Full Calendar */
 	
