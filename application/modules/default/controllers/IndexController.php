@@ -119,6 +119,7 @@ class IndexController extends Zend_Controller_Action {
 
     public function processcartAction() {
         $cartSession = new Zend_Session_Namespace('laundryCart');
+        $orderSession = new Zend_Session_Namespace('orderSession');
         if ($this->getRequest()->isPost()) {
             $post = $this->getRequest()->getPost();
             //VALIDATION IS TO BE PERFORMED
@@ -739,6 +740,8 @@ class IndexController extends Zend_Controller_Action {
 
                 //session destroy
                 $laundryCart->unsetAll();
+                $orderSession->unsetAll();
+                
                 if (isset($post['onlinepayment']) && $post['onlinepayment'] == 'false')
                     $this->_redirect('index/orderlist');
                 else
@@ -750,6 +753,7 @@ class IndexController extends Zend_Controller_Action {
             }
         } elseif ($laundryCart->orderType == 'package' && $this->getRequest()->isPost()) {
 
+            
             //get package details
             $packageDetails = new Application_Model_PackagesMapper();
             $packageDetails = $packageDetails->getPackageById($laundryCart->package[0]);
@@ -777,7 +781,8 @@ class IndexController extends Zend_Controller_Action {
 
             //session destroy
             $laundryCart->unsetAll();
-
+            $orderSession->unsetAll();
+            
             if (isset($post['onlinepayment']) && $post['onlinepayment'] == 'false')
                 $this->_redirect('index/orderlist');
             else
