@@ -16,7 +16,7 @@ class Admin_DeliveryboyController extends Zend_Controller_Action {
     public function indexAction() {
         try {
             $request = $this->getRequest();
-            $deliveryboyMapper = new Application_Model_DeliveryboyMapper();
+            $deliveryboyMapper = new Application_Model_DeliveryBoyMapper();
             $deliveryBoys = $deliveryboyMapper->getAllDeliveryBoys();
             if (!empty($deliveryBoys)) {
                 $paginator = Zend_Paginator::factory($deliveryBoys);
@@ -106,7 +106,7 @@ class Admin_DeliveryboyController extends Zend_Controller_Action {
                         $params = $request->getParams();
 
                         if ($orderForm->isValid($params)) {
-                            
+
                             $this->allotOrder($params);
                             $this->_redirect("admin/deliveryboy/allotorder");
                         } else {
