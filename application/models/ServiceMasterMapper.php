@@ -22,6 +22,7 @@ class Application_Model_ServiceMasterMapper
             return $result;
         }
     }
+    
     public function getServiceMasterById($service_id)
     {
         $where = array(

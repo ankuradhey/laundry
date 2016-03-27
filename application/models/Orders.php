@@ -30,11 +30,9 @@ class Application_Model_Orders {
     private $order_pickup_boy;
     private $order_added_time;
     private $order_modified_time;
-	
-	private $order_coupon_id;
-	private $order_coupon_dis;
-	
-	
+    private $order_mobile_number;
+    private $order_coupon_id;
+    private $order_coupon_dis;
     
 
     public function __construct($order_row = NULL) {

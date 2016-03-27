@@ -49,6 +49,12 @@ class Application_Model_OrdersMapper {
         if(empty($data['order_added_time']))
             unset($data['order_added_time']);
         
+        foreach($data as $key=>$val){
+            if(empty($val)){
+                unset($data[$key]);
+            }
+        }
+        
         $result = $this->_db_table->insert($data);
         if (count($result) == 0) {
             return false;
@@ -235,7 +241,7 @@ class Application_Model_OrdersMapper {
             if($del_type == 'not_picked')
                 $query .= " (`order_status` is NULL or `order_status` = 'alloted' ) AND ";
             elseif($del_type == 'not_delivered')
-                $query .= " (`order_status` is NULL or `order_status` = 'picked' ) AND ";
+                $query .= " (`order_status` is NULL or `order_status` != 'delivered' ) AND ";
         }
         
 //        $query .= " `order_delivery` = '" . date("Y-m-d",strtotime($del_date)) . " 00:00:00' AND ";

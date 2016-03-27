@@ -159,6 +159,18 @@ class Application_Model_UsersMapper {
         $user = new Application_Model_Users($result);
         return $user;
     }
+    
+    public function getUserByMobileNumber($mobileNumber) {
+        $where = array(
+            "user_number = ?" => $mobileNumber
+        );
+        $result = $this->_db_table->fetchRow($where);
+        if(!$result){
+            return false;
+        }
+        $user = new Application_Model_Users($result);
+        return $user;
+    }
 
 }
 
