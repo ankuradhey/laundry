@@ -19,6 +19,7 @@
         <link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/css_new/icons/16x16.css" media="screen" />
         <link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/css_new/icons/24x24.css" media="screen" />
         <link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/css_new/icons/32x32.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/css_new/icons/icol16.css" media="screen" />
 
         <!-- Demo and Plugin Stylesheets -->
         <link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/css_new/demo.css" media="screen" />
@@ -38,22 +39,22 @@
         <!-- Theme Stylesheet -->
         <link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/css_new/mws.theme.css" media="screen" />
 
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css"/>
-        
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css"/>
+
         <!-- JavaScript Plugins -->
-        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/js_new/jquery-1.7.2.min.js"></script>
-        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/js_new/jquery.mousewheel.min.js"></script>
-        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/js_new/jquery.placeholder.js"></script>
-        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/js_new/jquery.fileinput.js"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/js/jquery-1.7.2.min.js"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/js/jquery.mousewheel.min.js"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/js/jquery.placeholder.js"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/js/jquery.fileinput.js"></script>
 
         <!-- jQuery-UI Dependent Scripts -->
-        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/js/js/jquery-ui-1.8.20.min.js"></script>
-        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/js/js/jquery.ui.timepicker.min.js"></script>
-        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/js/js/jquery.ui.touch-punch.js"></script>
-        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/spinner/ui.spinner.min.js"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/jui/js/jquery-ui-1.8.20.min.js"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/jui/js/jquery.ui.timepicker.min.js"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/jui/js/jquery.ui.touch-punch.js"></script>
+<!--        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/spinner/ui.spinner.min.js"></script>-->
 
         <!-- Plugin Scripts -->
-        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/plugins/imgareaselect/jquery.imgareaselect.min.js"></script>
+        <!--<script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/plugins/imgareaselect/jquery.imgareaselect.min.js"></script>-->
         <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/plugins/duallistbox/jquery.dualListBox-1.3.min.js"></script>
         <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/plugins/jgrowl/jquery.jgrowl-min.js"></script>
         <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/plugins/fullcalendar/fullcalendar.min.js"></script>
@@ -63,10 +64,10 @@
         <!--[if lt IE 9]>
         <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/plugins/flot/excanvas.min.js"></script>
         <![endif]-->
-        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/plugins/flot/jquery.flot.min.js"></script>
+<!--        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/plugins/flot/jquery.flot.min.js"></script>
         <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/plugins/flot/jquery.flot.pie.min.js"></script>
         <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/plugins/flot/jquery.flot.stack.min.js"></script>
-        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/plugins/flot/jquery.flot.resize.min.js"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/plugins/flot/jquery.flot.resize.min.js"></script>-->
         <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/plugins/colorpicker/colorpicker-min.js"></script>
         <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/plugins/tipsy/jquery.tipsy-min.js"></script>
         <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/plugins/sourcerer/Sourcerer-1.2-min.js"></script>
@@ -77,17 +78,17 @@
         <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/js/core/mws.wizard.js"></script>
 
 
-		<script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/jui/js/jquery-ui-1.8.20.min.js"></script>
-		<script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/jui/js/source/jquery.ui.datepicker.js"></script>
-		
+        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/jui/js/jquery-ui-1.8.20.min.js"></script>
+        <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/jui/js/source/jquery.ui.datepicker.js"></script>
+
         <!-- Themer Script (Remove if not needed) -->
         <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/js/core/themer.js"></script>
-		
+
         <!-- Demo Scripts (remove if not needed) -->
         <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/js/demo/demo.js"></script>
         <script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/public/admin_assets/assets/js/demo/demo.dashboard.js"></script>
-		
-    
+
+
     <body>
         <div id="mws-header" class="clearfix">
             <!-- Logo Container -->
@@ -199,11 +200,11 @@
                                 User Transactions
                             </a>
                         </li>
-<!--                        <li >
-                            <a href="<?php echo $this->baseUrl(); ?>/admin/user-wallet" class='mws-i-24 i-home'>
-                                User Wallet
-                            </a>
-                        </li>-->
+                        <!--                        <li >
+                                                    <a href="<?php echo $this->baseUrl(); ?>/admin/user-wallet" class='mws-i-24 i-home'>
+                                                        User Wallet
+                                                    </a>
+                                                </li>-->
                         <li >
                             <a href="<?php echo $this->baseUrl(); ?>/admin/coupons" class='mws-i-24 i-archive'>
                                 Coupons
@@ -218,6 +219,26 @@
                             <a href="<?php echo $this->baseUrl(); ?>/admin/packages" class='mws-i-24 i-archive'>
                                 Packages
                             </a>
+                        </li>
+                        <li>
+                            <a href="#" class="mws-i-24 i-tools">Delivery Boy</a>
+                            <ul>
+                                <li>
+                                    <a class="mws-ic-16 ic-cog bd_image" href="<?php echo $this->baseUrl(); ?>/admin/deliveryboy">
+                                        List Delivery boy
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="mws-ic-16 ic-email bd_image" href="<?php echo $this->baseUrl(); ?>/admin/deliveryboy/pickup">
+                                        Allot Pickup Order
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="mws-ic-16 ic-email bd_image" href="<?php echo $this->baseUrl(); ?>/admin/deliveryboy/delivery">
+                                        Allot Delivery Order
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
                 </div>
