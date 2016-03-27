@@ -642,5 +642,20 @@ class AjaxController extends Zend_Controller_Action {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
     }
-
+    
+    public function getuserAction(){
+        $request = $this->getRequest();
+        $mobileNumber = $request->getParam("mobile_number");
+        $user = new Application_Model_UsersMapper();
+        $userObj = $user->getUserByMobileNumber($mobileNumber);
+        $retArr = array('data'=>false,'message'=>'No user found', 'success'=>false);
+        if($userObj){
+            $retArr['data'] = array('first_name'=>$userObj->user_fname, 'last_name'=>$userObj->user_lname,'email'=>$userObj->user_email,
+                                    'house_address'=>$userObj->user_address, 'city'=>$userObj->user_city, 'user_id'=>$userObj->user_id
+                ); 
+            $retArr['message'] = 'User found';
+            $retArr['success'] = true;
+        }
+        exit(json_encode($retArr));
+    }
 }
