@@ -3,7 +3,7 @@
         <span class="mws-i-24 i-speech-bubble-2">Add Order</span>
     </div>
     <div class="mws-panel-body">
-        <form class="mws-form" method="post" enctype="multipart/form-data">
+        <form class="mws-form" method="post" id="orderform">
             <?php if ($this->hasMessage): ?>
                 <div class="mws-form-message <?php echo $this->messageType == 'danger' ? 'error' : $this->messageType; ?> fade in">
                     <?php if ($this->messageType == "danger"): ?>
@@ -24,8 +24,20 @@
                 $elements = $this->form->getElements();
                 foreach ($elements as $element):
                     ?>
-                    <div class="mws-form-row">
-                        <?php echo $element; ?>
+                    <div class="mws-form-row" <?php echo $element->getName() == 'order_package' || $element->getName() == 'order_user_id' ? 'style="display:none;"' : ''; ?>>
+                        <?php
+//                        echo "<pre>"; print_r(get_class_methods($element)); 
+                        if ($element->getName() == 'order_mobile_number') {
+                            echo $element;
+                            ?>
+                            <div class="controls mws-form-item medium">
+                                <input type="button" class="mws-button btn-primary" id="order_user_load" name="load_user" value="Load User" onclick="loadUser()">
+                            </div>
+                            <?php
+                        } else {
+                            echo $element;
+                        }
+                        ?>
                     </div>
                     <?php
                 endforeach;
@@ -38,6 +50,84 @@
         </form>
     </div>
 </div>
+<script type="text/javascript">
+                            function loadUser() {
+                                //mobile number
+                                var mobileNumber = $('#order_mobile_number').val();
+                                if (mobileNumber && !isNaN(parseInt(mobileNumber)) && mobileNumber.length == 10) {
+                                    $.ajax({
+                                        url: "<?php echo $this->baseUrl(); ?>/ajax/getuser",
+                                        type: "get",
+                                        dataType: 'json',
+                                        async: true,
+                                        data: {mobile_number: mobileNumber},
+                                        beforeSend: function() {
 
+                                            if (!mobileNumber) {
+                                                alert("Oops! Some error occurred");
+                                                window.location = window.location;
+                                            }
+                                        },
+                                        success: function(responseData) {
+                                            if (responseData.success) {
+                                                fillupData(responseData.data);
+                                            } else {
+                                                alert(responseData.message);
+                                                return false;
+                                            }
+                                        },
+                                        error: function(responseData) {
+                                            console.log(responseData);
+                                        }
+                                    });
+                                } else {
+                                    alert('Please enter mobile number to load user');
+                                }
+                            }
 
+                            function fillupData(formData) {
+                                $('#order_first_name').val(formData.first_name);
+                                $('#order_last_name').val(formData.last_name);
+                                $('#order_user_email').val(formData.email);
+                                $('#order_address').val(formData.house_address);
+                                $('#order_city').val(formData.city);
+                                $('#order_user_id').val(formData.user_id);
+                            }
 
+                            function changeOrderType(orderType) {
+                                if (orderType == 'package') {
+                                    $('#order_delivery_type').val('5');
+                                    $('#order_delivery_type').attr('disabled', 'disabled');
+                                    $('#order_package').closest('.mws-form-row').show();
+                                    $('#order_service_type').val(3);
+                                    $('#order_service_type').attr('disabled', 'disabled');
+                                } else {
+                                    $('#order_delivery_type').removeAttr('disabled');
+                                    $('#order_package').closest('.mws-form-row').hide();
+                                    $('#order_service_type').removeAttr('disabled');
+                                }
+                            }
+
+//                            $(document).ready(function(){
+//                               $('#order_service_type').on('change','body',function(e){
+//                                   console.log($(this).val());
+//                               }) 
+//                            });
+                            //for ironing service (5) delivery type would always be fixed slot
+                            function updateDeliveryType(serviceType) {
+                                serviceType = $('#order_service_type').val();
+                                console.log(serviceType.length, serviceType[0], $('#order_service_type').attr('disabled'));
+                                if (serviceType.length == 1 && serviceType[0] == 5 && $('#order_service_type').attr('disabled') != 'disabled') {
+                                    $('#order_delivery_type').val(6);
+                                    $('#order_delivery_type').attr('disabled', 'disabled');
+                                } else if ($('#order_service_type').attr('disabled') != 'disabled') {
+                                    $('#order_delivery_type').removeAttr('disabled');
+                                }
+                            }
+
+                            $(document).ready(function() {
+                                $('#orderform').on('submit', function() {
+                                    $('input, select').attr('disabled', false);
+                                });
+                            });
+</script>
