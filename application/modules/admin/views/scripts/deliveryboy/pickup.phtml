@@ -84,11 +84,46 @@
                                 <?php echo $order->__get("order_address"); ?>
                             </td>
                             <td><?php echo $order->__get("order_pickup_time"); ?></td>
-                            <td><?php echo $order->__get("order_status")?:'--N.A--'; ?></td>
+                            <td><?php echo $order->__get("order_status")? : '--N.A--'; ?></td>
                             <td>
-                                <a href="#inlineorderpick" rel="prettyPhoto" id="mws-form-dialog-mdl-btn">
+                                <a href="#inlineorderpick<?php echo $order->__get("order_id"); ?>" rel="prettyPhoto" id="mws-form-dialog-mdl-btn">
                                     <i class="icol-application-edit"></i>
                                 </a>
+                                <div id="inlineorderpick<?php echo $order->__get("order_id"); ?>" style="display:none;">
+                                    <table class="mws-table">
+                                        <thead>
+                                            <tr>
+                                                <td>Select</td>
+                                                <td>Pickup Boy Names</td>
+                                                <td>Number of Orders</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            foreach ($this->deliveryBoys as $delboyId => $boys):
+                                                ?>
+                                                <tr>
+                                                    <td>
+                                                        <input  type="checkbox" value="<?php echo $boys['info']['id']; ?>" onclick="allotorder('<?php echo $order->__get("order_id"); ?>', this.value)">
+                                                    </td>
+                                                    <td class="center">
+                                                        <?php
+                                                        echo $boys['info']['name'];
+                                                        ?>
+                                                    </td>
+                                                    <td class="center">
+                                                        <?php
+                                                        echo $boys['info']['orderscount'];
+                                                        ?>
+                                                    </td>
+                                                </tr>
+                                                <?php
+                                                $count++;
+                                            endforeach;
+                                            ?>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </td>
                         </tr>
                     <?php endforeach;
@@ -98,41 +133,6 @@
             </tbody>
         </table>
     </div>
-</div>
-<div id="inlineorderpick" style="display:none;">
-    <table class="mws-table">
-        <thead>
-            <tr>
-                <td>Select</td>
-                <td>Pickup Boy Names</td>
-                <td>Number of Orders</td>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            foreach ($this->deliveryBoys as $delboyId => $boys):
-                ?>
-                <tr>
-                    <td>
-                        <input  type="checkbox" value="<?php echo $boys['info']['id']; ?>" onclick="allotorder('<?php echo $order->__get("order_id"); ?>', this.value)">
-                    </td>
-                    <td class="center">
-                        <?php
-                        echo $boys['info']['name'];
-                        ?>
-                    </td>
-                    <td class="center">
-                        <?php
-                        echo $boys['info']['orderscount'];
-                        ?>
-                    </td>
-                </tr>
-                <?php
-                $count++;
-            endforeach;
-            ?>
-        </tbody>
-    </table>
 </div>
 <div id="inlineorderdelmultiple" style="display:none;">
     <table class="mws-table">

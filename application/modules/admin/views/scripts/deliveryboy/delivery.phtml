@@ -83,12 +83,54 @@
                                 <?php echo $order->__get("order_address"); ?>
                             </td>
                             <td><?php echo $order->__get("order_delivery_time"); ?></td>
-                            <td><?php echo $order->__get("order_status")?:'--N.A--'; ?></td>
+                            <td><?php 
+                                if($order->__get("order_status") != 'delivered' && !empty($order->__get('order_delivery_boy'))){
+                                    echo 'allotted';
+                                }elseif(!empty($order->__get("order_status"))){
+                                    echo $order->__get("order_status");
+                                }else{
+                                    echo '-N.A-';
+                                }
+                                ?>
                             <td>
-                                <a href="#inlineorderdel" rel="prettyPhoto" id="mws-form-dialog-mdl-btn">
+                                <a href="#inlineorderdel<?php echo $order->__get("order_id"); ?>" rel="prettyPhoto" id="mws-form-dialog-mdl-btn">
                                     <i class="icol-application-edit"></i>
                                 </a>
-
+                                <div id="inlineorderdel<?php echo $order->__get("order_id"); ?>" style="display:none;">
+                                    <table class="mws-table">
+                                        <thead>
+                                            <tr>
+                                                <td>Select</td>
+                                                <td>Pickup Boy Names</td>
+                                                <td>Number of Orders</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            foreach ($this->deliveryBoys as $delboyId => $boys):
+                                                ?>
+                                                <tr>
+                                                    <td>
+                                                        <input type="checkbox" value="<?php echo $boys['info']['id']; ?>" onclick="allotorder('<?php echo $order->__get("order_id"); ?>', this.value)">
+                                                    </td>
+                                                    <td class="center">
+                                                        <?php
+                                                        echo $boys['info']['name'];
+                                                        ?>
+                                                    </td>
+                                                    <td class="center">
+                                                        <?php
+                                                        echo $boys['info']['orderscount'];
+                                                        ?>
+                                                    </td>
+                                                </tr>
+                                                <?php
+                                                $count++;
+                                            endforeach;
+                                            ?>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </td>
                         </tr>
                     <?php endforeach;
@@ -98,41 +140,6 @@
             </tbody>
         </table>
     </div>
-</div>
-<div id="inlineorderdel" style="display:none;">
-    <table class="mws-table">
-        <thead>
-            <tr>
-                <td>Select</td>
-                <td>Pickup Boy Names</td>
-                <td>Number of Orders</td>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            foreach ($this->deliveryBoys as $delboyId => $boys):
-                ?>
-                <tr>
-                    <td>
-                        <input type="checkbox" value="<?php echo $boys['info']['id']; ?>" onclick="allotorder('<?php echo $order->__get("order_id"); ?>', this.value)">
-                    </td>
-                    <td class="center">
-                        <?php
-                        echo $boys['info']['name'];
-                        ?>
-                    </td>
-                    <td class="center">
-                        <?php
-                        echo $boys['info']['orderscount'];
-                        ?>
-                    </td>
-                </tr>
-                <?php
-                $count++;
-            endforeach;
-            ?>
-        </tbody>
-    </table>
 </div>
 <div id="inlineorderdelmultiple" style="display:none;">
     <table class="mws-table">
@@ -174,7 +181,7 @@
                             $.ajax({
                                 url: '<?php echo $this->baseUrl("admin/deliveryboy/ajaxallotorder") ?>',
                                 dataType: 'json',
-                                data: {'allot_type': 'delivery', 'delboy_id': delboyId, 'orders': orderId, 'isSingle':true},
+                                data: {'allot_type': 'delivery', 'delboy_id': delboyId, 'orders': orderId, 'isSingle': true},
                                 success: function(data) {
                                     if (data.success) {
                                         window.location.href = '<?php echo $this->baseUrl("admin/deliveryboy/delivery") ?>';
@@ -194,19 +201,19 @@
                                 return;
                             }
                             var orders = $('.orderIds:checked'),
-                                orderIds = [];
-                            
-                            $.each(orders,function(index, $elm){
+                                    orderIds = [];
+
+                            $.each(orders, function(index, $elm) {
                                 orderIds.push($elm.value);
-                                
+
                             });
-                            
+
                             orderIds.join('|');
-                            
+
                             $.ajax({
                                 url: '<?php echo $this->baseUrl("admin/deliveryboy/ajaxallotorder") ?>',
                                 dataType: 'json',
-                                data: {'allot_type': 'delivery', 'delboy_id': delboyId, 'orders': orderIds,'isSingle':false},
+                                data: {'allot_type': 'delivery', 'delboy_id': delboyId, 'orders': orderIds, 'isSingle': false},
                                 success: function(data) {
                                     if (data.success) {
                                         window.location.href = '<?php echo $this->baseUrl("admin/deliveryboy/delivery") ?>';
@@ -215,6 +222,6 @@
                                     }
                                 }
                             })
-                            
+
                         }
 </script>
