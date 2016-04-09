@@ -27,6 +27,16 @@ class OrderMapper {
         return array("order_id"=>$results->getGeneratedValue());
     }
 
+    public function createTransaction($data){
+        $adapter = $this->adapter;
+        $sql = new Sql($this->adapter);
+        $insert = $sql->insert('user_transaction');
+        $insert->values($data);
+        $selectString = $sql->getSqlStringForSqlObject($insert);
+        $results = $this->adapter->query($selectString, $adapter::QUERY_MODE_EXECUTE);
+        return array("trnx_id"=>$results->getGeneratedValue());
+    }
+    
     public function updatePackage(){
         
     }
