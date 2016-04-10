@@ -32,10 +32,12 @@ class PackageResource extends AbstractResourceListener
             if(!$res){
                 return new ApiProblem(405, 'Package not found');
             }else{
+                $data['usertrack_order_id'] = $data['order_id'];
                 $data['clothes_left'] = $data['clothes_availed'] =$res->no_of_clothes;
                 $data['pickups_left'] = $data['pickups_availed'] = $res->no_of_pickups;
                 $data['usertrack_start_date'] = date('Y-m-d');
                 $data['usertrack_expiry_date'] = date('Y-m-d',strtotime("+$res->validity Month ".date('Y-m-d') ));
+                unset($data['order_id']);
                 return $this->mapper->insert($data);
             }
             
