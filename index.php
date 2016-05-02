@@ -16,6 +16,7 @@ set_include_path(realpath(APPLICATION_PATH . '/../library') . PATH_SEPARATOR . g
 
 require_once 'Zend/Config/Ini.php';
 require_once 'Zend/Application.php';
+require_once 'application/configs/Barcode39.php';
 
 class Application
 {
