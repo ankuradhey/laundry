@@ -23,11 +23,11 @@ class IndexController extends Zend_Controller_Action {
 
         $model = new Users_Model_User();
 
-//        $namespace = new Zend_Session_Namespace('userInfo');
-//        $namespace->user_id = 17;
-//        $namespace->user_fname = 'Ankit';
-//        $namespace->user_lname = 'Sharma';
-//        $namespace->user_img = $img;
+        $namespace = new Zend_Session_Namespace('userInfo');
+        $namespace->user_id = 17;
+        $namespace->user_fname = 'Ankit';
+        $namespace->user_lname = 'Sharma';
+        $namespace->user_img = $img;
 
         if (!isset($_SESSION)) {
             $auth = TBS\Auth::getInstance();
@@ -740,7 +740,6 @@ class IndexController extends Zend_Controller_Action {
 
                 //session destroy
                 $laundryCart->unsetAll();
-                $orderSession->unsetAll();
                 
                 if (isset($post['onlinepayment']) && $post['onlinepayment'] == 'false')
                     $this->_redirect('index/orderlist');
