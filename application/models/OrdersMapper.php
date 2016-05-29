@@ -37,6 +37,7 @@ class Application_Model_OrdersMapper {
         'order_payment_status' => $order->__get("order_payment_status"),
         'order_status' => $order->__get("order_status"),
         'order_delivery_boy' => $order->__get("order_delivery_boy"),
+        'order_pickup_boy' => $order->__get("order_pickup_boy"),
         'order_added_time' => $order->__get("order_added_time"),
         'order_modified_time' => $order->__get("order_modified_time"),
 		
