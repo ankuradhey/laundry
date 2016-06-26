@@ -76,8 +76,14 @@
 </div>
 <br/>
 <div class="mws-panel grid_8">
-    <div class="mws-panel-header">
-        <span class="mws-i-24 i-table-1">Orders</span>
+    <div class="mws-panel-header" style="position:relative;">
+        <span class="mws-i-24 i-table-1">Orders
+        <span class="exportapan" >
+        
+        <a href="<?php echo $this->baseUrl()?>/admin/orders/exportorders"><button class="mws-button success export" type="button">Export Orders</button></a> 
+        <a href="<?php echo $this->baseUrl()?>/admin/orders/importorders"><button  class="mws-button red" type="button">Import Orders</button></a>
+        
+        </span></span>
     </div>
     <div class="mws-panel-body">
         <div class="mws-panel-toolbar top clearfix ">
@@ -145,7 +151,7 @@
                                 echo $date = new Zend_Date($timestamp, "dd-MMM-yyyy");
                                 ?></td>-->
                             <td style="white-space:nowrap">
-                                <a href="<?php echo $this->baseUrl()?>/admin/orders/receipt/id/<?php echo $order->__get("order_id")?>" title="print-bill" class="print-order-bill"><button class="btn btn-grey btn-mini"><i class="icon-print  icon-only"></i></button></a>
+                                <a onclick="PrintOrder(<?php echo $order->__get("order_id")?>);"  href="javascript:void(0)" title="print-bill" class="print-order-bill"><button class="btn btn-grey btn-mini"><i class="icon-print  icon-only"></i></button></a>
                                 <a href="<?php echo $this->baseUrl(); ?>/admin/orders/edit/id/<?php echo $order->__get("order_id"); ?>"><button class="btn btn-warning btn-mini"><i class="icon-wrench  bigger-110 icon-only"></i></button></a>
                                 <a href="#" data-id="<?php echo $order->__get("order_id"); ?>"  class="delete"><button class="btn btn-grey btn-mini"><i class="icon-trash  icon-only"></i></button></a>
                                 
@@ -179,6 +185,19 @@
         </div><!-- modal-content -->
     </div><!-- modal-dialog -->
 </div>
+<style>
+.exportapan{
+
+	position: absolute;
+	left:77%;
+	margin-top:-29px;
+	}
+</style>
+<div id="divToPrint" style="display:none;">
+  <div style="width:290px;height:100%;background-color:teal;">
+           <?php //echo $html; ?>      
+  </div>
+</div>
 
 <script type="text/javascript">
 $(".mws-datepicker").datepicker({
@@ -186,17 +205,31 @@ $(".mws-datepicker").datepicker({
 		//maxDate: '0'
 	});
 
-$(".print-order-bill").click(function(){
+function PrintOrder(orderId){
+	
 	
 	$.ajax({
-            url: '<?php echo $this->baseUrl(); ?>/order/printreceipt',
-            dataType: 'json',
-            sync: true,
+            url: '<?php echo $this->baseUrl(); ?>/admin/orders/printorder',
+            type:'POST',
+            //dataType: 'json',
+           // sync: true,
             data: {'order': orderId },
             success: function(response) {
-                
+              // alert(response);
+				printfinalorder(response);
             }
         });
 	
-})	
+}
+function printfinalorder(response){
+  // alert(response);
+     var divToPrint = document.getElementById('divToPrint');
+       //var popupWin = window.open('', '_blank', 'width=300,height=300');
+       
+       document.open('', '_blank','width=300,height=300');
+       document.write('<html><body onload="window.print()"><div><div style="width:290px;height:auto;background-color:teal;">'+response+'</div></div></html>');
+       document.close();
+
+}
+
 </script>
